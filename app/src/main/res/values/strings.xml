@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">小本本</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="test">Helloworld!Helloworld!Helloworld!Helloworld!
+        Helloworld!Helloworld!Helloworld!Helloworld!Helloworld!
+    Helloworld!Helloworld!Helloworld!Helloworld!Helloworld!</string>
+    <string name="haha">17:02 红红火火恍恍惚惚哼哼哈
+        嘿哈和红红火火恍恍惚惚哼哼哈嘿哈和红红火
+        火恍恍惚惚哼哼哈嘿哈和红红火火恍恍惚惚哼哼哈嘿哈红红火火恍恍惚惚哼哼哈嘿哈红红火火恍恍惚惚哼哼哈嘿哈红红火火恍恍惚惚哼哼哈嘿哈红红火火恍恍惚惚哼哼哈嘿哈</string>
+    <string name="hehe">TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="title_activity_home">HomeActivity</string>
+</resources>

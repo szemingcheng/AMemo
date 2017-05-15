@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#757575</color>
+    <color name="colorPrimaryDark">#393a3e</color>
+    <color name="colorAccent">#2aa330</color>
+    <color name="bg_color">#f9f9f9</color>
+    <color name="common_txt">#000000</color>
+    <color name="txt">#f9f9f9</color>
+    <color name="line">#d0d0d0</color>
+    <color name="memo_title">#2e2e2e</color>
+    <color name="memo_content">#757575</color>
+</resources>

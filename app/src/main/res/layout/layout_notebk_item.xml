@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:paddingLeft="20dp"
+    android:paddingStart="20dp"
+    android:paddingRight="0dp"
+    android:paddingEnd="0dp">
+    <LinearLayout
+        android:id="@+id/note_book"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="start|center"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:background="?android:attr/selectableItemBackground">
+        <TextView
+            android:id="@+id/note_book_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:maxLength="60"
+            tool:text="XXXXMemo"
+            android:textColor="@color/memo_title"
+            android:textSize="@dimen/note_book_title_txt"/>
+        <TextView
+            android:id="@+id/memo_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            tool:text="1条笔记"
+            android:textColor="@color/memo_content"
+            android:paddingTop="5dp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/note_book_more"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/vector_drawable_more"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignRight="@id/note_book"
+        android:layout_alignEnd="@id/note_book"
+        android:padding="7dp"
+        android:background="?android:attr/selectableItemBackground"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/line"
+        android:layout_alignBottom="@id/note_book" />
+
+</RelativeLayout>
