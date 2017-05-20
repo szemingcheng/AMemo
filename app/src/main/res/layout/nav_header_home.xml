@@ -16,7 +16,7 @@
         android:id="@+id/default_avatar"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        tool:src="@drawable/vector_drawable_defualt_avatar"/>
+        android:src="@drawable/vector_drawable_defualt_avatar"/>
 
     <TextView
         android:id="@+id/onscreen_name"

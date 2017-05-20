@@ -35,12 +35,21 @@
             fab:fab_colorRipple="#1B5E20"
             fab:fab_size="mini"
             fab:fab_label="拍照" />
-
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_item_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/vector_drawable_pic_empty"
+            fab:fab_colorNormal="#43A047"
+            fab:fab_colorPressed="#2E7D32"
+            fab:fab_colorRipple="#1B5E20"
+            fab:fab_size="mini"
+            fab:fab_label="附件" />
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_item_reminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/vector_drawable_reminder_clock"
+            android:src="@drawable/vector_drawable_reminder_clock_menu"
             fab:fab_colorNormal="#43A047"
             fab:fab_colorPressed="#2E7D32"
             fab:fab_colorRipple="#1B5E20"

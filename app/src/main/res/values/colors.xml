@@ -9,4 +9,5 @@
     <color name="line">#d0d0d0</color>
     <color name="memo_title">#2e2e2e</color>
     <color name="memo_content">#757575</color>
+    <color name="reminder_color">#48a4e7</color>
 </resources>

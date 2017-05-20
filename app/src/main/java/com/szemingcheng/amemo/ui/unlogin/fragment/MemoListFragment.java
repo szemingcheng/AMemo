@@ -4,11 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,63 +17,100 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.szemingcheng.amemo.R;
+import com.szemingcheng.amemo.entity.Memo;
+import com.szemingcheng.amemo.presenter.Imp.MemoListFragmentPresentImp;
+import com.szemingcheng.amemo.presenter.MemoListFragmentPresent;
+import com.szemingcheng.amemo.view.MemoListFragmentView;
+
+import java.util.List;
 
 /**
  * Created by szemingcheng on 2017/5/15.
  */
 
-public class MemoListFragment extends Fragment {
-    public  Context mContext;
+public class MemoListFragment extends Fragment implements MemoListFragmentView {
     public  View mView;
-    private LinearLayout mdateheader;
     public RecyclerView mRecyclerView;
     public SwipeRefreshLayout mSwipeRefreshLayout;
-    public FrameLayout mEmptypage;
-    public TextView mdate;
+//    public FrameLayout mEmptyLayout;
+//    public TextView mErrorMessage;
     public FloatingActionMenu mfloatingActionButton;
     public FloatingActionButton memo_cam;
+    public FloatingActionButton memo_pic;
     public FloatingActionButton memo_reminder;
     public FloatingActionButton memo_txt;
-
+    private MemoListFragmentPresent memoListFragmentPresent;
+    private MemoListAdapter memoListAdapter;
+    List<Memo> data;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        memoListFragmentPresent = new MemoListFragmentPresentImp(this);
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.layout_memo_list_fragment,container,false);
-        mRecyclerView = (RecyclerView)mView.findViewById(R.id.recyclerview);
-        mdateheader = (LinearLayout)mView.findViewById(R.id.sticky_header);
-        mdate = (TextView)mdateheader.findViewById(R.id.date_sort);
+//        mEmptyLayout = (FrameLayout)mView.findViewById(R.id.empty_layout);
+//        mErrorMessage = (TextView)mEmptyLayout.findViewById(R.id.error_view);
         mSwipeRefreshLayout = (SwipeRefreshLayout)mView.findViewById(R.id.swipe_refresh_widget);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        memoListAdapter = new MemoListAdapter(getActivity().getApplicationContext(), new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(getActivity().getApplicationContext(),"点了",Toast.LENGTH_SHORT).show();
+            }
+        });
+        mRecyclerView = (RecyclerView)mView.findViewById(R.id.recyclerview);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setAdapter(memoListAdapter);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (data!=null) data.clear();
+                        memoListFragmentPresent.pulltorefresh("");
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        Toast.makeText(getActivity().getApplication(), "更新了...", Toast.LENGTH_SHORT).show();
+                    }
+                }, 1000);
+            }
+        });
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                    memoListFragmentPresent.getMemo("");
+            }
+        });
         return mView;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view,Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         mfloatingActionButton = (FloatingActionMenu) view.findViewById(R.id.fab_menu);
         memo_cam = (FloatingActionButton)view.findViewById(R.id.menu_item_camera);
+        memo_pic = (FloatingActionButton)view.findViewById(R.id.menu_item_pic);
         memo_reminder = (FloatingActionButton)view.findViewById(R.id.menu_item_reminder);
         mfloatingActionButton.setClosedOnTouchOutside(true);
         mfloatingActionButton.hideMenuButton(false);
-        super.onViewCreated(view, savedInstanceState);
     }
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mfloatingActionButton.showMenuButton(true);
         memo_cam.setOnClickListener(onClickListener);
+        memo_pic.setOnClickListener(onClickListener);
         memo_reminder.setOnClickListener(onClickListener);
         createCustomAnimation();
         mfloatingActionButton.setOnMenuButtonClickListener(new View.OnClickListener() {
@@ -139,8 +177,57 @@ public class MemoListFragment extends Fragment {
                     Toast.makeText(getActivity(), memo_reminder.getLabelText(), Toast.LENGTH_SHORT).show();
                     mfloatingActionButton.toggle(false);
                     break;
-
+                case R.id.memo_pic:
+                    Toast.makeText(getActivity(), memo_pic.getLabelText(), Toast.LENGTH_SHORT).show();
+                    mfloatingActionButton.toggle(false);
             }
         }
     };
+
+    @Override
+    public void updateListView(List<Memo> memos) {
+        memoListAdapter.clear();
+        memoListAdapter.setData(memos);
+        memoListAdapter.notifyDataSetChanged();
+    }
+    @Override
+    public void showLoadingIcon() {
+     mSwipeRefreshLayout.setRefreshing(true);
+    }
+    @Override
+    public void hideLoadingIcon() {
+    mSwipeRefreshLayout.setRefreshing(false);
+
+    }
+
+//    @Override
+//    public void showRecyclerView() {
+//        if (mSwipeRefreshLayout.getVisibility() != View.VISIBLE) {
+//            mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+//        }
+//    }
+//
+//    @Override
+//    public void hideRecyclerView() {
+//        if (mSwipeRefreshLayout.getVisibility() != View.GONE) {
+//            mSwipeRefreshLayout.setVisibility(View.GONE);
+//        }
+//    }
+//
+//    @Override
+//    public void showEmptyBackground(String text) {
+//        if (mEmptyLayout.getVisibility() != View.VISIBLE) {
+//            mEmptyLayout.setVisibility(View.VISIBLE);
+//            mErrorMessage.setText(text);
+//        }
+//    }
+//
+//    @Override
+//    public void hideEmptyBackground() {
+//        if (mEmptyLayout.getVisibility() != View.GONE) {
+//            mEmptyLayout.setVisibility(View.GONE);
+//        }
+//    }
+
+
 }

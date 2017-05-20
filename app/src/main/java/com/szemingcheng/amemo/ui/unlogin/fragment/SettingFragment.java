@@ -9,6 +9,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.szemingcheng.amemo.R;
+
 /**
  * Created by szemingcheng on 2017/5/15.
  */
@@ -27,7 +29,7 @@ public class SettingFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+       return inflater.inflate(R.layout.layput_empty,container,false);
     }
 
     @Override
