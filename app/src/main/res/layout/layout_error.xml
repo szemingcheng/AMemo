@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/empty_layout"
+    android:id="@+id/error_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:background="#f9f9f9"
     android:visibility="invisible">
     <TextView
-    android:id="@+id/empty_view"
+        android:id="@+id/error_view"
         android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text=" 空！"
-            android:drawableTop="@drawable/vector_drawable_box_empty"
-            android:textSize="18sp" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="出错啦，点击重试"
+        android:drawableTop="@drawable/vector_drawable_error"
+        android:textSize="18sp" />
 
 </FrameLayout>

@@ -1,8 +1,8 @@
 package com.szemingcheng.amemo.ui.unlogin.fragment;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,10 +35,11 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      MemoListAdapter(Context context, OnItemClickListener onItemClickListener) {
         mcontext = context;
         this.onItemClickListener = onItemClickListener;
-
+        Log.i("adapter","adapter assigned");
     }
 
      void setData(List<Memo> data) {
+         Log.i("adapter","set data:"+data.size());
         list = data;
         this.notifyDataSetChanged();
     }
@@ -72,6 +73,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else if (list.get(position).getType() == Memo.TYPE_REMINDER) {
             return REMINDER_VIEW;
         } else {
+            Log.i("adapter","default item view type:"+super.getItemViewType(position));
             return super.getItemViewType(position);
         }
     }
@@ -79,10 +81,12 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
+        Log.i("adapter","create view holder,view item:"+viewType);
         if (viewType == TXT_VIEW) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.layout_memo_item, parent, false);
             TextViewHolder vh = new TextViewHolder(view,onItemClickListener);
+
             return vh;
         } else if (viewType == PIC_VIEW) {
             view = LayoutInflater.from(parent.getContext())
@@ -95,51 +99,56 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ReminderViewHolder vh = new ReminderViewHolder(view,onItemClickListener);
             return vh;
         }
-        else {
+        else if (viewType == EMPTY_TYPE){
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.layput_empty, parent, false);
             EmptyViewHolder vh = new EmptyViewHolder(view,onItemClickListener);
             return vh;
         }
-
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.layout_error,parent,false);
+            ErrorViewHolder vh = new ErrorViewHolder(view,onItemClickListener);
+            return vh;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        Log.i("adapter","bind view holder:"+holder);
         if (holder instanceof TextViewHolder) {
             Memo memo = list.get(position);
             ((TextViewHolder)holder).memoTitle.setText(memo.getTitle());
-            ((TextViewHolder)holder).memoContent.setText(memo.getContext());
+            ((TextViewHolder)holder).memoContent.setText(memo.getMemotxt());
             ((TextViewHolder)holder).memoUpdateat.setText(TimeUtils.getChatTimeStr(memo.getUpdateat()));
 
         } else if (holder instanceof PicViewHolder) {
             Memo memo = list.get(position);
             ((PicViewHolder) holder).memoTitle.setText(memo.getTitle());
-            ((PicViewHolder) holder).memoContent.setText(memo.getContext());
+            ((PicViewHolder) holder).memoContent.setText(memo.getMemotxt());
             ((PicViewHolder) holder).memoUpdateat.setText(TimeUtils.getChatTimeStr(memo.getUpdateat()));
-            ((PicViewHolder)holder).memoPic.setImageResource(R.drawable.vector_drawable_pic_empty);
+            ((PicViewHolder)holder).memoPic.setImageResource(Integer.parseInt(memo.getPic()));
         } else if (holder instanceof ReminderViewHolder) {
             Memo memo = list.get(position);
             ((ReminderViewHolder) holder).memoTitle.setText(memo.getTitle());
-            ((ReminderViewHolder) holder).memoContent.setText(memo.getContext());
+            ((ReminderViewHolder) holder).memoContent.setText(memo.getMemotxt());
             ((ReminderViewHolder) holder).memoreminderDate.setText(TimeUtils.getChatTimeStr(memo.getReminder_date()));
         }
         else if (holder instanceof EmptyViewHolder){
-            ((EmptyViewHolder)holder).errorView.setText("null!");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ((EmptyViewHolder)holder).errorView.setCompoundDrawables(null,mcontext.getDrawable(R.drawable.vector_drawable_box_empty),null,null);
-            }
-
+            ((EmptyViewHolder)holder).emptyLayout.setVisibility(View.VISIBLE);
+        }
+        else {
+            ((ErrorViewHolder)holder).emptyLayout.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public int getItemCount() {
-        if (list != null) {
+       // Log.i("adapter","item count:"+list.size());
+        if (list != null&&list.size()!=0) {
             return list.size();
-        } else {
+        } else if (list.size()>=0){
             return 1;
         }
+        else return 0;
     }
 
     private class TextViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -225,6 +234,25 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             super(view);
             onItemClickListenerl = onItemClickListener;
             emptyLayout = (FrameLayout) view.findViewById(R.id.empty_layout);
+            errorView = (TextView) view.findViewById(R.id.empty_view);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (null != onItemClickListenerl) {
+                onItemClickListenerl.onItemClick(v, getAdapterPosition());
+            }
+        }
+    }
+    private class ErrorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private FrameLayout emptyLayout;
+        private TextView errorView;
+        private OnItemClickListener onItemClickListenerl;
+
+        private ErrorViewHolder(View view, OnItemClickListener onItemClickListener) {
+            super(view);
+            onItemClickListenerl = onItemClickListener;
+            emptyLayout = (FrameLayout) view.findViewById(R.id.error_layout);
             errorView = (TextView) view.findViewById(R.id.error_view);
         }
 

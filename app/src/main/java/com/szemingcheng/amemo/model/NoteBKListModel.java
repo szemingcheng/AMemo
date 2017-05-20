@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface NoteBKListModel {
     interface OnDataFinishedListener{
-        void noDataFirstLoad(String error);
         void getDataFinish(List<NoteBK> noteBKs);
         void onError(String error);
     }
@@ -19,4 +18,5 @@ public interface NoteBKListModel {
         void onError(String error);
     }
     void notebk_list(String userid, OnDataFinishedListener onDataFinishedListener);
+    void notebk_delete(Long _id,OnRequestListener onRequestListener );
 }

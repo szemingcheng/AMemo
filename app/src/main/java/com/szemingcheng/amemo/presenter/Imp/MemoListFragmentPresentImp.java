@@ -32,20 +32,17 @@ public class MemoListFragmentPresentImp implements MemoListFragmentPresent {
     }
 
     private MemoListModel.OnDataFinishedListener  onDataFinishedListener = new MemoListModel.OnDataFinishedListener() {
-
         @Override
         public void getDataFinish(List<Memo> memos) {
-//            memoListFragmentView.showRecyclerView();
+            memoListFragmentView.showRecyclerView();
             memoListFragmentView.hideLoadingIcon();
             memoListFragmentView.updateListView(memos);
-//            memoListFragmentView.hideEmptyBackground();
         }
 
         @Override
         public void onError(String error) {
             memoListFragmentView.hideLoadingIcon();
-//            memoListFragmentView.hideRecyclerView();
-//            memoListFragmentView.showEmptyBackground(error);
+            memoListFragmentView.hideRecyclerView();
         }
     };
 }

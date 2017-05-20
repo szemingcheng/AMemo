@@ -18,5 +18,6 @@
             />
 </android.support.v4.widget.SwipeRefreshLayout>
 <include layout="@layout/floating_aciton_button"/>
-<!--<include layout="@layout/layput_empty"/>-->
+<include layout="@layout/layput_empty"/>
+<include layout="@layout/layout_error"/>
 </FrameLayout>

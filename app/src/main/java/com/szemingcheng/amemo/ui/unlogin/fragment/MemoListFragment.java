@@ -11,16 +11,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.szemingcheng.amemo.App;
 import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.entity.Memo;
 import com.szemingcheng.amemo.presenter.Imp.MemoListFragmentPresentImp;
@@ -37,8 +41,8 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
     public  View mView;
     public RecyclerView mRecyclerView;
     public SwipeRefreshLayout mSwipeRefreshLayout;
-//    public FrameLayout mEmptyLayout;
-//    public TextView mErrorMessage;
+    public FrameLayout mEmptyLayout;
+    public TextView mErrorMessage;
     public FloatingActionMenu mfloatingActionButton;
     public FloatingActionButton memo_cam;
     public FloatingActionButton memo_pic;
@@ -49,7 +53,7 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
     List<Memo> data;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         memoListFragmentPresent = new MemoListFragmentPresentImp(this);
     }
@@ -58,20 +62,18 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.layout_memo_list_fragment,container,false);
-//        mEmptyLayout = (FrameLayout)mView.findViewById(R.id.empty_layout);
-//        mErrorMessage = (TextView)mEmptyLayout.findViewById(R.id.error_view);
+        mEmptyLayout = (FrameLayout)mView.findViewById(R.id.empty_layout);
+        mErrorMessage = (TextView)mEmptyLayout.findViewById(R.id.empty_view);
         mSwipeRefreshLayout = (SwipeRefreshLayout)mView.findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-        memoListAdapter = new MemoListAdapter(getActivity().getApplicationContext(), new OnItemClickListener() {
+        memoListAdapter = new MemoListAdapter(getActivity().getApplication(), new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getActivity().getApplicationContext(),"点了",Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getAppcontext(),"点了",Toast.LENGTH_SHORT).show();
             }
         });
+        Log.i("setadapter","assigned,context:"+getActivity());
         mRecyclerView = (RecyclerView)mView.findViewById(R.id.recyclerview);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setAdapter(memoListAdapter);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -81,11 +83,15 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
                         if (data!=null) data.clear();
                         memoListFragmentPresent.pulltorefresh("");
                         mSwipeRefreshLayout.setRefreshing(false);
-                        Toast.makeText(getActivity().getApplication(), "更新了...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(App.getAppcontext(), "更新了...", Toast.LENGTH_SHORT).show();
                     }
                 }, 1000);
             }
         });
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setAdapter(memoListAdapter);
+        Log.i("setadapter","recyclerview assigned");
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -189,6 +195,7 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
         memoListAdapter.clear();
         memoListAdapter.setData(memos);
         memoListAdapter.notifyDataSetChanged();
+        Log.i("setadapter","update List view");
     }
     @Override
     public void showLoadingIcon() {
@@ -200,34 +207,18 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
 
     }
 
-//    @Override
-//    public void showRecyclerView() {
-//        if (mSwipeRefreshLayout.getVisibility() != View.VISIBLE) {
-//            mSwipeRefreshLayout.setVisibility(View.VISIBLE);
-//        }
-//    }
-//
-//    @Override
-//    public void hideRecyclerView() {
-//        if (mSwipeRefreshLayout.getVisibility() != View.GONE) {
-//            mSwipeRefreshLayout.setVisibility(View.GONE);
-//        }
-//    }
-//
-//    @Override
-//    public void showEmptyBackground(String text) {
-//        if (mEmptyLayout.getVisibility() != View.VISIBLE) {
-//            mEmptyLayout.setVisibility(View.VISIBLE);
-//            mErrorMessage.setText(text);
-//        }
-//    }
-//
-//    @Override
-//    public void hideEmptyBackground() {
-//        if (mEmptyLayout.getVisibility() != View.GONE) {
-//            mEmptyLayout.setVisibility(View.GONE);
-//        }
-//    }
+    @Override
+    public void showRecyclerView() {
+        if (mSwipeRefreshLayout.getVisibility() != View.VISIBLE) {
+            mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+        }
+    }
 
+    @Override
+    public void hideRecyclerView() {
+        if (mSwipeRefreshLayout.getVisibility() != View.GONE) {
+            mSwipeRefreshLayout.setVisibility(View.GONE);
+        }
+    }
 
 }

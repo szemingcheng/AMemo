@@ -22,19 +22,15 @@ public class App extends Application {
 //        DaoSession daoSession = getDaoSession();
 //            UserDao userDao = daoSession.getUserDao();
 //        User user = userDao.queryBuilder().where(UserDao.Properties._ID.eq(1L)).unique();
-//        user.setType(User.TYPE_VISITOR);
-//        userDao.insertOrReplace(user);
+//
 //            NoteBKDao noteBKDao = daoSession.getNoteBKDao();
+//        NoteBK noteBK = noteBKDao.queryBuilder().where(NoteBKDao.Properties._ID.eq(1L)).unique();
 //            MemoDao memoDao = daoSession.getMemoDao();
-//        User user = new User();
-//        userDao.insert(user);
-//        NoteBK noteBK = new NoteBK();
-//        noteBK.setTitle("我的第一个笔记本");
-//        noteBKDao.insert(noteBK);
-//        for(int i = 0;i<=11;i++){
+//
+//        for(int i = 0;i<=2;i++){
 //            Memo memo = new Memo();
-//            memo.setTitle("听说今天5.20。标题"+i);
-//            memo.setMemotxt("关我什么事"+getString(R.string.test));
+//            memo.setTitle("小本本标题"+i);
+//            memo.setMemotxt("好的这是文字item");
 //            memo.setUser(user);
 //            memo.setState(Memo.IS_EXSIT);
 //            memo.setType(Memo.TYPE_TXT);
@@ -43,16 +39,32 @@ public class App extends Application {
 //            memo.setUpdateat((System.currentTimeMillis() - 86400000 * i-31536000000L*i+ 3600000 * i));
 //            memoDao.insert(memo);
 //        }
-//            for (int i = 0; i <= 3; i++) {
-//                Note note = new Note();
-//                note.setTitle("test" + i);
-//                note.setMemotxt(getString(R.string.test));
-//                note.setUser(user);
-//                note.setState(Note.IS_EXSIT);
-//                note.setCreatat((System.currentTimeMillis() - 86400000 * i));
-//                note.setUpdateat((System.currentTimeMillis() - 86400000 * i + 3600000 * i));
-//                noteDao.insert(note);
-//            }
+//        for(int i = 0;i<=2;i++){
+//            Memo memo = new Memo();
+//            memo.setTitle("小本本标题"+i);
+//            memo.setMemotxt("好的这是图片item");
+//            memo.setUser(user);
+//            memo.setState(Memo.IS_EXSIT);
+//            memo.setType(Memo.TYPE_CAM);
+//            memo.setPic(String.valueOf(R.drawable.user3));
+//            memo.setNoteBK(noteBK);
+//            memo.setCreatat((System.currentTimeMillis() - 86400000 * i -31536000000L*i ));
+//            memo.setUpdateat((System.currentTimeMillis() - 86400000 * i-31536000000L*i+ 3600000 * i));
+//            memoDao.insert(memo);
+//        }
+//        for(int i = 0;i<=2;i++){
+//            Memo memo = new Memo();
+//            memo.setTitle("小本本标题"+i);
+//            memo.setMemotxt("好的这是提醒item");
+//            memo.setUser(user);
+//            memo.setState(Memo.IS_EXSIT);
+//            memo.setType(Memo.TYPE_REMINDER);
+//            memo.setNoteBK(noteBK);
+//            memo.setReminder_date(System.currentTimeMillis()+3600000*2);
+//            memo.setCreatat((System.currentTimeMillis() - 86400000 * i -31536000000L*i ));
+//            memo.setUpdateat((System.currentTimeMillis() - 86400000 * i-31536000000L*i+ 3600000 * i));
+//            memoDao.insert(memo);
+//        }
     }
 
     public static App getAppcontext() {
