@@ -18,7 +18,7 @@ public interface MemoListModel {
         void onError(String error);
     }
     void memo_all(String userid,OnDataFinishedListener onDataFinishedListener);
-    void memo_in_notebk(String notebk_id,OnDataFinishedListener onDataFinishedListener);
+    void memo_in_notebk(String notebk_title,OnDataFinishedListener onDataFinishedListener);
     void memo_in_trash(String userid,OnDataFinishedListener onDataFinishedListener);
     void memo_delete(Long memo_id,OnRequestListener onRequestListener);
     void memo_in_type(String userid,int type,OnDataFinishedListener onDataFinishedListener);

@@ -31,6 +31,16 @@ public class MemoListFragmentPresentImp implements MemoListFragmentPresent {
         memoListModel.memo_all(user_id,onDataFinishedListener);
     }
 
+    @Override
+    public void getMemo_notebk(String note_title) {
+        memoListModel.memo_in_notebk(note_title,onDataFinishedListener);
+    }
+
+    @Override
+    public void pulltorefresh_notebk(String note_id) {
+        memoListModel.memo_in_notebk(note_id,onDataFinishedListener);
+    }
+
     private MemoListModel.OnDataFinishedListener  onDataFinishedListener = new MemoListModel.OnDataFinishedListener() {
         @Override
         public void getDataFinish(List<Memo> memos) {

@@ -1,4 +1,4 @@
-package com.szemingcheng.amemo.ui.unlogin.fragment;
+package com.szemingcheng.amemo.ui.unlogin.fragment.notebk;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,19 +27,21 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.szemingcheng.amemo.App;
 import com.szemingcheng.amemo.R;
-import com.szemingcheng.amemo.entity.NoteBK;
-import com.szemingcheng.amemo.presenter.Imp.NoteBKListFragmentPresentImp;
-import com.szemingcheng.amemo.presenter.NoteBKListFragmentPresent;
-import com.szemingcheng.amemo.view.NoteBKListFragmentView;
+import com.szemingcheng.amemo.entity.Memo;
+import com.szemingcheng.amemo.presenter.Imp.MemoListFragmentPresentImp;
+import com.szemingcheng.amemo.presenter.MemoListFragmentPresent;
+import com.szemingcheng.amemo.ui.unlogin.fragment.MemoListAdapter;
+import com.szemingcheng.amemo.ui.unlogin.fragment.OnItemClickListener;
+import com.szemingcheng.amemo.view.MemoListFragmentView;
 
 import java.util.List;
 
 /**
- * Created by szemingcheng on 2017/5/15.
+ * Created by szemingcheng on 2017/5/20.
  */
 
-public class NoteBKListFragment extends Fragment implements NoteBKListFragmentView {
-    public  View mView;
+public class MemoListInNBFragment extends Fragment implements MemoListFragmentView {
+    public View mView;
     public RecyclerView mRecyclerView;
     public SwipeRefreshLayout mSwipeRefreshLayout;
     public FrameLayout mEmptyLayout;
@@ -48,25 +51,37 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
     public FloatingActionButton memo_pic;
     public FloatingActionButton memo_reminder;
     public FloatingActionButton memo_txt;
-    private NoteBKListFragmentPresent noteBKListFragmentPresent;
-    private NoteBKListAdapter noteBKListAdapter;
-    List<NoteBK> data;
-
+    private MemoListFragmentPresent memoListFragmentPresent;
+    private MemoListAdapter memoListAdapter;
+    List<Memo> data;
+    String notebk_title;
+    Toolbar mToolbar;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        noteBKListFragmentPresent = new NoteBKListFragmentPresentImp(this);
+        memoListFragmentPresent = new MemoListFragmentPresentImp(this);
+        notebk_title = getArguments().getString("note_book");
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.layout_memo_list_fragment,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mView = inflater.inflate(R.layout.layout_memo_list_in_notebk_fragment,container,false);
+        mToolbar = (Toolbar)mView.findViewById(R.id.toolbar_in_fragment);
         mEmptyLayout = (FrameLayout)mView.findViewById(R.id.empty_layout);
         mErrorMessage = (TextView)mEmptyLayout.findViewById(R.id.empty_view);
         mSwipeRefreshLayout = (SwipeRefreshLayout)mView.findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-        noteBKListAdapter = new NoteBKListAdapter(getActivity().getApplicationContext());
+        memoListAdapter = new MemoListAdapter(getActivity().getApplication(), new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(App.getAppcontext(),"点了",Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onMoreClick(View view, int position) {
+
+            }
+        });
         Log.i("setadapter","assigned,context:"+getActivity());
         mRecyclerView = (RecyclerView)mView.findViewById(R.id.recyclerview);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -76,7 +91,7 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
                     @Override
                     public void run() {
                         if (data!=null) data.clear();
-                        noteBKListFragmentPresent.pulltorefresh("");
+                        memoListFragmentPresent.pulltorefresh_notebk(notebk_title);
                         mSwipeRefreshLayout.setRefreshing(false);
                         Toast.makeText(App.getAppcontext(), "更新了...", Toast.LENGTH_SHORT).show();
                     }
@@ -85,17 +100,18 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setAdapter(noteBKListAdapter);
+        mRecyclerView.setAdapter(memoListAdapter);
         Log.i("setadapter","recyclerview assigned");
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                noteBKListFragmentPresent.getMemo("");
+                memoListFragmentPresent.getMemo_notebk(notebk_title);
             }
         });
         return mView;
     }
 
+    @Override
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mfloatingActionButton = (FloatingActionMenu) view.findViewById(R.id.fab_menu);
@@ -151,6 +167,20 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
         set.setInterpolator(new OvershootInterpolator(2));
         mfloatingActionButton.setIconToggleAnimatorSet(set);
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -169,26 +199,12 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
             }
         }
     };
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public void updateListView(List<NoteBK> noteBKs) {
-        noteBKListAdapter.clear();
-        noteBKListAdapter.setData(noteBKs);
-        noteBKListAdapter.notifyDataSetChanged();
+    public void updateListView(List<Memo> memos) {
+        memoListAdapter.clear();
+        memoListAdapter.setData(memos);
+        memoListAdapter.notifyDataSetChanged();
         Log.i("setadapter","update List view");
     }
     @Override
@@ -214,4 +230,6 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
             mSwipeRefreshLayout.setVisibility(View.GONE);
         }
     }
+
+
 }

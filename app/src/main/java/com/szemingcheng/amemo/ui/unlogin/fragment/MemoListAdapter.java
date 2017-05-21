@@ -32,33 +32,33 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context mcontext;
     private List<Memo> list=new ArrayList<>();
 
-     MemoListAdapter(Context context, OnItemClickListener onItemClickListener) {
+     public MemoListAdapter(Context context, OnItemClickListener onItemClickListener) {
         mcontext = context;
         this.onItemClickListener = onItemClickListener;
         Log.i("adapter","adapter assigned");
     }
 
-     void setData(List<Memo> data) {
+     public void setData(List<Memo> data) {
          Log.i("adapter","set data:"+data.size());
         list = data;
         this.notifyDataSetChanged();
     }
-    void clear() {
+    public void clear() {
         int size = list.size();
         list.clear();
         notifyItemRangeRemoved(0, size);
     }
-     void removeDataItem(int position) {
+    public void removeDataItem(int position) {
         list.remove(position);
         notifyItemRemoved(position);
     }
 
-     void insertData(Memo memo,int position){
+    public void insertData(Memo memo,int position){
         list.add(position,memo);
         notifyItemInserted(position);
     }
 
-     Memo getItemData(int position){
+    public Memo getItemData(int position){
         return list == null ? null : list.size() < position ? null : list.get(position);
     }
 

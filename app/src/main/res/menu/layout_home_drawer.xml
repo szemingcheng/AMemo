@@ -11,7 +11,7 @@
             android:title="笔记本" />
         <item
             android:id="@+id/nav_trash"
-            android:icon="@drawable/vector_drawable_delete"
+            android:icon="@drawable/vector_drawable_trash_black"
             android:title="乐色桶" />
         <item
             android:id="@+id/nav_setting"
