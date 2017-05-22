@@ -9,4 +9,5 @@ import android.view.View;
 public interface OnItemClickListener {
     void onItemClick(View view, int position);
     void onMoreClick(View view,int position);
+    void onItemLongClick(View view,int positon);
 }

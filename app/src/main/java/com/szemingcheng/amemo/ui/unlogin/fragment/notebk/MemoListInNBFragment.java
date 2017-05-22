@@ -1,9 +1,5 @@
 package com.szemingcheng.amemo.ui.unlogin.fragment.notebk;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -18,13 +14,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.szemingcheng.amemo.App;
 import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.entity.Memo;
@@ -44,23 +36,25 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
     public View mView;
     public RecyclerView mRecyclerView;
     public SwipeRefreshLayout mSwipeRefreshLayout;
-    public FrameLayout mEmptyLayout;
-    public TextView mErrorMessage;
-    public FloatingActionMenu mfloatingActionButton;
-    public FloatingActionButton memo_cam;
-    public FloatingActionButton memo_pic;
-    public FloatingActionButton memo_reminder;
-    public FloatingActionButton memo_txt;
     private MemoListFragmentPresent memoListFragmentPresent;
     private MemoListAdapter memoListAdapter;
+    private FrameLayout memolist;
     List<Memo> data;
     String notebk_title;
     Toolbar mToolbar;
+    public static MemoListInNBFragment newInstance(String title){
+        Bundle bundle = new Bundle();
+        bundle.putString("note_title", title);
+        MemoListInNBFragment fragment = new MemoListInNBFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         memoListFragmentPresent = new MemoListFragmentPresentImp(this);
-        notebk_title = getArguments().getString("note_book");
+        notebk_title = getArguments().getString("note_title");
+        Log.i("fragment",notebk_title);
     }
 
     @Nullable
@@ -68,8 +62,8 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.layout_memo_list_in_notebk_fragment,container,false);
         mToolbar = (Toolbar)mView.findViewById(R.id.toolbar_in_fragment);
-        mEmptyLayout = (FrameLayout)mView.findViewById(R.id.empty_layout);
-        mErrorMessage = (TextView)mEmptyLayout.findViewById(R.id.empty_view);
+        mToolbar.setTitle(notebk_title);
+        memolist = (FrameLayout)mView.findViewById(R.id.memo_list_in_nb);
         mSwipeRefreshLayout = (SwipeRefreshLayout)mView.findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         memoListAdapter = new MemoListAdapter(getActivity().getApplication(), new OnItemClickListener() {
@@ -81,9 +75,14 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
             public void onMoreClick(View view, int position) {
 
             }
+
+            @Override
+            public void onItemLongClick(View view, int positon) {
+
+            }
         });
         Log.i("setadapter","assigned,context:"+getActivity());
-        mRecyclerView = (RecyclerView)mView.findViewById(R.id.recyclerview);
+        mRecyclerView = (RecyclerView)memolist.findViewById(R.id.recyclerview);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -112,62 +111,6 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
     }
 
     @Override
-    public void onViewCreated(View view,Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mfloatingActionButton = (FloatingActionMenu) view.findViewById(R.id.fab_menu);
-        memo_cam = (FloatingActionButton)view.findViewById(R.id.menu_item_camera);
-        memo_pic = (FloatingActionButton)view.findViewById(R.id.menu_item_pic);
-        memo_reminder = (FloatingActionButton)view.findViewById(R.id.menu_item_reminder);
-        mfloatingActionButton.setClosedOnTouchOutside(true);
-        mfloatingActionButton.hideMenuButton(false);
-    }
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mfloatingActionButton.showMenuButton(true);
-        memo_cam.setOnClickListener(onClickListener);
-        memo_pic.setOnClickListener(onClickListener);
-        memo_reminder.setOnClickListener(onClickListener);
-        createCustomAnimation();
-        mfloatingActionButton.setOnMenuButtonClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mfloatingActionButton.isOpened()) {
-                    Toast.makeText(getActivity(), mfloatingActionButton.getMenuButtonLabelText(), Toast.LENGTH_SHORT).show();
-                }
-                mfloatingActionButton.toggle(true);
-            }
-        });
-    }
-    private void createCustomAnimation() {
-        AnimatorSet set = new AnimatorSet();
-
-        ObjectAnimator scaleOutX = ObjectAnimator.ofFloat(mfloatingActionButton.getMenuIconView(), "scaleX", 1.0f, 0.2f);
-        ObjectAnimator scaleOutY = ObjectAnimator.ofFloat(mfloatingActionButton.getMenuIconView(), "scaleY", 1.0f, 0.2f);
-
-        ObjectAnimator scaleInX = ObjectAnimator.ofFloat(mfloatingActionButton.getMenuIconView(), "scaleX", 0.2f, 1.0f);
-        ObjectAnimator scaleInY = ObjectAnimator.ofFloat(mfloatingActionButton.getMenuIconView(), "scaleY", 0.2f, 1.0f);
-
-        scaleOutX.setDuration(50);
-        scaleOutY.setDuration(50);
-
-        scaleInX.setDuration(150);
-        scaleInY.setDuration(150);
-
-        scaleInX.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                mfloatingActionButton.getMenuIconView().setImageResource(mfloatingActionButton.isOpened()
-                        ? R.drawable.vector_drawable_pen_memo : R.drawable.fab_add);
-            }
-        });
-
-        set.play(scaleOutX).with(scaleOutY);
-        set.play(scaleInX).with(scaleInY).after(scaleOutX);
-        set.setInterpolator(new OvershootInterpolator(2));
-        mfloatingActionButton.setIconToggleAnimatorSet(set);
-    }
-    @Override
     public void onResume() {
         super.onResume();
     }
@@ -181,24 +124,6 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
     }
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.menu_item_camera:
-                    Toast.makeText(getActivity(), memo_cam.getLabelText(), Toast.LENGTH_SHORT).show();
-                    mfloatingActionButton.toggle(false);
-                    break;
-                case R.id.menu_item_reminder:
-                    Toast.makeText(getActivity(), memo_reminder.getLabelText(), Toast.LENGTH_SHORT).show();
-                    mfloatingActionButton.toggle(false);
-                    break;
-                case R.id.memo_pic:
-                    Toast.makeText(getActivity(), memo_pic.getLabelText(), Toast.LENGTH_SHORT).show();
-                    mfloatingActionButton.toggle(false);
-            }
-        }
-    };
 
     @Override
     public void updateListView(List<Memo> memos) {

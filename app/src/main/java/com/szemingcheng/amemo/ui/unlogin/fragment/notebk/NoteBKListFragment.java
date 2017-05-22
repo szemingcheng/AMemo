@@ -9,8 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -24,6 +22,7 @@ import com.szemingcheng.amemo.presenter.Imp.NoteBKListFragmentPresentImp;
 import com.szemingcheng.amemo.presenter.NoteBKListFragmentPresent;
 import com.szemingcheng.amemo.ui.unlogin.activity.HomeActivity;
 import com.szemingcheng.amemo.ui.unlogin.fragment.OnItemClickListener;
+import com.szemingcheng.amemo.view.HomeActivityView;
 import com.szemingcheng.amemo.view.NoteBKListFragmentView;
 
 import java.util.List;
@@ -38,25 +37,27 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
     public SwipeRefreshLayout mSwipeRefreshLayout;
     public FrameLayout mEmptyLayout;
     public TextView mErrorMessage;
-//    public FloatingActionMenu mfloatingActionButton;
-//    public FloatingActionButton memo_cam;
-//    public FloatingActionButton memo_pic;
-//    public FloatingActionButton memo_reminder;
-//    public FloatingActionButton memo_txt;
     private NoteBKListFragmentPresent noteBKListFragmentPresent;
     private NoteBKListAdapter noteBKListAdapter;
     List<NoteBK> data;
+    HomeActivityView homeActivityView = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         noteBKListFragmentPresent = new NoteBKListFragmentPresentImp(this);
+        homeActivityView = ((HomeActivity)getActivity());
+        Bundle bundle = new Bundle();
+        bundle.putString("fragment","notebklist");
+        homeActivityView.fragment_callback(bundle);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.layout_memo_list_fragment,container,false);
+
+
         mEmptyLayout = (FrameLayout)mView.findViewById(R.id.empty_layout);
         mErrorMessage = (TextView)mEmptyLayout.findViewById(R.id.empty_view);
         mSwipeRefreshLayout = (SwipeRefreshLayout)mView.findViewById(R.id.swipe_refresh_widget);
@@ -64,18 +65,23 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
         noteBKListAdapter = new NoteBKListAdapter(getActivity().getApplicationContext(), new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Bundle bundle = new Bundle();
-                bundle.putString("note_book",noteBKListAdapter.getItemData(position).getTitle());
-                MemoListInNBFragment memoListInNBFragment = new MemoListInNBFragment();
-                memoListInNBFragment.setArguments(bundle);
-//                getActivity().getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.fragment,memoListInNBFragment,"memolistinb").commit();
-                ((HomeActivity)getActivity()).replaceFragment(R.id.home_layout,memoListInNBFragment,"memolistinb");
+//                Bundle bundle = new Bundle();
+//                bundle.putString("note_book",noteBKListAdapter.getItemData(position).getTitle());
+//                homeActivityView.memolist_in_nb_callback(bundle);
+                MemoListInNBFragment memoListInNBFragment =
+                        MemoListInNBFragment.newInstance(noteBKListAdapter.getItemData(position).getTitle());
+                ((HomeActivity)getActivity()).replaceFragment
+                        (R.id.fragment,memoListInNBFragment,"memolistinb");
             }
 
             @Override
             public void onMoreClick(View view, int position) {
                 Toast.makeText(getActivity().getApplicationContext(),"点了more",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemLongClick(View view, int positon) {
+
             }
         });
         Log.i("setadapter","assigned,context:"+getActivity());
@@ -107,79 +113,6 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
         return mView;
     }
 
-//    public void onViewCreated(View view,Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        mfloatingActionButton = (FloatingActionMenu) view.findViewById(R.id.fab_menu);
-//        memo_cam = (FloatingActionButton)view.findViewById(R.id.menu_item_camera);
-//        memo_pic = (FloatingActionButton)view.findViewById(R.id.menu_item_pic);
-//        memo_reminder = (FloatingActionButton)view.findViewById(R.id.menu_item_reminder);
-//        mfloatingActionButton.setClosedOnTouchOutside(true);
-//        mfloatingActionButton.hideMenuButton(false);
-//    }
-//    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        mfloatingActionButton.showMenuButton(true);
-//        memo_cam.setOnClickListener(onClickListener);
-//        memo_pic.setOnClickListener(onClickListener);
-//        memo_reminder.setOnClickListener(onClickListener);
-//        createCustomAnimation();
-//        mfloatingActionButton.setOnMenuButtonClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (mfloatingActionButton.isOpened()) {
-//                    Toast.makeText(getActivity(), mfloatingActionButton.getMenuButtonLabelText(), Toast.LENGTH_SHORT).show();
-//                }
-//                mfloatingActionButton.toggle(true);
-//            }
-//        });
-//    }
-//    private void createCustomAnimation() {
-//        AnimatorSet set = new AnimatorSet();
-//
-//        ObjectAnimator scaleOutX = ObjectAnimator.ofFloat(mfloatingActionButton.getMenuIconView(), "scaleX", 1.0f, 0.2f);
-//        ObjectAnimator scaleOutY = ObjectAnimator.ofFloat(mfloatingActionButton.getMenuIconView(), "scaleY", 1.0f, 0.2f);
-//
-//        ObjectAnimator scaleInX = ObjectAnimator.ofFloat(mfloatingActionButton.getMenuIconView(), "scaleX", 0.2f, 1.0f);
-//        ObjectAnimator scaleInY = ObjectAnimator.ofFloat(mfloatingActionButton.getMenuIconView(), "scaleY", 0.2f, 1.0f);
-//
-//        scaleOutX.setDuration(50);
-//        scaleOutY.setDuration(50);
-//
-//        scaleInX.setDuration(150);
-//        scaleInY.setDuration(150);
-//
-//        scaleInX.addListener(new AnimatorListenerAdapter() {
-//            @Override
-//            public void onAnimationStart(Animator animation) {
-//                mfloatingActionButton.getMenuIconView().setImageResource(mfloatingActionButton.isOpened()
-//                        ? R.drawable.vector_drawable_pen_memo : R.drawable.fab_add);
-//            }
-//        });
-//
-//        set.play(scaleOutX).with(scaleOutY);
-//        set.play(scaleInX).with(scaleInY).after(scaleOutX);
-//        set.setInterpolator(new OvershootInterpolator(2));
-//        mfloatingActionButton.setIconToggleAnimatorSet(set);
-//    }
-//    private View.OnClickListener onClickListener = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            switch (v.getId()) {
-//                case R.id.menu_item_camera:
-//                    Toast.makeText(getActivity(), memo_cam.getLabelText(), Toast.LENGTH_SHORT).show();
-//                    mfloatingActionButton.toggle(false);
-//                    break;
-//                case R.id.menu_item_reminder:
-//                    Toast.makeText(getActivity(), memo_reminder.getLabelText(), Toast.LENGTH_SHORT).show();
-//                    mfloatingActionButton.toggle(false);
-//                    break;
-//                case R.id.memo_pic:
-//                    Toast.makeText(getActivity(), memo_pic.getLabelText(), Toast.LENGTH_SHORT).show();
-//                    mfloatingActionButton.toggle(false);
-//            }
-//        }
-//    };
     @Override
     public void onResume() {
         super.onResume();
@@ -188,11 +121,6 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

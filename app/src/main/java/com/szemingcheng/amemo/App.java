@@ -14,6 +14,8 @@ import com.szemingcheng.amemo.dao.DaoSession;
 public class App extends Application {
         private static App Appcontext;
         private static DaoSession mDaoSession;
+        private static Long Visitor_id;
+        private static Long User_ID = null;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -21,10 +23,18 @@ public class App extends Application {
         Appcontext= this;
 //        DaoSession daoSession = getDaoSession();
 //            UserDao userDao = daoSession.getUserDao();
+//        User user = new User();
+//        user.setType(User.TYPE_VISITOR);
+//        user.set_ID(1L);
 //        User user = userDao.queryBuilder().where(UserDao.Properties._ID.eq(1L)).unique();
-//
-//            NoteBKDao noteBKDao = daoSession.getNoteBKDao();
+//        NoteBKDao noteBKDao = daoSession.getNoteBKDao();
 //        NoteBK noteBK = noteBKDao.queryBuilder().where(NoteBKDao.Properties._ID.eq(1L)).unique();
+//        NoteBK noteBK = new NoteBK();
+//        noteBK.setUser(user);
+//        noteBK.set_ID(1L);
+//        noteBK.setTitle("我的第一个笔记本");
+//        noteBKDao.insert(noteBK);
+//        userDao.insert(user);
 //            MemoDao memoDao = daoSession.getMemoDao();
 //
 //        for(int i = 0;i<=2;i++){
@@ -65,6 +75,7 @@ public class App extends Application {
 //            memo.setUpdateat((System.currentTimeMillis() - 86400000 * i-31536000000L*i+ 3600000 * i));
 //            memoDao.insert(memo);
 //        }
+        Visitor_id = 1L;
     }
 
     public static App getAppcontext() {
@@ -75,6 +86,18 @@ public class App extends Application {
             initDaoSession();
         }
         return mDaoSession;
+    }
+
+    public static Long getVisitor_id() {
+        return Visitor_id;
+    }
+
+    public static Long getUser_ID() {
+        return User_ID;
+    }
+
+    public static void setUser_ID(Long user_ID) {
+        User_ID = user_ID;
     }
 
     private void initDaoSession() {
@@ -88,4 +111,6 @@ public class App extends Application {
         // 获取类似于缓存管理器,提供各表的DAO类
         mDaoSession = daoMaster.newSession();
     }
+
+
 }

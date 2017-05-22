@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -30,10 +31,11 @@ import com.szemingcheng.amemo.ui.unlogin.fragment.MemoListFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.SettingFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.TrashListFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.notebk.NoteBKListFragment;
+import com.szemingcheng.amemo.view.HomeActivityView;
 
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,HomeActivityView {
     private static final String MEMOLIST_FRAGMENT = "memolist";
     private static final String NOTEBKLIST_FRAGMENT ="notebklist";
     private static final String TRASHLIST_FRAGMENT = "trashlist";
@@ -51,6 +53,8 @@ public class HomeActivity extends AppCompatActivity
     public FloatingActionButton memo_reminder;
     public FloatingActionButton memo_txt;
     private long mExitTime = 0;
+    private boolean come_from_menu = false;
+    String Fragment_tag=MEMOLIST_FRAGMENT;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +84,6 @@ public class HomeActivity extends AppCompatActivity
         memo_cam = (FloatingActionButton)findViewById(R.id.menu_item_camera);
         memo_pic = (FloatingActionButton)findViewById(R.id.menu_item_pic);
         memo_reminder = (FloatingActionButton)findViewById(R.id.menu_item_reminder);
-        mfloatingActionButton.setClosedOnTouchOutside(true);
        // mfloatingActionButton.hideMenuButton(false);
         mfloatingActionButton.showMenuButton(true);
         memo_cam.setOnClickListener(onClickListener);
@@ -91,11 +94,20 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 if (mfloatingActionButton.isOpened()) {
-                    Toast.makeText(HomeActivity.this, mfloatingActionButton.getMenuButtonLabelText(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(HomeActivity.this, mfloatingActionButton.getMenuButtonLabelText(),
+//                              Toast.LENGTH_SHORT).show();
+                    come_from_menu = true;
+                    Intent intent = new Intent();
+                    intent.setAction("com.activity.MemoDetailActivity");
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("comefrommunebutton",come_from_menu);
+                    intent.putExtra("comefrommunebutton",bundle);
+                    startActivity(intent);
                 }
                 mfloatingActionButton.toggle(true);
             }
         });
+        mfloatingActionButton.setClosedOnTouchOutside(true);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment, new MemoListFragment()).commit();
@@ -111,13 +123,14 @@ public class HomeActivity extends AppCompatActivity
                     Toast.makeText(HomeActivity.this, memo_cam.getLabelText(), Toast.LENGTH_SHORT).show();
                     mfloatingActionButton.toggle(false);
                     break;
+                case R.id.menu_item_pic:
+                    Toast.makeText(HomeActivity.this, memo_pic.getLabelText(), Toast.LENGTH_SHORT).show();
+                    mfloatingActionButton.toggle(false);
+                    break;
                 case R.id.menu_item_reminder:
                     Toast.makeText(HomeActivity.this, memo_reminder.getLabelText(), Toast.LENGTH_SHORT).show();
                     mfloatingActionButton.toggle(false);
                     break;
-                case R.id.memo_pic:
-                    Toast.makeText(HomeActivity.this, memo_pic.getLabelText(), Toast.LENGTH_SHORT).show();
-                    mfloatingActionButton.toggle(false);
             }
         }
     };
@@ -142,14 +155,25 @@ public class HomeActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        switch (Fragment_tag){
+            case MEMOLIST_FRAGMENT:
+                menu.findItem(R.id.sort_by).setVisible(true);
+                menu.findItem(R.id.nav_setting).setVisible(true);
+                break;
+            case NOTEBKLIST_FRAGMENT:
+                menu.findItem(R.id.nav_setting).setVisible(true);
+                menu.findItem(R.id.sort_by).setVisible(false);
+                break;
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
+        getMenuInflater().inflate(R.menu.memo_list_fragment_menu,menu);
+        return super.onCreateOptionsMenu(menu);
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -158,10 +182,13 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.sort_by) {
+            Toast.makeText(HomeActivity.this,"排序",Toast.LENGTH_SHORT).show();
             return true;
         }
-
+       else if (id==R.id.nav_setting){
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -230,6 +257,15 @@ public class HomeActivity extends AppCompatActivity
     public void setToolbar(Toolbar toolbar) {
         this.toolbar = toolbar;
     }
+
+    public FloatingActionMenu getMfloatingActionButton() {
+        return mfloatingActionButton;
+    }
+
+    public void setMfloatingActionButton(FloatingActionMenu mfloatingActionButton) {
+        this.mfloatingActionButton = mfloatingActionButton;
+    }
+
     private void createCustomAnimation() {
         AnimatorSet set = new AnimatorSet();
 
@@ -257,5 +293,10 @@ public class HomeActivity extends AppCompatActivity
         set.play(scaleInX).with(scaleInY).after(scaleOutX);
         set.setInterpolator(new OvershootInterpolator(2));
         mfloatingActionButton.setIconToggleAnimatorSet(set);
+    }
+
+    @Override
+    public void fragment_callback(Bundle arg) {
+        Fragment_tag = arg.getString("fragment");
     }
 }

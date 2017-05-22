@@ -151,7 +151,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         else return 0;
     }
 
-    private class TextViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class TextViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private LinearLayout aMemoItem;
         private TextView memoTitle;
         private TextView memoContent;
@@ -166,6 +166,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             memoContent = (TextView) view.findViewById(R.id.memo_content);
             memoUpdateat = (TextView) view.findViewById(R.id.update_at);
             aMemoItem.setOnClickListener(this);
+            aMemoItem.setOnLongClickListener(this);
         }
 
         @Override
@@ -174,8 +175,16 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 this.onItemClickListener.onItemClick(v, getAdapterPosition());
             }
         }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (null != onItemClickListener) {
+                this.onItemClickListener.onItemLongClick(v, getAdapterPosition());
+            }
+            return true;
+        }
     }
-    private class PicViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class PicViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
             private LinearLayout aMemoItem;
             private TextView memoTitle;
             private TextView memoContent;
@@ -192,6 +201,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 memoPic = (ImageView) view.findViewById(R.id.memo_pic);
                 memoUpdateat = (TextView) view.findViewById(R.id.update_at);
                 aMemoItem.setOnClickListener(this);
+                aMemoItem.setOnLongClickListener(this);
             }
 
             @Override
@@ -200,8 +210,16 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     this.onItemClickListener.onItemClick(v, getAdapterPosition());
                 }
             }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (null != onItemClickListener) {
+                this.onItemClickListener.onItemLongClick(v, getAdapterPosition());
+            }
+            return true;
         }
-    private class ReminderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    }
+    private class ReminderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
             private LinearLayout aMemoItem;
             private TextView memoTitle;
             private TextView memoContent;
@@ -216,6 +234,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 memoContent = (TextView) view.findViewById(R.id.memo_content);
                 memoreminderDate = (TextView) view.findViewById(R.id.memo_reminder_date);
                 aMemoItem.setOnClickListener(this);
+                aMemoItem.setOnLongClickListener(this);
             }
 
             @Override
@@ -224,7 +243,14 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     this.onItemClickListener.onItemClick(v, getAdapterPosition());
                 }
             }
+        @Override
+        public boolean onLongClick(View v) {
+            if (null != onItemClickListener) {
+                this.onItemClickListener.onItemLongClick(v, getAdapterPosition());
+            }
+            return true;
         }
+    }
     private class EmptyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private FrameLayout emptyLayout;
         private TextView errorView;
@@ -235,6 +261,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             onItemClickListenerl = onItemClickListener;
             emptyLayout = (FrameLayout) view.findViewById(R.id.empty_layout);
             errorView = (TextView) view.findViewById(R.id.empty_view);
+
         }
 
         @Override
