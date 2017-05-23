@@ -56,8 +56,6 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.layout_memo_list_fragment,container,false);
-
-
         mEmptyLayout = (FrameLayout)mView.findViewById(R.id.empty_layout);
         mErrorMessage = (TextView)mEmptyLayout.findViewById(R.id.empty_view);
         mSwipeRefreshLayout = (SwipeRefreshLayout)mView.findViewById(R.id.swipe_refresh_widget);

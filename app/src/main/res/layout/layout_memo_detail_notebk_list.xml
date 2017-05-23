@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/layout_memo_detail_notebk_list"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_margin="50dp"
+    android:orientation="vertical"
+    android:background="@color/bg_color">
+    <EditText
+        android:id="@+id/editNoteBK"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="查找笔记本或添加新的笔记本"
+        android:inputType="text" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonAdd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onButtonClick"
+            android:text="添加" />
+
+        <Button
+            android:id="@+id/buttonQuery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onButtonClick"
+            android:text="查找" />
+    </LinearLayout>
+    <ListView
+        android:id="@+id/memo_detail_notebk_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

@@ -9,6 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="130dp"
     android:orientation="vertical"
+    android:background="#ffffff"
     android:layout_below="@+id/toolbar_in_memo_detail">
     <EditText
         android:id="@+id/memo_detail_title"
@@ -17,8 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:inputType="text"
-        android:text="笔记标题"
-        android:textColor="@color/colorAccent"/>
+        android:hint="笔记标题"
+        android:textColor="@color/colorAccent"
+        />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"

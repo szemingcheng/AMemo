@@ -11,16 +11,23 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v7.widget.Toolbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.TextView;
 
 import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.entity.Memo;
+import com.szemingcheng.amemo.entity.NoteBK;
 import com.szemingcheng.amemo.utils.Editor;
+import com.szemingcheng.amemo.view.MemoDetailActivityView;
 
 import java.io.File;
+import java.util.List;
 
 import jp.wasabeef.richeditor.RichEditor;
 
@@ -28,16 +35,20 @@ import jp.wasabeef.richeditor.RichEditor;
  * Created by szemingcheng on 2017/5/17.
  */
 
-public class MemoDetailActivity extends AppCompatActivity {
+public class MemoDetailActivity extends AppCompatActivity implements MemoDetailActivityView {
     private RichEditor mEditor;
     private Editor editor;
-//    private TextView textView;
+    public final static String VIEW_NOTE_MODE = "VIEW_NOTE_MODE";
+    public final static String CREATE_MEMO_MODE = "CREATE_NOTE_MODE";
     public static final int TAKE_PHOTO = 1;
     public static final int CHOOSE_PHOTO = 2;
     private Uri imageUri;
-    public File outputImage;
+    public  File outputImage;
     private HorizontalScrollView horizontalScrollView;
+    private EditText title;
+    private TextView notebk_title;
     private Memo memo;
+    private MenuItem doneMenuItem;
     boolean come_from_menu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,37 +56,81 @@ public class MemoDetailActivity extends AppCompatActivity {
         setContentView(R.layout.layout_memo_detail);
         memo = new Memo();
         Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra("comefrommunebutton");
-        come_from_menu = bundle.getBoolean("comefrommunebutton");
-//        textView =(TextView) findViewById(R.id.result);
-       Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_in_memo_detail);
-       setSupportActionBar(toolbar);
+        Bundle bundle = intent.getBundleExtra(CREATE_MEMO_MODE);
+        come_from_menu = bundle.getBoolean(CREATE_MEMO_MODE);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_in_memo_detail);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.vector_drawable_back);
+        toolbar.setNavigationOnClickListener(OnNavigationListener);
+        toolbar.setOnMenuItemClickListener(onMenuItemClick);
+        title = (EditText) findViewById(R.id.memo_detail_title);
+        notebk_title = (TextView) findViewById(R.id.memo_detail_notebk);
+        notebk_title.setHint("点击选择笔记本");
+        notebk_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         horizontalScrollView = (HorizontalScrollView)findViewById(R.id.edit_tool);
             editor = new Editor();
             mEditor = (RichEditor) findViewById(R.id.editor);
-            //编辑设置高度
-            mEditor.setEditorHeight(800);
-            //设置字体大小
-            mEditor.setEditorFontSize(22);
-            //设置字体颜色
-            mEditor.setEditorFontColor(Color.BLACK);
-            mEditor.setPadding(10, 10, 10, 10);
-            //背景文字
-            mEditor.setPlaceholder("Insert text here...");
+            initEditor();
             mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
                 @Override
                 public void onTextChange(String text) {
-//                    textView.setText(text);
+                        doneMenuItem.setVisible(true);
                 }
             });
-            initaciton();
+
+            initAction();
         if (come_from_menu){
             horizontalScrollView.setVisibility(View.VISIBLE);
         }
-
     }
 
-    private void initaciton() {
+    private Toolbar.OnClickListener OnNavigationListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            showSaveMemoDialog();
+            onBackPressed();
+        }
+    };
+    private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.memo_save_done:
+                    save_memo();
+                    break;
+            }
+            return true;
+        }
+    };
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        doneMenuItem = menu.getItem(0);
+        return super.onPrepareOptionsMenu(menu);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.memo_detail_activity, menu);
+        return true;
+    }
+    private void save_memo() {
+    }
+
+    private void initEditor() {
+        mEditor.setEditorHeight(800);
+        mEditor.setEditorFontSize(22);
+        mEditor.setEditorFontColor(Color.BLACK);
+        mEditor.setPadding(10, 10, 10, 10);
+        mEditor.setPlaceholder("单击此输入内容....");
+    }
+
+    private void initAction() {
         findViewById(R.id.action_undo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -224,4 +279,48 @@ public class MemoDetailActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void setToolbarTitle(String title) {
+
+    }
+
+    @Override
+    public void initViewOnViewMode(Memo memo) {
+
+    }
+
+    @Override
+    public void initViewOnCreateMode() {
+
+    }
+
+    @Override
+    public void initViewSelectNoteBK(List<NoteBK> noteBKs) {
+
+    }
+
+    @Override
+    public void setDoneMenuItemVisible(boolean visible) {
+
+    }
+
+    @Override
+    public boolean isDoneMenuItemVisible() {
+        return false;
+    }
+
+    @Override
+    public void showSaveMemoDialog() {
+
+    }
+
+    @Override
+    public void showSaveMemoSuccess() {
+
+    }
+
+    @Override
+    public void showSaveMemoFail() {
+
+    }
 }

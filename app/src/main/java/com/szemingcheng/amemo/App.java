@@ -16,6 +16,7 @@ public class App extends Application {
         private static DaoSession mDaoSession;
         private static Long Visitor_id;
         private static Long User_ID = null;
+        private static SQLiteDatabase db ;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -88,15 +89,15 @@ public class App extends Application {
         return mDaoSession;
     }
 
-    public static Long getVisitor_id() {
+    public  Long getVisitor_id() {
         return Visitor_id;
     }
 
-    public static Long getUser_ID() {
+    public  Long getUser_ID() {
         return User_ID;
     }
 
-    public static void setUser_ID(Long user_ID) {
+    public  void setUser_ID(Long user_ID) {
         User_ID = user_ID;
     }
 
@@ -105,12 +106,14 @@ public class App extends Application {
         // 这里会自动执行upgrade的逻辑.backup all table→del all table→create all new table→restore data
         DaoMaster.DevOpenHelper helper =new DaoMaster.DevOpenHelper(this,"notetest-db",null);
         // 得到可写的数据库操作对象
-        SQLiteDatabase db = helper.getWritableDatabase();
+        db = helper.getWritableDatabase();
         // 获得Master实例,相当于给database包装工具
         DaoMaster daoMaster = new DaoMaster(db);
         // 获取类似于缓存管理器,提供各表的DAO类
         mDaoSession = daoMaster.newSession();
     }
 
-
+    public static SQLiteDatabase getDb() {
+        return db;
+    }
 }

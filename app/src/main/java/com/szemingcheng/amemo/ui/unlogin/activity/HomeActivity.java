@@ -94,14 +94,12 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 if (mfloatingActionButton.isOpened()) {
-//                    Toast.makeText(HomeActivity.this, mfloatingActionButton.getMenuButtonLabelText(),
-//                              Toast.LENGTH_SHORT).show();
                     come_from_menu = true;
                     Intent intent = new Intent();
                     intent.setAction("com.activity.MemoDetailActivity");
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean("comefrommunebutton",come_from_menu);
-                    intent.putExtra("comefrommunebutton",bundle);
+                    bundle.putBoolean(MemoDetailActivity.CREATE_MEMO_MODE,come_from_menu);
+                    intent.putExtra(MemoDetailActivity.CREATE_MEMO_MODE,bundle);
                     startActivity(intent);
                 }
                 mfloatingActionButton.toggle(true);
