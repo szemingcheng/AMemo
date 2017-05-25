@@ -31,6 +31,22 @@ public class NoteBKListFragmentPresentImp implements NoteBKListFragmentPresent {
     public void pulltorefresh(String user_id) {
         noteBKListModel.notebk_list(user_id,onDatafinishedlistener);
     }
+
+    @Override
+    public void add_NoteBK(NoteBK noteBK) {
+        noteBKListModel.notebk_add(noteBK,onRequestListener);
+    }
+
+    @Override
+    public void delete_NoteBK(Long notebk_id) {
+        noteBKListModel.notebk_delete(notebk_id,onRequestListener);
+    }
+
+    @Override
+    public void update_NoteBK(NoteBK noteBK) {
+        noteBKListModel.notebk_save(noteBK,onRequestListener);
+    }
+
     private NoteBKListModel.OnDataFinishedListener onDatafinishedlistener = new NoteBKListModel.OnDataFinishedListener() {
         @Override
         public void getDataFinish(List<NoteBK> noteBKs) {
@@ -42,6 +58,22 @@ public class NoteBKListFragmentPresentImp implements NoteBKListFragmentPresent {
         public void onError(String error) {
             noteBKListFragmentView.hideLoadingIcon();
             noteBKListFragmentView.hideRecyclerView();
+        }
+    };
+    private NoteBKListModel.OnRequestListener onRequestListener = new NoteBKListModel.OnRequestListener() {
+        @Override
+        public void onSuccess() {
+            noteBKListFragmentView.showSuccess();
+        }
+
+        @Override
+        public void onSuccess(NoteBK noteBK) {
+            noteBKListFragmentView.AddSuccess(noteBK);
+        }
+
+        @Override
+        public void onError(String error) {
+            noteBKListFragmentView.showError(error);
         }
     };
 }

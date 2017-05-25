@@ -21,8 +21,8 @@ public class MemoDetailActivityPresentImp implements MemoDetailActivityPresent {
     }
 
     @Override
-    public void load_memo_detail(Memo memo) {
-        memoDetailModel.get_memo_detail(memo,onDataFinishedListener);
+    public void load_memo_detail(Long memo_id) {
+        memoDetailModel.get_memo_detail(memo_id,onDataFinishedListener);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class MemoDetailActivityPresentImp implements MemoDetailActivityPresent {
         }
         @Override
         public void onError(String error) {
-            memoDetailActivityView.showSaveMemoFail();
+            memoDetailActivityView.showSaveMemoFail(error);
         }
     };
 

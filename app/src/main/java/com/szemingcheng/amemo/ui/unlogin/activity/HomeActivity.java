@@ -29,7 +29,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.ui.unlogin.fragment.MemoListFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.SettingFragment;
-import com.szemingcheng.amemo.ui.unlogin.fragment.TrashListFragment;
+import com.szemingcheng.amemo.ui.unlogin.fragment.trash.TrashListFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.notebk.NoteBKListFragment;
 import com.szemingcheng.amemo.view.HomeActivityView;
 
@@ -41,6 +41,7 @@ public class HomeActivity extends AppCompatActivity
     private static final String TRASHLIST_FRAGMENT = "trashlist";
     private static final String SETTING_FRAGMENT = "setting";
     private static final String MEMOLIST_IN_NB_FRAGMENT="memolistinb";
+    public static final int MEMO_DETAIL_ACTIVITY = 1;
     Toolbar toolbar;
     DrawerLayout drawer;
     NavigationView navigationView;
@@ -53,7 +54,6 @@ public class HomeActivity extends AppCompatActivity
     public FloatingActionButton memo_reminder;
     public FloatingActionButton memo_txt;
     private long mExitTime = 0;
-    private boolean come_from_menu = false;
     String Fragment_tag=MEMOLIST_FRAGMENT;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,12 +94,10 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 if (mfloatingActionButton.isOpened()) {
-                    come_from_menu = true;
+
                     Intent intent = new Intent();
                     intent.setAction("com.activity.MemoDetailActivity");
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean(MemoDetailActivity.CREATE_MEMO_MODE,come_from_menu);
-                    intent.putExtra(MemoDetailActivity.CREATE_MEMO_MODE,bundle);
+                    intent.putExtra("comefrom",MemoDetailActivity.CREATE_MEMO_MODE);
                     startActivity(intent);
                 }
                 mfloatingActionButton.toggle(true);
@@ -154,20 +152,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        switch (Fragment_tag){
-            case MEMOLIST_FRAGMENT:
-                menu.findItem(R.id.sort_by).setVisible(true);
-                menu.findItem(R.id.nav_setting).setVisible(true);
-                break;
-            case NOTEBKLIST_FRAGMENT:
-                menu.findItem(R.id.nav_setting).setVisible(true);
-                menu.findItem(R.id.sort_by).setVisible(false);
-                break;
-        }
-        return super.onPrepareOptionsMenu(menu);
-    }
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.memo_list_fragment_menu,menu);
         return super.onCreateOptionsMenu(menu);
@@ -178,13 +162,7 @@ public class HomeActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.sort_by) {
-            Toast.makeText(HomeActivity.this,"排序",Toast.LENGTH_SHORT).show();
-            return true;
-        }
-       else if (id==R.id.nav_setting){
+        if (id==R.id.nav_setting){
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -297,4 +275,6 @@ public class HomeActivity extends AppCompatActivity
     public void fragment_callback(Bundle arg) {
         Fragment_tag = arg.getString("fragment");
     }
+
+
 }

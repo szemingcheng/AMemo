@@ -1,0 +1,4 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/check_item" android:title="查看"/>
+    <item android:id="@+id/delete_item" android:title="删除"/>
+</menu>

@@ -1,5 +1,6 @@
 package com.szemingcheng.amemo.model.Imp;
 
+import com.szemingcheng.amemo.App;
 import com.szemingcheng.amemo.dao.MemoDao;
 import com.szemingcheng.amemo.dao.NoteBKDao;
 import com.szemingcheng.amemo.dao.UserDao;
@@ -49,6 +50,93 @@ public class NoteBKListModelImp implements NoteBKListModel {
         else {
             noteBKHelper.deleteByKey(_id);
             onRequestListener.onSuccess();
+        }
+    }
+
+    @Override
+    public void notebk_add(NoteBK noteBK, OnRequestListener onRequestListener) {
+        boolean error = false;
+        String userid = App.getAppcontext().getUser_ID();
+        if (userid.equals("")){
+            User user = userHelper.queryBuilder()
+                    .where(UserDao.Properties._ID.eq(1L))
+                    .unique();
+            List<NoteBK> notes = noteBKHelper.queryBuilder()
+                    .where(NoteBKDao.Properties.User_id.eq(1L)).list();
+                for (NoteBK noteBK1 : notes) {
+                    if (noteBK1.getTitle().equals(noteBK.getTitle())) {
+                        error = true;
+                        onRequestListener.onError("笔记本标题不能重复！");
+                    }
+                }
+            if (!error){
+                noteBK.setNotebk_id(String.valueOf(System.currentTimeMillis()));
+                noteBK.setUser(user);
+                noteBKHelper.save(noteBK);
+                onRequestListener.onSuccess(noteBK);
+            }
+        }
+        else {
+            User user = userHelper.queryBuilder()
+                    .where(UserDao.Properties.User_id.eq(App.getAppcontext().getUser_ID()))
+                    .unique();
+            Long user_id = user.get_ID();
+            List<NoteBK> notes = noteBKHelper.queryBuilder()
+                    .where(NoteBKDao.Properties.User_id.eq(user_id)).list();
+            for (NoteBK noteBK1:notes){
+                if (noteBK1.getTitle().equals(noteBK.getTitle())) {
+                    error = true;
+                    onRequestListener.onError("笔记本标题不能重复！");
+                }
+            }
+            if (!error){
+                noteBK.setNotebk_id(String.valueOf(System.currentTimeMillis()));
+                noteBK.setUser(user);
+                noteBKHelper.save(noteBK);
+                onRequestListener.onSuccess(noteBK);
+            }
+        }
+
+    }
+
+    @Override
+    public void notebk_save(NoteBK noteBK, OnRequestListener onRequestListener) {
+        boolean error = false;
+        String userid = App.getAppcontext().getUser_ID();
+        if (userid.equals("")){
+            User user = userHelper.queryBuilder()
+                    .where(UserDao.Properties._ID.eq(1L))
+                    .unique();
+            List<NoteBK> notes = noteBKHelper.queryBuilder()
+                    .where(NoteBKDao.Properties.User_id.eq(1L)).list();
+            for (NoteBK noteBK1 : notes) {
+                if (noteBK1.getTitle().equals(noteBK.getTitle())) {
+                    error = true;
+                    onRequestListener.onError("笔记本标题不能重复！");
+                }
+            }
+            if (!error){
+                noteBKHelper.update(noteBK);
+                onRequestListener.onSuccess();
+            }
+        }
+        else {
+            User user = userHelper.queryBuilder()
+                    .where(UserDao.Properties.User_id.eq(App.getAppcontext().getUser_ID()))
+                    .unique();
+            Long user_id = user.get_ID();
+            List<NoteBK> notes = noteBKHelper.queryBuilder()
+                    .where(NoteBKDao.Properties.User_id.eq(user_id)).list();
+            for (NoteBK noteBK1:notes){
+                if (noteBK1.getTitle().equals(noteBK.getTitle())) {
+                    error = true;
+                    onRequestListener.onError("笔记本标题不能重复！");
+                }
+            }
+            if (!error){
+                noteBKHelper.update(noteBK);
+                onRequestListener.onSuccess();
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ import com.szemingcheng.amemo.entity.Memo;
 
 public interface MemoDetailActivityPresent {
 
-    void load_memo_detail(Memo memo);
+    void load_memo_detail(Long memo_id);
     void save_memo_detail(Memo memo);
     void update_memo_detail(Memo memo);
 

@@ -1,6 +1,8 @@
 package com.szemingcheng.amemo.ui.unlogin.fragment;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.entity.Memo;
 import com.szemingcheng.amemo.utils.TimeUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,7 +128,14 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ((PicViewHolder) holder).memoTitle.setText(memo.getTitle());
             ((PicViewHolder) holder).memoContent.setText(memo.getMemotxt());
             ((PicViewHolder) holder).memoUpdateat.setText(TimeUtils.getChatTimeStr(memo.getUpdateat()));
-            ((PicViewHolder)holder).memoPic.setImageResource(Integer.parseInt(memo.getPic()));
+            String file = memo.getPic();
+           File file1 = new File(file);
+            if (file1.exists()) {
+                Bitmap bm = BitmapFactory.decodeFile(file);
+                ((PicViewHolder)holder).memoPic.setImageBitmap(bm);
+            }
+            else ((PicViewHolder)holder).memoPic.setImageResource(R.drawable.vector_drawable_pic_empty);
+
         } else if (holder instanceof ReminderViewHolder) {
             Memo memo = list.get(position);
             ((ReminderViewHolder) holder).memoTitle.setText(memo.getTitle());

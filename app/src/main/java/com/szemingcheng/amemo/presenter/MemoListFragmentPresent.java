@@ -9,4 +9,5 @@ public interface MemoListFragmentPresent {
     void pulltorefresh(String user_id);
     void getMemo_notebk(String note_title);
     void pulltorefresh_notebk(String note_title);
+    void delete_memo(Long memo_id);
 }

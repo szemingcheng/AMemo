@@ -15,7 +15,7 @@ public class App extends Application {
         private static App Appcontext;
         private static DaoSession mDaoSession;
         private static Long Visitor_id;
-        private static Long User_ID = null;
+        private static String User_ID = "";
         private static SQLiteDatabase db ;
     @Override
     public void onCreate() {
@@ -27,9 +27,9 @@ public class App extends Application {
 //        User user = new User();
 //        user.setType(User.TYPE_VISITOR);
 //        user.set_ID(1L);
-//        User user = userDao.queryBuilder().where(UserDao.Properties._ID.eq(1L)).unique();
+////        User user = userDao.queryBuilder().where(UserDao.Properties._ID.eq(1L)).unique();
 //        NoteBKDao noteBKDao = daoSession.getNoteBKDao();
-//        NoteBK noteBK = noteBKDao.queryBuilder().where(NoteBKDao.Properties._ID.eq(1L)).unique();
+////        NoteBK noteBK = noteBKDao.queryBuilder().where(NoteBKDao.Properties._ID.eq(1L)).unique();
 //        NoteBK noteBK = new NoteBK();
 //        noteBK.setUser(user);
 //        noteBK.set_ID(1L);
@@ -93,11 +93,11 @@ public class App extends Application {
         return Visitor_id;
     }
 
-    public  Long getUser_ID() {
+    public  String getUser_ID() {
         return User_ID;
     }
 
-    public  void setUser_ID(Long user_ID) {
+    public  void setUser_ID(String user_ID) {
         User_ID = user_ID;
     }
 

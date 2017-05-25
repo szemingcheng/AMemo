@@ -1,10 +1,13 @@
 package com.szemingcheng.amemo.ui.unlogin.fragment.notebk;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +25,7 @@ import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.entity.Memo;
 import com.szemingcheng.amemo.presenter.Imp.MemoListFragmentPresentImp;
 import com.szemingcheng.amemo.presenter.MemoListFragmentPresent;
+import com.szemingcheng.amemo.ui.unlogin.activity.MemoDetailActivity;
 import com.szemingcheng.amemo.ui.unlogin.fragment.MemoListAdapter;
 import com.szemingcheng.amemo.ui.unlogin.fragment.OnItemClickListener;
 import com.szemingcheng.amemo.view.MemoListFragmentView;
@@ -69,7 +73,11 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
         memoListAdapter = new MemoListAdapter(getActivity().getApplication(), new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(App.getAppcontext(),"点了",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setAction("com.activity.MemoDetailActivity");
+                intent.putExtra("comefrom", MemoDetailActivity.VIEW_MEMO_MODE);
+                intent.putExtra("id",memoListAdapter.getItemData(position).get_ID());
+                startActivity(intent);
             }
             @Override
             public void onMoreClick(View view, int position) {
@@ -78,7 +86,7 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
 
             @Override
             public void onItemLongClick(View view, int positon) {
-
+                showMultiBtnDialog(memoListAdapter.getItemData(positon),positon);
             }
         });
         Log.i("setadapter","assigned,context:"+getActivity());
@@ -113,6 +121,7 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
     @Override
     public void onResume() {
         super.onResume();
+        memoListFragmentPresent.getMemo_notebk(notebk_title);
     }
 
     @Override
@@ -133,16 +142,6 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
         Log.i("setadapter","update List view");
     }
     @Override
-    public void showLoadingIcon() {
-        mSwipeRefreshLayout.setRefreshing(true);
-    }
-    @Override
-    public void hideLoadingIcon() {
-        mSwipeRefreshLayout.setRefreshing(false);
-
-    }
-
-    @Override
     public void showRecyclerView() {
         if (mSwipeRefreshLayout.getVisibility() != View.VISIBLE) {
             mSwipeRefreshLayout.setVisibility(View.VISIBLE);
@@ -156,5 +155,46 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
         }
     }
 
+    @Override
+    public void showSuccess() {
+        Toast.makeText(App.getAppcontext(),"删除成功",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showError(String error) {
+        Toast.makeText(App.getAppcontext(),error,Toast.LENGTH_SHORT).show();
+    }
+    private void showMultiBtnDialog(final Memo memo, final int position){
+        AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(getActivity());
+        normalDialog.setTitle(memo.getTitle()).setMessage("您想进行什么操作呢？");
+        normalDialog.setPositiveButton("取消",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // ...To-do
+                    }
+                });
+        normalDialog.setNeutralButton("删除",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        memoListFragmentPresent.delete_memo(memo.get_ID());
+                        memoListAdapter.removeDataItem(position);
+                    }
+                });
+        normalDialog.setNegativeButton("查看", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent();
+                intent.setAction("com.activity.MemoDetailActivity");
+                intent.putExtra("comefrom", MemoDetailActivity.VIEW_MEMO_MODE);
+                intent.putExtra("id",memo.get_ID());
+                startActivity(intent);
+            }
+        });
+        // 创建实例并显示
+        normalDialog.show();
+    }
 
 }

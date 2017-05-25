@@ -10,14 +10,9 @@ import java.util.List;
 
 public interface MemoListFragmentView {
    void updateListView(List<Memo> memos);
-
-     void showLoadingIcon();
-
-     void hideLoadingIcon();
-
      void showRecyclerView();
-
      void hideRecyclerView();
-
+    void showSuccess();
+    void showError(String error);
 
 }

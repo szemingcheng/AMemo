@@ -15,7 +15,7 @@ public interface MemoDetailModel {
         void onSuccess();
         void onError(String error);
     }
-    void get_memo_detail(Memo memo,OnDataFinishedListener onDataFinishedListener);
+    void get_memo_detail(Long id,OnDataFinishedListener onDataFinishedListener);
     void save_memo(Memo memo, OnRequestListener onRequestListener);
     void update_memo(Memo memo,OnRequestListener onRequestListener);
 }

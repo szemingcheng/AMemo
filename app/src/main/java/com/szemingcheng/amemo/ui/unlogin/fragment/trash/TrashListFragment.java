@@ -1,17 +1,17 @@
-package com.szemingcheng.amemo.ui.unlogin.fragment;
+package com.szemingcheng.amemo.ui.unlogin.fragment.trash;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -21,12 +21,14 @@ import android.widget.Toast;
 import com.szemingcheng.amemo.App;
 import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.entity.Memo;
-import com.szemingcheng.amemo.presenter.Imp.MemoListFragmentPresentImp;
-import com.szemingcheng.amemo.presenter.MemoListFragmentPresent;
+import com.szemingcheng.amemo.presenter.Imp.TrashListFragmentPresentImp;
+import com.szemingcheng.amemo.presenter.TrashListFragmentPresent;
 import com.szemingcheng.amemo.ui.unlogin.activity.HomeActivity;
 import com.szemingcheng.amemo.ui.unlogin.activity.MemoDetailActivity;
+import com.szemingcheng.amemo.ui.unlogin.fragment.MemoListAdapter;
+import com.szemingcheng.amemo.ui.unlogin.fragment.OnItemClickListener;
 import com.szemingcheng.amemo.view.HomeActivityView;
-import com.szemingcheng.amemo.view.MemoListFragmentView;
+import com.szemingcheng.amemo.view.TrashListFragmentView;
 
 import java.util.List;
 
@@ -34,25 +36,24 @@ import java.util.List;
  * Created by szemingcheng on 2017/5/15.
  */
 
-public class MemoListFragment extends Fragment implements MemoListFragmentView {
+public class TrashListFragment extends Fragment implements TrashListFragmentView {
     public  View mView;
     public RecyclerView mRecyclerView;
     public SwipeRefreshLayout mSwipeRefreshLayout;
     public FrameLayout mEmptyLayout;
     public TextView mErrorMessage;
-    private MemoListFragmentPresent memoListFragmentPresent;
+    private TrashListFragmentPresent trashListFragmentPresent;
     private MemoListAdapter memoListAdapter;
     List<Memo> data;
     HomeActivityView homeActivityView = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        memoListFragmentPresent = new MemoListFragmentPresentImp(this);
+        trashListFragmentPresent = new TrashListFragmentPresentImp(this);
         homeActivityView = ((HomeActivity)getActivity());
         Bundle bundle = new Bundle();
         bundle.putString("fragment","memolist");
         homeActivityView.fragment_callback(bundle);
-        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -68,7 +69,7 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent();
                 intent.setAction("com.activity.MemoDetailActivity");
-                intent.putExtra("comefrom", MemoDetailActivity.VIEW_MEMO_MODE);
+                intent.putExtra("comefrom", MemoDetailActivity.VIEW_DELETE_MODE);
                 intent.putExtra("id",memoListAdapter.getItemData(position).get_ID());
                 startActivity(intent);
             }
@@ -78,8 +79,7 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
             }
             @Override
             public void onItemLongClick(View view, int positon) {
-                Memo memo = memoListAdapter.getItemData(positon);
-                showMultiBtnDialog(memo,positon);
+                Toast.makeText(App.getAppcontext(),"长按",Toast.LENGTH_SHORT).show();
             }
         });
         Log.i("setadapter","assigned,context:"+getActivity());
@@ -91,7 +91,7 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
                     @Override
                     public void run() {
                         if (data!=null) data.clear();
-                        memoListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
+                        trashListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
                         mSwipeRefreshLayout.setRefreshing(false);
                         Toast.makeText(App.getAppcontext(), "更新了...", Toast.LENGTH_SHORT).show();
                     }
@@ -105,10 +105,9 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                    memoListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
+                trashListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
             }
         });
-
         return mView;
     }
 
@@ -120,7 +119,7 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
                 if (data!=null) data.clear();
-                memoListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
+                trashListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         }, 2000);
@@ -129,6 +128,12 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu,inflater);
+        getActivity().getMenuInflater().inflate(R.menu.memo_list_fragment_menu,menu);
     }
 
     @Override
@@ -151,48 +156,5 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
         if (mSwipeRefreshLayout.getVisibility() != View.GONE) {
             mSwipeRefreshLayout.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void showSuccess() {
-        Toast.makeText(App.getAppcontext(),"删除成功",Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showError(String error) {
-        Toast.makeText(App.getAppcontext(),error,Toast.LENGTH_SHORT).show();
-    }
-
-    private void showMultiBtnDialog(final Memo memo, final int position){
-        AlertDialog.Builder normalDialog =
-                new AlertDialog.Builder(getActivity());
-        normalDialog.setTitle(memo.getTitle()).setMessage("您想进行什么操作呢？");
-        normalDialog.setPositiveButton("取消",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // ...To-do
-                    }
-                });
-        normalDialog.setNeutralButton("删除",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        memoListFragmentPresent.delete_memo(memo.get_ID());
-                        memoListAdapter.removeDataItem(position);
-                    }
-                });
-        normalDialog.setNegativeButton("查看", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent();
-                intent.setAction("com.activity.MemoDetailActivity");
-                intent.putExtra("comefrom", MemoDetailActivity.VIEW_MEMO_MODE);
-                intent.putExtra("id",memo.get_ID());
-                startActivity(intent);
-            }
-        });
-        // 创建实例并显示
-        normalDialog.show();
     }
 }

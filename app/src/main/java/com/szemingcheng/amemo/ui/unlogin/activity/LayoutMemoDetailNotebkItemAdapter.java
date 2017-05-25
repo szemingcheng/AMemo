@@ -1,13 +1,10 @@
-package com.szemingcheng.amemo.ui.unlogin.fragment.notebk;
+package com.szemingcheng.amemo.ui.unlogin.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,23 +15,19 @@ import com.szemingcheng.amemo.ui.unlogin.fragment.OnItemClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by szemingcheng on 2017/5/20.
- */
 
-public class NoteBKListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class LayoutMemoDetailNotebkItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<NoteBK> list=new ArrayList<>();
     private Context context;
-    private final int EMPTY_TYPE = -1;
     private OnItemClickListener onItemClickListener;
 
-    public NoteBKListAdapter(Context context, OnItemClickListener onItemClickListener) {
+    public LayoutMemoDetailNotebkItemAdapter(Context context, OnItemClickListener onItemClickListener) {
         this.context = context;
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void setData(List<NoteBK> data) {
-        list = data;
+    public void setData(List<NoteBK> list) {
+        this.list = list;
         this.notifyDataSetChanged();
     }
     public void clear() {
@@ -57,36 +50,27 @@ public class NoteBKListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemViewType(int position) {
-        if (list.size()<=0) return EMPTY_TYPE;
         return super.getItemViewType(position);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        if (viewType == EMPTY_TYPE ){
-            view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.layput_empty, parent, false);
-            EmptyViewHolder vh = new EmptyViewHolder(view);
-            return vh;
-        }
         view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.layout_notebk_item, parent, false);
-        NoteBKViewHolder vh = new NoteBKViewHolder(view,onItemClickListener);
+                .inflate(R.layout.layout_memo_detail_notebk_item, parent, false);
+        LayoutMemoDetailNotebkItemAdapter.NoteBKViewHolder vh =
+                new LayoutMemoDetailNotebkItemAdapter.NoteBKViewHolder(view,onItemClickListener);
         return vh;
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof EmptyViewHolder){
-            ((EmptyViewHolder)holder).emptyLayout.setVisibility(View.VISIBLE);
-        }
-        else {
-            NoteBK noteBK = list.get(position);
-            ((NoteBKViewHolder) holder).noteBookTitle.setText(noteBK.getTitle());
-//            ((NoteBKViewHolder) holder).memoQuantity.setText(noteBK.getMemos().size()+"条笔记");
-        }
+        NoteBK noteBK = list.get(position);
+        ((LayoutMemoDetailNotebkItemAdapter.NoteBKViewHolder) holder)
+                .noteBookTitle.setText(noteBK.getTitle());
+//        ((LayoutMemoDetailNotebkItemAdapter.NoteBKViewHolder) holder)
+//                .memoQuantity.setText(String.valueOf((noteBK.getMemos()).size())+"条笔记");
+
     }
 
     @Override
@@ -104,17 +88,14 @@ public class NoteBKListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         private LinearLayout noteBook;
         private TextView noteBookTitle;
         private TextView memoQuantity;
-        private ImageView noteBookMore;
         private OnItemClickListener onItemClickListener;
         public NoteBKViewHolder(View view,OnItemClickListener onItemClickListener1) {
             super(view);
             onItemClickListener = onItemClickListener1;
-            noteBook = (LinearLayout) view.findViewById(R.id.note_book);
-            noteBookTitle = (TextView) view.findViewById(R.id.note_book_title);
-            memoQuantity = (TextView) view.findViewById(R.id.memo_quantity);
-            noteBookMore = (ImageView) view.findViewById(R.id.note_book_more);
+            noteBook = (LinearLayout) view.findViewById(R.id.note_book_select_item);
+            noteBookTitle = (TextView) view.findViewById(R.id.note_book_select_title);
+            memoQuantity = (TextView) view.findViewById(R.id.note_book_select_quantity);
             noteBook.setOnClickListener(NBitemListener);
-            noteBookMore.setOnClickListener(NBMoreListener);
         }
         private View.OnClickListener NBitemListener = new View.OnClickListener() {
             @Override
@@ -124,24 +105,6 @@ public class NoteBKListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }
             }
         };
-        private View.OnClickListener NBMoreListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != onItemClickListener) {
-                    onItemClickListener.onMoreClick(v, getAdapterPosition());
-                }
-            }
-        };
     }
 
-    private class EmptyViewHolder extends RecyclerView.ViewHolder {
-        private FrameLayout emptyLayout;
-        private TextView errorView;
-        private EmptyViewHolder(View view) {
-            super(view);
-            emptyLayout = (FrameLayout) view.findViewById(R.id.empty_layout);
-            errorView = (TextView) view.findViewById(R.id.empty_view);
-
-        }
-    }
 }

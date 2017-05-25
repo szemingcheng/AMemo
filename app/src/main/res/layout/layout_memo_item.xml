@@ -1,78 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:id="@+id/memo_item"
     android:layout_width="match_parent"
     android:layout_height="130dp"
     android:background="?android:attr/selectableItemBackground"
-    xmlns:tool="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:id="@+id/memo_item">
+    android:focusable="false"
+    android:orientation="vertical">
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/line"
-        android:layout_marginStart="25dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp"/>
+        android:layout_marginStart="25dp"
+        android:background="@color/line" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="start|top"
         android:orientation="horizontal">
+
         <LinearLayout
             android:id="@+id/a_memo_txt"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:paddingBottom="10dp"
-            android:paddingStart="0dp"
-            android:paddingLeft="0dp"
             android:paddingEnd="5dp"
-            android:paddingRight="5dp">
+            android:paddingLeft="0dp"
+            android:paddingRight="5dp"
+            android:paddingStart="0dp">
+
             <TextView
                 android:id="@+id/memo_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="none"
-                android:maxLines="2"
-                tool:text="XXXXMemo"
-                android:textColor="@color/memo_title"
-                android:textSize="@dimen/memo_title_txt"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="25dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginEnd="5dp" />
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:ellipsize="none"
+                android:maxLines="2"
+                android:textColor="@color/memo_title"
+                android:textSize="@dimen/memo_title_txt"
+                tool:text="XXXXMemo" />
+
             <TextView
+                android:id="@+id/update_at"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/update_at"
-                android:layout_marginStart="25dp"
                 android:layout_marginLeft="25dp"
+                android:layout_marginStart="25dp"
                 android:textColor="@color/colorAccent"
                 android:textSize="12sp"
-                tool:text="今天12:12"/>
+                tool:text="今天12:12" />
+
             <TextView
                 android:id="@+id/memo_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="none"
-                tool:text="@string/haha"
-                android:textColor="@color/memo_content"
-                android:maxLines="4"
-                android:layout_marginStart="25dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginEnd="5dp" />
+                android:layout_marginStart="25dp"
+                android:ellipsize="none"
+                android:maxLines="4"
+                android:textColor="@color/memo_content"
+                tool:text="@string/haha" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
-                android:layout_marginStart="25dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginEnd="5dp"
-                />
+                android:layout_marginStart="25dp" />
         </LinearLayout>
 
     </LinearLayout>

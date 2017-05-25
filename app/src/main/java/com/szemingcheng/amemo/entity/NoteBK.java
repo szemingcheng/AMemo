@@ -20,12 +20,12 @@ import java.util.List;
  * Created by szemingcheng on 2017/5/16.
  */
 @Entity
-public class NoteBK {
+public class NoteBK  {
     @Id(autoincrement = true)
     Long _ID;
 
-    String notebk_id;
-    @NotNull@Unique String title;
+    @Unique String notebk_id;
+    @NotNull String title;
     Long User_id;
 
     @ToMany(referencedJoinProperty = "NoteBK_ID")
@@ -168,5 +168,4 @@ public class NoteBK {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getNoteBKDao() : null;
     }
-
 }

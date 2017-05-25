@@ -87,7 +87,7 @@ public class MemoListModelImp implements MemoListModel {
         Memo memo = memoHelper.queryBuilder().where(MemoDao.Properties._ID.eq(memo_id)).unique();
         int state = memo.getState();
         if (state == Memo.IS_DELETE||state!=Memo.IS_EXSIT){
-            onRequestListener.onError("error");
+            onRequestListener.onError("未知错误，删除失败");
             error = true;
         }
         else {

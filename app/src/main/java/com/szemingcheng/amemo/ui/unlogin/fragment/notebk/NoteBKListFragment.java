@@ -1,10 +1,12 @@
 package com.szemingcheng.amemo.ui.unlogin.fragment.notebk;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -63,20 +65,15 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
         noteBKListAdapter = new NoteBKListAdapter(getActivity().getApplicationContext(), new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-//                Bundle bundle = new Bundle();
-//                bundle.putString("note_book",noteBKListAdapter.getItemData(position).getTitle());
-//                homeActivityView.memolist_in_nb_callback(bundle);
                 MemoListInNBFragment memoListInNBFragment =
                         MemoListInNBFragment.newInstance(noteBKListAdapter.getItemData(position).getTitle());
                 ((HomeActivity)getActivity()).replaceFragment
                         (R.id.fragment,memoListInNBFragment,"memolistinb");
             }
-
             @Override
             public void onMoreClick(View view, int position) {
-                Toast.makeText(getActivity().getApplicationContext(),"点了more",Toast.LENGTH_SHORT).show();
+                showMultiBtnDialog(noteBKListAdapter.getItemData(position),position);
             }
-
             @Override
             public void onItemLongClick(View view, int positon) {
 
@@ -105,7 +102,7 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                noteBKListFragmentPresent.getMemo("");
+                noteBKListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
             }
         });
         return mView;
@@ -114,6 +111,16 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
     @Override
     public void onResume() {
         super.onResume();
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mSwipeRefreshLayout.setRefreshing(true);
+//                if (data!=null) data.clear();
+//               noteBKListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
+//                mSwipeRefreshLayout.setRefreshing(false);
+//            }
+//        }, 2000);
+        noteBKListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
     }
 
     @Override
@@ -130,12 +137,9 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
     }
     @Override
     public void showLoadingIcon() {
-        mSwipeRefreshLayout.setRefreshing(true);
     }
     @Override
     public void hideLoadingIcon() {
-        mSwipeRefreshLayout.setRefreshing(false);
-
     }
 
     @Override
@@ -150,5 +154,53 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
         if (mSwipeRefreshLayout.getVisibility() != View.GONE) {
             mSwipeRefreshLayout.setVisibility(View.GONE);
         }
+    }
+    @Override
+    public void showError(String error) {
+        Toast.makeText(App.getAppcontext(),error,Toast.LENGTH_SHORT).show();
+
+    }
+    @Override
+    public void AddSuccess(NoteBK noteBK) {
+
+    }
+
+    @Override
+    public void showSuccess() {
+        Toast.makeText(App.getAppcontext(),"删除成功",Toast.LENGTH_SHORT).show();
+        noteBKListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
+    }
+
+    private void showMultiBtnDialog(final NoteBK noteBK, final int position){
+        AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(getActivity());
+        normalDialog.setTitle("笔记本 "+noteBK.getTitle()).setMessage("您想进行什么操作呢？笔记本不为空时，不能进行删除操作");
+        normalDialog.setPositiveButton("取消",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // ...To-do
+                    }
+                });
+        normalDialog.setNeutralButton("删除",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        noteBKListFragmentPresent.delete_NoteBK(noteBK.get_ID());
+                    }
+                });
+        normalDialog.setNegativeButton("修改", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+//        Dialog dialog = normalDialog.create();
+//        Button btn = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_NEUTRAL);
+//        if (noteBK.getMemos().size()>0){
+//            btn.setEnabled(false);
+//        }
+        // 创建实例并显示
+        normalDialog.show();
     }
 }

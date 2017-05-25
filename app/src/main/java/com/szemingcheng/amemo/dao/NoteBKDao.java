@@ -55,8 +55,8 @@ public class NoteBKDao extends AbstractDao<NoteBK, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"NOTE_BK\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: _ID
-                "\"NOTEBK_ID\" TEXT," + // 1: notebk_id
-                "\"TITLE\" TEXT NOT NULL UNIQUE ," + // 2: title
+                "\"NOTEBK_ID\" TEXT UNIQUE ," + // 1: notebk_id
+                "\"TITLE\" TEXT NOT NULL ," + // 2: title
                 "\"USER_ID\" INTEGER);"); // 3: User_id
     }
 
