@@ -22,6 +22,6 @@ public interface MemoListModel {
     void memo_in_trash(String userid,OnDataFinishedListener onDataFinishedListener);
     void memo_delete(Long memo_id,OnRequestListener onRequestListener);
     void memo_in_type(String userid,int type,OnDataFinishedListener onDataFinishedListener);
-
-
+    void memo_restore(Long memo_id,OnRequestListener onRequestListener);
+    void memo_remove(Long memo_id,OnRequestListener onRequestListener);
 }

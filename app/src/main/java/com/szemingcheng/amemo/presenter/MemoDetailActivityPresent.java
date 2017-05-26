@@ -11,5 +11,7 @@ public interface MemoDetailActivityPresent {
     void load_memo_detail(Long memo_id);
     void save_memo_detail(Memo memo);
     void update_memo_detail(Memo memo);
-
+    void delete_memo(Long memo_id);
+    void restore_memo(Long memo_id);
+    void remove_memo(Long memo_id);
 }

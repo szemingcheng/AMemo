@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/toolbar_in_memo_detail"/>
+    <RelativeLayout
+        android:id="@+id/memo_detail_layout"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:background="#ffffff"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_below="@+id/toolbar_in_memo_detail">
+        <EditText
+            android:id="@+id/memo_detail_title"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@null"
+            android:inputType="text"
+            android:hint="笔记标题"
+            android:textColor="@color/colorAccent"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:layout_below="@+id/memo_detail_title"
+            android:id="@+id/layout">
+            <TextView
+                android:id="@+id/memo_detail_notebk"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="@+id/memo_detail_information"
+                android:layout_alignParentStart="@+id/memo_detail_information"
+                android:ellipsize="end"
+                android:maxEms="11"
+                android:singleLine="true"
+                tools:text="我的第一本笔记本我的第一本笔记本我的第一本笔记本我的第一本笔记本"
+                android:textColor="@color/memo_content"
+                />
+            <ImageView
+                android:id="@+id/memo_detail_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/vector_drawable_i"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+        <View
+            android:background="@color/line"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentBottom="true"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
+            android:id="@+id/layout2"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="提醒日期"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:ems="10"
+                android:hint="点击选择日期"
+                android:textColor="@color/colorAccent"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_below="@+id/layout2"
+            android:visibility="visible">
+            <TextView
+                android:text="提醒时间"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:textColor="@color/colorAccent"
+                android:hint="点击选择时间"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:id="@+id/time" />
+        </LinearLayout>
+    </RelativeLayout>
+
+
+    <EditText
+        android:id="@+id/editor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:background="@null"
+        android:layout_margin="10dp"
+        android:hint="写下要提醒的事情..."
+        android:layout_below="@+id/memo_detail_layout"
+        android:inputType="textMultiLine"
+        android:gravity="top"
+        />
+</RelativeLayout>

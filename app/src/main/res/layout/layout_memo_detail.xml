@@ -9,7 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="130dp"
     android:orientation="vertical"
-    android:background="#f9f9f9"
+    android:background="#ffffff"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:layout_below="@+id/toolbar_in_memo_detail">
@@ -19,6 +19,7 @@
         android:layout_marginLeft="10dp"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:background="@null"
         android:inputType="text"
         android:hint="笔记标题"
         android:textColor="@color/colorAccent"
@@ -35,7 +36,10 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="@+id/memo_detail_information"
             android:layout_alignParentStart="@+id/memo_detail_information"
-            tools:text="我的第一本笔记本"
+            android:ellipsize="end"
+            android:maxEms="11"
+            android:singleLine="true"
+            tools:text="我的第一本笔记本我的第一本笔记本我的第一本笔记本我的第一本笔记本"
             android:textColor="@color/memo_content"
             />
         <ImageView
@@ -47,10 +51,19 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:visibility="gone"/>
-    </RelativeLayout>
 
     </RelativeLayout>
-
+    <View
+        android:background="@color/line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentBottom="true"
+        />
+    </RelativeLayout>
     <jp.wasabeef.richeditor.RichEditor
         android:id="@+id/editor"
         android:layout_width="match_parent"

@@ -14,4 +14,8 @@ public interface TrashListFragmentView {
     void showRecyclerView();
 
     void hideRecyclerView();
+
+    void showSuccess();
+
+    void showError(String error);
 }

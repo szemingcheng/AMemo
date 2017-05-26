@@ -93,7 +93,7 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
                         if (data!=null) data.clear();
                         memoListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
                         mSwipeRefreshLayout.setRefreshing(false);
-                        Toast.makeText(App.getAppcontext(), "更新了...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(App.getAppcontext(), "更新完成", Toast.LENGTH_SHORT).show();
                     }
                 }, 1000);
             }
@@ -102,10 +102,12 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(memoListAdapter);
         Log.i("setadapter","recyclerview assigned");
+        mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                    memoListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
+                memoListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
 
@@ -118,10 +120,8 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mSwipeRefreshLayout.setRefreshing(true);
                 if (data!=null) data.clear();
-                memoListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
-                mSwipeRefreshLayout.setRefreshing(false);
+                memoListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
             }
         }, 2000);
     }
@@ -166,7 +166,7 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
     private void showMultiBtnDialog(final Memo memo, final int position){
         AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(getActivity());
-        normalDialog.setTitle(memo.getTitle()).setMessage("您想进行什么操作呢？");
+        normalDialog.setTitle("笔记 "+memo.getTitle()).setMessage("您想进行什么操作呢？");
         normalDialog.setPositiveButton("取消",
                 new DialogInterface.OnClickListener() {
                     @Override

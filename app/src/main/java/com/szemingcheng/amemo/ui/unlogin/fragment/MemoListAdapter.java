@@ -134,7 +134,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Bitmap bm = BitmapFactory.decodeFile(file);
                 ((PicViewHolder)holder).memoPic.setImageBitmap(bm);
             }
-            else ((PicViewHolder)holder).memoPic.setImageResource(R.drawable.vector_drawable_pic_empty);
+            else ((PicViewHolder)holder).memoPic.setImageResource(R.drawable.vector_drawable_pic_error);
 
         } else if (holder instanceof ReminderViewHolder) {
             Memo memo = list.get(position);

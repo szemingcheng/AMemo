@@ -1,12 +1,14 @@
 package com.szemingcheng.amemo.model.Imp;
 
 import com.szemingcheng.amemo.App;
+import com.szemingcheng.amemo.dao.MemoDao;
 import com.szemingcheng.amemo.dao.UserDao;
 import com.szemingcheng.amemo.db.DBUtils;
 import com.szemingcheng.amemo.db.MemoHelper;
 import com.szemingcheng.amemo.db.NoteBKHelper;
 import com.szemingcheng.amemo.db.UserHelper;
 import com.szemingcheng.amemo.entity.Memo;
+import com.szemingcheng.amemo.entity.NoteBK;
 import com.szemingcheng.amemo.entity.User;
 import com.szemingcheng.amemo.model.MemoDetailModel;
 import com.szemingcheng.amemo.utils.HtmlRegexpUtil;
@@ -93,6 +95,63 @@ public class MemoDetailModelImp implements MemoDetailModel {
             memo.setUpdateat(System.currentTimeMillis());
             memoHelper.saveOrUpdate(memo);
             onRequestListener.onSuccess();
+        }
+    }
+
+    @Override
+    public void delete_memo(Long memo_id, OnRequestListener onRequestListener) {
+        boolean error = false;
+        Memo memo = memoHelper.queryBuilder().where(MemoDao.Properties._ID.eq(memo_id)).unique();
+        int state = memo.getState();
+        if (state == Memo.IS_DELETE||state!=Memo.IS_EXSIT){
+            onRequestListener.onError("未知错误，删除失败");
+            error = true;
+        }
+        else {
+            memo.setState(Memo.IS_DELETE);
+            memo.setNoteBK(null);
+            memoHelper.update(memo);
+        }
+        if (!error){
+            onRequestListener.onDeleteSuccess();
+        }
+    }
+
+    @Override
+    public void memo_restore(Long memo_id, OnRequestListener onRequestListener) {
+        boolean error = false;
+        Memo memo = memoHelper.queryBuilder().where(MemoDao.Properties._ID.eq(memo_id)).unique();
+        int state = memo.getState();
+        Long User_id = memo.getUser_ID();
+        if (state == Memo.IS_EXSIT||state!=Memo.IS_DELETE){
+            onRequestListener.onError("未知错误，恢复失败");
+            error = true;
+        }
+        else {
+            memo.setState(Memo.IS_EXSIT);
+            NoteBK noteBK = userHelper.query(User_id).getNoteBKs().get(0);
+            memo.setNoteBK(noteBK);
+            memoHelper.update(memo);
+        }
+        if (!error){
+            onRequestListener.onRestoreSuccess();
+        }
+    }
+
+    @Override
+    public void memo_remove(Long memo_id, OnRequestListener onRequestListener) {
+        boolean error = false;
+        Memo memo = memoHelper.queryBuilder().where(MemoDao.Properties._ID.eq(memo_id)).unique();
+        int state = memo.getState();
+        if (state == Memo.IS_EXSIT||state!=Memo.IS_DELETE){
+            onRequestListener.onError("未知错误，移除失败");
+            error = true;
+        }
+        else{
+            memoHelper.delete(memo);
+        }
+        if (!error){
+            onRequestListener.onDeleteSuccess();
         }
     }
 }

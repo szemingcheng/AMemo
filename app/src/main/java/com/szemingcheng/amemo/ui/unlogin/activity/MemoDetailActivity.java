@@ -1,6 +1,7 @@
 package com.szemingcheng.amemo.ui.unlogin.activity;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -17,11 +18,13 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +35,7 @@ import com.szemingcheng.amemo.entity.NoteBK;
 import com.szemingcheng.amemo.presenter.Imp.MemoDetailActivityPresentImp;
 import com.szemingcheng.amemo.presenter.MemoDetailActivityPresent;
 import com.szemingcheng.amemo.utils.Editor;
+import com.szemingcheng.amemo.utils.TimeUtils;
 import com.szemingcheng.amemo.view.MemoDetailActivityView;
 
 import java.io.File;
@@ -56,12 +60,13 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
     private HorizontalScrollView horizontalScrollView;
     private EditText title;
     private TextView notebk_title;
+    private ImageView information;
     private Memo memo;
     private Toolbar toolbar;
     private String come_from;
+    private int action_type;
     private String notebk_title_view_mode;
     private MemoDetailActivityPresent memoDetailActivityPresent;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,12 +74,13 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
         memoDetailActivityPresent = new MemoDetailActivityPresentImp(this);
         final Intent intent = getIntent();
         come_from = intent.getExtras().getString("comefrom");
-         toolbar = (Toolbar)findViewById(R.id.toolbar_in_memo_detail);
+        action_type = intent.getExtras().getInt("actiontype");
+        toolbar = (Toolbar)findViewById(R.id.toolbar_in_memo_detail);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         title = (EditText) findViewById(R.id.memo_detail_title);
         notebk_title = (TextView) findViewById(R.id.memo_detail_notebk);
-
+        information = (ImageView)findViewById(R.id.memo_detail_information);
         horizontalScrollView = (HorizontalScrollView)findViewById(R.id.edit_tool);
             editor = new Editor();
             mEditor = (RichEditor) findViewById(R.id.editor);
@@ -95,7 +101,6 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
             case VIEW_MEMO_MODE:
                 Long id = intent.getExtras().getLong("id");
                 memoDetailActivityPresent.load_memo_detail(id);
-                Toast.makeText(MemoDetailActivity.this,"长按显示编辑工具栏",Toast.LENGTH_LONG).show();
                 break;
             case VIEW_DELETE_MODE:
                Long id2 = intent.getExtras().getLong("id");
@@ -104,8 +109,10 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
                 break;
         }
         toolbar.setNavigationOnClickListener(OnNavigationListener);
+        if (action_type==TAKE_PHOTO){
+            setTakePhoto();
+        }
     }
-
     private Toolbar.OnClickListener OnNavigationListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -113,22 +120,139 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
         }
     };
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        switch (come_from){
+            case CREATE_MEMO_MODE:
+                menu.findItem(R.id.memo_detail_help).setVisible(true);
+                break;
+            case VIEW_MEMO_MODE:
+                menu.findItem(R.id.memo_detail_edit).setVisible(true);
+                menu.findItem(R.id.memo_detail_delete).setVisible(true);
+                break;
+            case VIEW_DELETE_MODE:
+                menu.findItem(R.id.memo_detail_restore).setVisible(true);
+                menu.findItem(R.id.memo_detail_remove).setVisible(true);
+                break;
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+        @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.memo_detail_activity, menu);
         return true;
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.memo_detail_delete){
+            showDeleteDialog();
             return true;
+        }
+        if (id == R.id.memo_detail_remove){
+            showRemoveDialog();
+            return true;
+        }
+        if (id == R.id.memo_detail_restore){
+            showRestoreDialog();
+            return true;
+        }
+        if (id == R.id.memo_detail_help){
+            showHelperDialog();
+            return true;
+        }
+        if (id == R.id.memo_detail_edit){
+            horizontalScrollView.setVisibility(View.VISIBLE);
+            mEditor.setFocusable(true);
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void showHelperDialog() {
+        AlertDialog.Builder customizeDialog =
+                new AlertDialog.Builder(MemoDetailActivity.this);
+        final View dialogView = LayoutInflater.from(MemoDetailActivity.this)
+                .inflate(R.layout.layout_memo_edit_helper,null);
+        customizeDialog.setTitle("帮助");
+        customizeDialog.setView(dialogView);
+        customizeDialog.setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        customizeDialog.show();
+    }
+
+    private void showRestoreDialog() {
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(MemoDetailActivity.this);
+        normalDialog.setTitle("恢复");
+        normalDialog.setMessage("笔记将会恢复到您的笔记本中");
+        normalDialog.setNegativeButton("关闭",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-do
+                    }
+                });
+        normalDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                memoDetailActivityPresent.restore_memo(memo.get_ID());
+
+            }
+        });
+        // 显示
+        normalDialog.show();
+    }
+
+    private void showRemoveDialog() {
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(MemoDetailActivity.this);
+        normalDialog.setTitle("彻底删除");
+        normalDialog.setMessage("彻底删除后将不能恢复该笔记");
+        normalDialog.setNegativeButton("关闭",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-do
+                    }
+                });
+        normalDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                memoDetailActivityPresent.remove_memo(memo.get_ID());
+
+            }
+        });
+        // 显示
+        normalDialog.show();
+    }
+
+    private void showDeleteDialog() {
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(MemoDetailActivity.this);
+        normalDialog.setTitle("删除");
+        normalDialog.setMessage("该笔记将会移到乐色桶");
+        normalDialog.setNegativeButton("关闭",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-do
+                    }
+                });
+        normalDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                memoDetailActivityPresent.delete_memo(memo.get_ID());
+
+            }
+        });
+        // 显示
+        normalDialog.show();
+    }
+
     private void initEditor() {
         mEditor.setEditorHeight(800);
         mEditor.setEditorFontSize(22);
@@ -136,7 +260,6 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
         mEditor.setPadding(10, 10, 10, 10);
         mEditor.setPlaceholder("单击此输入内容....");
     }
-
     private void initAction() {
         findViewById(R.id.action_undo).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,108 +267,80 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
                 mEditor.undo();
             }
         });
-
         findViewById(R.id.action_redo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mEditor.redo();
             }
         });
-
         findViewById(R.id.action_bold).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mEditor.setBold();
             }
         });
-
         findViewById(R.id.action_italic).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mEditor.setItalic();
             }
         });
-
         findViewById(R.id.action_strikethrough).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mEditor.setStrikeThrough();
             }
         });
-
         findViewById(R.id.action_underline).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mEditor.setUnderline();
             }
         });
-
         findViewById(R.id.action_txt_color).setOnClickListener(new View.OnClickListener() {
             private boolean isChanged;
-
             @Override
             public void onClick(View v) {
                 mEditor.setTextColor(isChanged ? Color.BLACK : Color.RED);
                 isChanged = !isChanged;
             }
         });
-
         findViewById(R.id.action_align_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mEditor.setAlignLeft();
             }
         });
-
         findViewById(R.id.action_align_center).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mEditor.setAlignCenter();
             }
         });
-
         findViewById(R.id.action_align_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mEditor.setAlignRight();
             }
         });
-
-
         findViewById(R.id.action_insert_bullets).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mEditor.setBullets();
             }
         });
-
         findViewById(R.id.action_insert_numbers).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mEditor.setNumbers();
             }
         });
-
         findViewById(R.id.action_insert_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //创建File对象，用于存储拍照后的图片
-                outputImage = editor.outputImage(getExternalCacheDir(), System.currentTimeMillis() + ".jpg");
-
-                //7.0以上，使用FileProvider.getUriForFile调用Uri地址
-                if (Build.VERSION.SDK_INT >= 24) {
-                    imageUri = FileProvider.getUriForFile(MemoDetailActivity.this, "nullteam.richeditortest.fileprovider", outputImage);
-                } else {
-                    imageUri = Uri.fromFile(outputImage);
-                }
-
-                //启动相机程序
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                startActivityForResult(intent, TAKE_PHOTO);
+               setTakePhoto();
             }
         });
-
         findViewById(R.id.action_insert_camera).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -258,6 +353,20 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
                 }
             }
         });
+    }
+    private void setTakePhoto(){
+        //创建File对象，用于存储拍照后的图片
+        outputImage = editor.outputImage(getExternalCacheDir(), System.currentTimeMillis() + ".jpg");
+        //7.0以上，使用FileProvider.getUriForFile调用Uri地址
+        if (Build.VERSION.SDK_INT >= 24) {
+            imageUri = FileProvider.getUriForFile(MemoDetailActivity.this, "nullteam.richeditortest.fileprovider", outputImage);
+        } else {
+            imageUri = Uri.fromFile(outputImage);
+        }
+        //启动相机程序
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, TAKE_PHOTO);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -337,22 +446,38 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
             }
         }
     }
+    private void showInfomationDialog() {
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(MemoDetailActivity.this);
+        normalDialog.setIcon(R.drawable.vector_drawable_i);
+        normalDialog.setTitle("笔记信息");
+        normalDialog.setMessage("创建时间："+ TimeUtils.getChatTimeStr(memo.getCreatat())+
+                "\n最后修改时间："+TimeUtils.getChatTimeStr(memo.getUpdateat()));
+        normalDialog.setNegativeButton("关闭",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-do
+                    }
+                });
+        normalDialog.show();
+    }
     @Override
     public void initViewOnViewMode(Memo memo) {
         toolbar.setNavigationIcon(R.drawable.vector_drawable_back);
-        notebk_title.setText(memo.getNoteBK().getTitle());
-        notebk_title_view_mode = memo.getNoteBK().getTitle();
         title.setText(memo.getTitle());
         mEditor.setHtml(memo.getContext());
         title.setSelected(false);
+        information.setVisibility(View.VISIBLE);
+        information.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showInfomationDialog();
+            }
+        });
         if (memo.getState()==Memo.IS_EXSIT) {
-            mEditor.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    horizontalScrollView.setVisibility(View.VISIBLE);
-                    return true;
-                }
-            });
+            notebk_title.setText(memo.getNoteBK().getTitle());
+            notebk_title_view_mode = memo.getNoteBK().getTitle();
             title.addTextChangedListener(onTextChangedListener);
             notebk_title.addTextChangedListener(onTextChangedListener);
             notebk_title.setOnClickListener(new View.OnClickListener() {
@@ -365,10 +490,13 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
             this.memo = memo;
         }
         else{
+            notebk_title.setText("已放入乐色桶！");
             title.setEnabled(false);
             mEditor.setInputEnabled(false);
+            this.memo = memo;
         }
     }
+
     private TextWatcher onTextChangedListener = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -396,12 +524,6 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
             }
         });
     }
-
-    @Override
-    public void showSaveMemoDialog() {
-        AlertDialog alertDialog = new AlertDialog.Builder(MemoDetailActivity.this).create();
-        alertDialog.setTitle("");
-    }
     @Override
     public void showSaveMemoSuccess() {
         Toast.makeText(MemoDetailActivity.this,"保存成功",Toast.LENGTH_SHORT).show();
@@ -411,5 +533,15 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
     public void showSaveMemoFail(String error) {
         Toast.makeText(MemoDetailActivity.this,error,Toast.LENGTH_SHORT).show();
     }
+    @Override
+    public void showDeleteSuccess() {
+        Toast.makeText(MemoDetailActivity.this,"删除成功",Toast.LENGTH_SHORT).show();
+        finish();
+    }
 
+    @Override
+    public void showRestoreSuccess() {
+        Toast.makeText(MemoDetailActivity.this,"恢复成功",Toast.LENGTH_SHORT).show();
+        finish();
+    }
 }

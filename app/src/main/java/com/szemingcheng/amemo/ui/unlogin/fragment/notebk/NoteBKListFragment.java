@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,7 +73,7 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
             }
             @Override
             public void onMoreClick(View view, int position) {
-                showMultiBtnDialog(noteBKListAdapter.getItemData(position),position);
+                showMultiBtnDialog(noteBKListAdapter.getItemData(position));
             }
             @Override
             public void onItemLongClick(View view, int positon) {
@@ -111,15 +112,6 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
     @Override
     public void onResume() {
         super.onResume();
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mSwipeRefreshLayout.setRefreshing(true);
-//                if (data!=null) data.clear();
-//               noteBKListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
-//                mSwipeRefreshLayout.setRefreshing(false);
-//            }
-//        }, 2000);
         noteBKListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
     }
 
@@ -171,10 +163,12 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
         noteBKListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
     }
 
-    private void showMultiBtnDialog(final NoteBK noteBK, final int position){
+    private void showMultiBtnDialog(final NoteBK noteBK){
+        final EditText editText = new EditText(getActivity());
         AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(getActivity());
-        normalDialog.setTitle("笔记本 "+noteBK.getTitle()).setMessage("您想进行什么操作呢？笔记本不为空时，不能进行删除操作");
+        normalDialog.setTitle("笔记本 "+noteBK.getTitle());
+        normalDialog.setMessage("您想进行什么操作呢？\n笔记本不为空时，不能进行删除操作");
         normalDialog.setPositiveButton("取消",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -189,18 +183,12 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
                         noteBKListFragmentPresent.delete_NoteBK(noteBK.get_ID());
                     }
                 });
-        normalDialog.setNegativeButton("修改", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-//        Dialog dialog = normalDialog.create();
-//        Button btn = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_NEUTRAL);
-//        if (noteBK.getMemos().size()>0){
-//            btn.setEnabled(false);
-//        }
-        // 创建实例并显示
+//        normalDialog.setNegativeButton("修改", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//
+//            }
+//        });
         normalDialog.show();
     }
 }

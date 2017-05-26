@@ -1,11 +1,13 @@
 package com.szemingcheng.amemo.ui.unlogin.fragment.trash;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -79,7 +81,7 @@ public class TrashListFragment extends Fragment implements TrashListFragmentView
             }
             @Override
             public void onItemLongClick(View view, int positon) {
-                Toast.makeText(App.getAppcontext(),"长按",Toast.LENGTH_SHORT).show();
+                showMultiBtnDialog(memoListAdapter.getItemData(positon));
             }
         });
         Log.i("setadapter","assigned,context:"+getActivity());
@@ -111,16 +113,42 @@ public class TrashListFragment extends Fragment implements TrashListFragmentView
         return mView;
     }
 
+    private void showMultiBtnDialog(final Memo memo) {
+        AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(getActivity());
+        normalDialog.setTitle("笔记 "+memo.getTitle()).setMessage("您想进行什么操作呢？");
+        normalDialog.setPositiveButton("取消",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // ...To-do
+                    }
+                });
+        normalDialog.setNeutralButton("彻底删除",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        trashListFragmentPresent.memo_delete(memo.get_ID());
+                    }
+                });
+        normalDialog.setNegativeButton("恢复", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                trashListFragmentPresent.memo_restore(memo.get_ID());
+            }
+        });
+        // 创建实例并显示
+        normalDialog.show();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mSwipeRefreshLayout.setRefreshing(true);
                 if (data!=null) data.clear();
                 trashListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
-                mSwipeRefreshLayout.setRefreshing(false);
             }
         }, 2000);
     }
@@ -133,7 +161,7 @@ public class TrashListFragment extends Fragment implements TrashListFragmentView
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu,inflater);
-        getActivity().getMenuInflater().inflate(R.menu.memo_list_fragment_menu,menu);
+        getActivity().getMenuInflater().inflate(R.menu.memo_activity_menu,menu);
     }
 
     @Override
@@ -156,5 +184,16 @@ public class TrashListFragment extends Fragment implements TrashListFragmentView
         if (mSwipeRefreshLayout.getVisibility() != View.GONE) {
             mSwipeRefreshLayout.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void showSuccess() {
+        Toast.makeText(App.getAppcontext(),"操作成功",Toast.LENGTH_SHORT).show();
+        trashListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
+    }
+
+    @Override
+    public void showError(String error) {
+        Toast.makeText(App.getAppcontext(),error,Toast.LENGTH_SHORT).show();
     }
 }

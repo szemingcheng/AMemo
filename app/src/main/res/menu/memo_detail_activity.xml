@@ -3,9 +3,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.unlogin.activity.MemoDetailActivity">
     <item
+        android:id="@+id/memo_detail_edit"
+        android:title="编辑"
+        android:icon="@drawable/vector_drawable_pen"
+        app:showAsAction="ifRoom"
+        android:visible="false"
+        />
+    <item
         android:id="@+id/memo_detail_delete"
         android:orderInCategory="100"
         android:title="删除"
         app:showAsAction="never"
+        android:visible="false"
        />
+    <item
+        android:id="@+id/memo_detail_restore"
+        android:title="恢复"
+        app:showAsAction="never"
+        android:visible="false"
+        />
+    <item
+        android:id="@+id/memo_detail_remove"
+        android:title="彻底删除"
+        app:showAsAction="never"
+        android:visible="false"/>
+    <item
+        android:id="@+id/memo_detail_help"
+        android:title="帮助"
+        app:showAsAction="never"
+        android:visible="false"/>
 </menu>

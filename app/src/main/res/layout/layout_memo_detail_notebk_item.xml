@@ -21,7 +21,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         tools:text="我的第一本笔记本"
+        android:ellipsize="end"
         android:maxLines="1"
+        android:singleLine="true"
         android:textSize="@dimen/note_book_title_txt"/>
     <TextView
         android:id="@+id/note_book_select_quantity"

@@ -7,4 +7,6 @@ package com.szemingcheng.amemo.presenter;
 public interface TrashListFragmentPresent {
     void getMemo(String user_id);
     void pulltorefresh(String user_id);
+    void memo_restore(Long memo_id);
+    void memo_delete(Long memo_id);
 }

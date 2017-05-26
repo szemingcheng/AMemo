@@ -92,6 +92,7 @@ public class MemoListModelImp implements MemoListModel {
         }
         else {
             memo.setState(Memo.IS_DELETE);
+            memo.setNoteBK(null);
             memoHelper.update(memo);
         }
         if (!error){
@@ -103,5 +104,43 @@ public class MemoListModelImp implements MemoListModel {
     @Override
     public void memo_in_type(String userid, int type, OnDataFinishedListener onDataFinishedListener) {
 
+    }
+
+    @Override
+    public void memo_restore(Long memo_id, OnRequestListener onRequestListener) {
+        boolean error = false;
+        Memo memo = memoHelper.queryBuilder().where(MemoDao.Properties._ID.eq(memo_id)).unique();
+        int state = memo.getState();
+        Long User_id = memo.getUser_ID();
+        if (state == Memo.IS_EXSIT||state!=Memo.IS_DELETE){
+            onRequestListener.onError("未知错误，恢复失败");
+            error = true;
+        }
+        else {
+            memo.setState(Memo.IS_EXSIT);
+            NoteBK noteBK = userHelper.query(User_id).getNoteBKs().get(0);
+            memo.setNoteBK(noteBK);
+            memoHelper.update(memo);
+        }
+        if (!error){
+            onRequestListener.onSuccess();
+        }
+    }
+
+    @Override
+    public void memo_remove(Long memo_id, OnRequestListener onRequestListener) {
+        boolean error = false;
+        Memo memo = memoHelper.queryBuilder().where(MemoDao.Properties._ID.eq(memo_id)).unique();
+        int state = memo.getState();
+        if (state == Memo.IS_EXSIT||state!=Memo.IS_DELETE){
+            onRequestListener.onError("未知错误，移除失败");
+            error = true;
+        }
+        else{
+            memoHelper.delete(memo);
+        }
+        if (!error){
+            onRequestListener.onSuccess();
+        }
     }
 }

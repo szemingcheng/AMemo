@@ -10,7 +10,8 @@ public interface MemoDetailActivityView {
 
     void initViewOnViewMode(Memo memo);
     void initViewOnCreateMode();
-    void showSaveMemoDialog();
     void showSaveMemoSuccess();
     void showSaveMemoFail(String error);
+    void showDeleteSuccess();
+    void showRestoreSuccess();
 }

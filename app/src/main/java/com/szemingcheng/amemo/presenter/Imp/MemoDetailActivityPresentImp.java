@@ -35,6 +35,21 @@ public class MemoDetailActivityPresentImp implements MemoDetailActivityPresent {
         memoDetailModel.update_memo(memo,onRequestListener);
     }
 
+    @Override
+    public void delete_memo(Long memo_id) {
+        memoDetailModel.delete_memo(memo_id,onRequestListener);
+    }
+
+    @Override
+    public void restore_memo(Long memo_id) {
+        memoDetailModel.memo_restore(memo_id,onRequestListener);
+    }
+
+    @Override
+    public void remove_memo(Long memo_id) {
+        memoDetailModel.memo_remove(memo_id,onRequestListener);
+    }
+
     private MemoDetailModel.OnDataFinishedListener onDataFinishedListener = new MemoDetailModel.OnDataFinishedListener() {
         @Override
         public void getDataFinish(Memo memo) {
@@ -54,6 +69,16 @@ public class MemoDetailActivityPresentImp implements MemoDetailActivityPresent {
         @Override
         public void onError(String error) {
             memoDetailActivityView.showSaveMemoFail(error);
+        }
+
+        @Override
+        public void onDeleteSuccess() {
+            memoDetailActivityView.showDeleteSuccess();
+        }
+
+        @Override
+        public void onRestoreSuccess() {
+            memoDetailActivityView.showRestoreSuccess();
         }
     };
 

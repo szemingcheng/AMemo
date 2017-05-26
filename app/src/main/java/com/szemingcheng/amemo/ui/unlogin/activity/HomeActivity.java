@@ -29,8 +29,8 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.ui.unlogin.fragment.MemoListFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.SettingFragment;
-import com.szemingcheng.amemo.ui.unlogin.fragment.trash.TrashListFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.notebk.NoteBKListFragment;
+import com.szemingcheng.amemo.ui.unlogin.fragment.trash.TrashListFragment;
 import com.szemingcheng.amemo.view.HomeActivityView;
 
 
@@ -40,8 +40,6 @@ public class HomeActivity extends AppCompatActivity
     private static final String NOTEBKLIST_FRAGMENT ="notebklist";
     private static final String TRASHLIST_FRAGMENT = "trashlist";
     private static final String SETTING_FRAGMENT = "setting";
-    private static final String MEMOLIST_IN_NB_FRAGMENT="memolistinb";
-    public static final int MEMO_DETAIL_ACTIVITY = 1;
     Toolbar toolbar;
     DrawerLayout drawer;
     NavigationView navigationView;
@@ -116,7 +114,11 @@ public class HomeActivity extends AppCompatActivity
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.menu_item_camera:
-                    Toast.makeText(HomeActivity.this, memo_cam.getLabelText(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.setAction("com.activity.MemoDetailActivity");
+                    intent.putExtra("comefrom",MemoDetailActivity.CREATE_MEMO_MODE);
+                    intent.putExtra("actiontype",MemoDetailActivity.TAKE_PHOTO);
+                    startActivity(intent);
                     mfloatingActionButton.toggle(false);
                     break;
                 case R.id.menu_item_pic:
@@ -140,30 +142,35 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         final int stackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
+//        final String tagName = getSupportFragmentManager().getBackStackEntryAt(stackEntryCount-2).getName();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (stackEntryCount==0){
             _exit();
         }
+//        else if (tagName.equals(MEMOLIST_FRAGMENT)||tagName.equals(NOTEBKLIST_FRAGMENT)
+//                ||tagName.equals(TRASHLIST_FRAGMENT)){
+//            _exit();
+//        }
         else {
-//            final String tagName = getSupportFragmentManager().getBackStackEntryAt(stackEntryCount - 2).getName();
+
             super.onBackPressed();
         }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.memo_list_fragment_menu,menu);
+        getMenuInflater().inflate(R.menu.memo_activity_menu,menu);
         return super.onCreateOptionsMenu(menu);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id==R.id.nav_setting){
-            return true;
+        switch (id){
+            case R.id.memo_reminder:
+             return true;
+            case R.id.nav_setting:
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -203,6 +210,7 @@ public class HomeActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     public void replaceFragment(int containerViewId, Fragment fragment, String tag) {
         if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -217,6 +225,7 @@ public class HomeActivity extends AppCompatActivity
             getSupportFragmentManager().popBackStack(tag, 0);
         }
     }
+
     private void _exit() {
         if (System.currentTimeMillis() - mExitTime > 2000) {
             Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
@@ -224,22 +233,6 @@ public class HomeActivity extends AppCompatActivity
         } else {
             finish();
         }
-    }
-
-    public Toolbar getToolbar() {
-        return toolbar;
-    }
-
-    public void setToolbar(Toolbar toolbar) {
-        this.toolbar = toolbar;
-    }
-
-    public FloatingActionMenu getMfloatingActionButton() {
-        return mfloatingActionButton;
-    }
-
-    public void setMfloatingActionButton(FloatingActionMenu mfloatingActionButton) {
-        this.mfloatingActionButton = mfloatingActionButton;
     }
 
     private void createCustomAnimation() {
@@ -275,6 +268,4 @@ public class HomeActivity extends AppCompatActivity
     public void fragment_callback(Bundle arg) {
         Fragment_tag = arg.getString("fragment");
     }
-
-
 }
