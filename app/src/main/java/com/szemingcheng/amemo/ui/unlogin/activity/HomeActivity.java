@@ -1,5 +1,6 @@
 package com.szemingcheng.amemo.ui.unlogin.activity;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -18,11 +19,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.szemingcheng.amemo.App;
 import com.szemingcheng.amemo.R;
+import com.szemingcheng.amemo.ui.login.activity.LoginActivity;
 import com.szemingcheng.amemo.ui.unlogin.fragment.MemoListFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.NoteBKListFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.SettingFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.TrashListFragment;
+import com.szemingcheng.amemo.utils.PreferencesUtils;
 
 
 public class HomeActivity extends AppCompatActivity
@@ -37,14 +41,16 @@ public class HomeActivity extends AppCompatActivity
     View header;
     TextView user_name;
     ImageView user_avatar;
-
+    String userid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
          toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //侧滑菜单
          drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //抽屉事件绑定
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -54,7 +60,15 @@ public class HomeActivity extends AppCompatActivity
         user_avatar=(ImageView)header.findViewById(R.id.default_avatar);
         user_name = (TextView)header.findViewById(R.id.onscreen_name);
         user_avatar.setImageResource(R.drawable.vector_drawable_defualt_avatar);
-        user_name.setText("请登录");
+
+        if(!PreferencesUtils.islogin(App.getAppcontext(),PreferencesUtils.LOGINED,false)){
+            user_name.setText("请登录");
+        }
+        else{
+        userid=PreferencesUtils.getUserId(App.getAppcontext(),PreferencesUtils.USERID,"VISITOR");
+            user_name.setText(userid);
+        }
+
         user_avatar.setOnClickListener(onLoginListener);
         user_name.setOnClickListener(onLoginListener);
         navigationView.setNavigationItemSelectedListener(this);
@@ -74,6 +88,9 @@ public class HomeActivity extends AppCompatActivity
         @Override
         public void onClick(View v) {
             Toast.makeText(HomeActivity.this, "登录啊老铁",Toast.LENGTH_SHORT ).show();
+            PreferencesUtils.logined(App.getAppcontext(),PreferencesUtils.LOGINED,false);
+            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+            finish();
         }
     };
 
@@ -93,7 +110,7 @@ public class HomeActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
-
+    //菜单项操作
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -109,13 +126,24 @@ public class HomeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    //侧滑栏的点击事件
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        ItemSelected(id);
+
+        item.setChecked(true);
+        item.setCheckable(true);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    //菜单项选择事件
+    private void ItemSelected(int id) {
         switch (id) {
             case R.id.nav_memo_all:
-               replaceFragment(R.id.fragment,new MemoListFragment(),MEMOLIST_FRAGMENT);
+                replaceFragment(R.id.fragment,new MemoListFragment(),MEMOLIST_FRAGMENT);
                 break;
             case R.id.nav_note_books:
                 replaceFragment(R.id.fragment,new NoteBKListFragment(),NOTEBKLIST_FRAGMENT);
@@ -127,11 +155,8 @@ public class HomeActivity extends AppCompatActivity
                 replaceFragment(R.id.fragment,new SettingFragment(),SETTING_FRAGMENT);
                 break;
         }
-        item.setChecked(true);
-        item.setCheckable(true);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
+
     protected void replaceFragment(int containerViewId, Fragment fragment, String tag) {
         if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

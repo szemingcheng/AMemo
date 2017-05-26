@@ -24,8 +24,8 @@ public class NoteBK {
     @Id(autoincrement = true)
     Long _ID;
 
-    String notebk_id;
-    @NotNull@Unique String title;
+    @Unique String notebk_id;
+    @NotNull String title;
     Long User_id;
 
     @ToMany(referencedJoinProperty = "NoteBK_ID")

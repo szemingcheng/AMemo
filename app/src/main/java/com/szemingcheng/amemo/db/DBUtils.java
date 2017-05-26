@@ -4,6 +4,7 @@ import com.szemingcheng.amemo.App;
 import com.szemingcheng.amemo.dao.MemoDao;
 import com.szemingcheng.amemo.dao.NoteBKDao;
 import com.szemingcheng.amemo.dao.UserDao;
+import com.szemingcheng.amemo.manager.DaoManger;
 
 /**
  * Created by szemingcheng on 2017/5/16.
@@ -15,13 +16,13 @@ public class DBUtils {
     private static MemoHelper memoHelper;
 
     private static UserDao getUserDriverDao() {
-        return App.getAppcontext().getDaoSession().getUserDao();
+        return DaoManger.getDaoSession(App.getUserId()).getUserDao();
     }
     private static NoteBKDao getNoteBKDriverDao() {
-        return App.getAppcontext().getDaoSession().getNoteBKDao();
+        return DaoManger.getDaoSession(App.getUserId()).getNoteBKDao();
     }
     private static MemoDao getMemoDriverDao() {
-        return App.getAppcontext().getDaoSession().getMemoDao();
+        return DaoManger.getDaoSession(App.getUserId()).getMemoDao();
     }
     public static UserHelper getUserDriverHelper() {
         if (userHelper == null) {
