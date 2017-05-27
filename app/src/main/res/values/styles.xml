@@ -25,6 +25,7 @@
     <style name="toolBar_in_memo_detail">
         <item name="colorControlNormal">#2aa330</item>
     </style>
+<<<<<<< HEAD
     <style name="common_button_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -36,4 +37,6 @@
     </style>
 
 
+=======
+>>>>>>> 2703da20c11591e192b590ca5e928911cca45848
 </resources>

@@ -17,8 +17,13 @@ import static com.szemingcheng.amemo.App.activityList;
 
 public class LoginActivity extends AppCompatActivity implements LoginActivityView, View.OnClickListener {
     EditText login_username, login_password;
+<<<<<<< HEAD
     TextView forget_password,login_register;
     Button login, login_register_byphone;
+=======
+    TextView forget_password;
+    Button login, login_register, login_register_byphone;
+>>>>>>> 2703da20c11591e192b590ca5e928911cca45848
     String userid, password;
     LoginActivity context;
     Login_RegisterActivityPresentImp loginActivityPresentImp;
@@ -40,7 +45,11 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
         login_password = (EditText) findViewById(R.id.login_password);
         forget_password = (TextView) findViewById(R.id.forget_password);
         login = (Button) findViewById(R.id.login);
+<<<<<<< HEAD
         login_register = (TextView) findViewById(R.id.login_register);
+=======
+        login_register = (Button) findViewById(R.id.login_register);
+>>>>>>> 2703da20c11591e192b590ca5e928911cca45848
         login_register_byphone = (Button) findViewById(R.id.login_register_byphone);
         login.setOnClickListener(this);
         login_register.setOnClickListener(this);

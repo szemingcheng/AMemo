@@ -459,8 +459,13 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
                 new AlertDialog.Builder(MemoDetailActivity.this);
         normalDialog.setIcon(R.drawable.vector_drawable_i);
         normalDialog.setTitle("笔记信息");
+<<<<<<< HEAD
         normalDialog.setMessage("创建时间：\n"+ TimeUtils.translateDate(TimeUtils.timestampFormate(memo.getCreatat()))+
                 "\n最后修改时间：\n"+TimeUtils.translateDate(TimeUtils.timestampFormate(memo.getUpdateat())));
+=======
+        normalDialog.setMessage("创建时间："+ TimeUtils.getChatTimeStr(memo.getCreatat())+
+                "\n最后修改时间："+TimeUtils.getChatTimeStr(memo.getUpdateat()));
+>>>>>>> 2703da20c11591e192b590ca5e928911cca45848
         normalDialog.setNegativeButton("关闭",
                 new DialogInterface.OnClickListener() {
                     @Override
