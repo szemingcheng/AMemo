@@ -25,4 +25,15 @@
     <style name="toolBar_in_memo_detail">
         <item name="colorControlNormal">#2aa330</item>
     </style>
+    <style name="common_button_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/selector_corners_button</item>
+        <item name="android:padding">6.0dip</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+
+    </style>
+
+
 </resources>

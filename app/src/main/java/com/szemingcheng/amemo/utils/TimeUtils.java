@@ -1,5 +1,7 @@
 package com.szemingcheng.amemo.utils;
 
+import android.text.TextUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -217,5 +219,14 @@ public class TimeUtils {
             timestamp = timestamp/1000;
         }
         return timestamp;
+    }
+    public static String translateDate(long time){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date = new Date(time * 1000);
+        String dateStr = dateFormat.format(date);
+        if (!TextUtils.isEmpty(dateStr) && dateStr.contains(" 0")) {
+            dateStr = dateStr.replace(" 0", " ");
+        }
+        return dateStr;
     }
 }

@@ -1,7 +1,6 @@
 package com.szemingcheng.amemo.model.Imp;
 
 import com.szemingcheng.amemo.App;
-import com.szemingcheng.amemo.dao.MemoDao;
 import com.szemingcheng.amemo.dao.NoteBKDao;
 import com.szemingcheng.amemo.dao.UserDao;
 import com.szemingcheng.amemo.db.DBUtils;
@@ -32,7 +31,7 @@ public class NoteBKListModelImp implements NoteBKListModel {
         else if (!userid.isEmpty()&&!userid.equals("")){
             User user = userHelper.queryBuilder().where(UserDao.Properties.User_id.eq(userid)).unique();
             Long _id = user.get_ID();
-            noteBKs = noteBKHelper.queryBuilder().where(MemoDao.Properties.User_ID.eq(_id))
+            noteBKs = noteBKHelper.queryBuilder().where(NoteBKDao.Properties.User_id.eq(_id))
                     .orderDesc(NoteBKDao.Properties._ID).list();
             onDataFinishedListener.getDataFinish(noteBKs);
         }
@@ -44,8 +43,12 @@ public class NoteBKListModelImp implements NoteBKListModel {
     @Override
     public void notebk_delete(Long _id, OnRequestListener onRequestListener) {
         List<Memo> memos = noteBKHelper.query(_id).getMemos();
+        List<NoteBK>noteBKs=noteBKHelper.queryBuilder().where(NoteBKDao.Properties._ID.eq(_id)).list();
         if (memos.size()>0){
             onRequestListener.onError("该笔记本不为空");
+        }else if(noteBKs.size()<=1){
+            onRequestListener.onError("该笔记为最后一本笔记，恳请您不要删除" +
+                    "        (ಥ _ ಥ)");
         }
         else {
             noteBKHelper.deleteByKey(_id);

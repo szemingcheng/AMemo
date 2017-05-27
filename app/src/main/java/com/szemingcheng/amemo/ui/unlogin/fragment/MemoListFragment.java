@@ -106,6 +106,7 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
+                Log.i("用户的ID是：", App.getAppcontext().getUser_ID());
                 memoListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
                 mSwipeRefreshLayout.setRefreshing(false);
             }

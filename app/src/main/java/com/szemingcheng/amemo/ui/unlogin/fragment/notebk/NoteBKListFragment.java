@@ -67,7 +67,8 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
             @Override
             public void onItemClick(View view, int position) {
                 MemoListInNBFragment memoListInNBFragment =
-                        MemoListInNBFragment.newInstance(noteBKListAdapter.getItemData(position).getTitle());
+                        MemoListInNBFragment.newInstance(noteBKListAdapter.getItemData(position).getTitle(),
+                                noteBKListAdapter.getItemData(position).getNotebk_id());
                 ((HomeActivity)getActivity()).replaceFragment
                         (R.id.fragment,memoListInNBFragment,"memolistinb");
             }
@@ -89,7 +90,7 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
                     @Override
                     public void run() {
                         if (data!=null) data.clear();
-                        noteBKListFragmentPresent.pulltorefresh("");
+                        noteBKListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
                         mSwipeRefreshLayout.setRefreshing(false);
                         Toast.makeText(App.getAppcontext(), "更新了...", Toast.LENGTH_SHORT).show();
                     }

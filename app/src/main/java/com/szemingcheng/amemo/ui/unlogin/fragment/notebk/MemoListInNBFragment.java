@@ -45,10 +45,12 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
     private FrameLayout memolist;
     List<Memo> data;
     String notebk_title;
+    String notebk_id;
     Toolbar mToolbar;
-    public static MemoListInNBFragment newInstance(String title){
+    public static MemoListInNBFragment newInstance(String title,String notebk_id){
         Bundle bundle = new Bundle();
         bundle.putString("note_title", title);
+        bundle.putString("note_id",notebk_id);
         MemoListInNBFragment fragment = new MemoListInNBFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -58,6 +60,7 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
         super.onCreate(savedInstanceState);
         memoListFragmentPresent = new MemoListFragmentPresentImp(this);
         notebk_title = getArguments().getString("note_title");
+        notebk_id = getArguments().getString("note_id");
         Log.i("fragment",notebk_title);
     }
 
@@ -98,7 +101,7 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
                     @Override
                     public void run() {
                         if (data!=null) data.clear();
-                        memoListFragmentPresent.pulltorefresh_notebk(notebk_title);
+                        memoListFragmentPresent.pulltorefresh_notebk(notebk_id);
                         mSwipeRefreshLayout.setRefreshing(false);
                         Toast.makeText(App.getAppcontext(), "更新了...", Toast.LENGTH_SHORT).show();
                     }
@@ -112,7 +115,7 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                memoListFragmentPresent.getMemo_notebk(notebk_title);
+                memoListFragmentPresent.getMemo_notebk(notebk_id);
             }
         });
         return mView;
@@ -121,7 +124,7 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
     @Override
     public void onResume() {
         super.onResume();
-        memoListFragmentPresent.getMemo_notebk(notebk_title);
+        memoListFragmentPresent.getMemo_notebk(notebk_id);
     }
 
     @Override

@@ -60,7 +60,7 @@ public class MemoDetailModelImp implements MemoDetailModel {
             }
             else {
                 User user = userHelper.queryBuilder()
-                        .where(UserDao.Properties._ID.eq(App.getAppcontext().getUser_ID())).unique();
+                        .where(UserDao.Properties.User_id.eq(App.getAppcontext().getUser_ID())).unique();
                 memo.setUser(user);
             }
             memoHelper.save(memo);

@@ -110,7 +110,12 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
         }
         toolbar.setNavigationOnClickListener(OnNavigationListener);
         if (action_type==TAKE_PHOTO){
+            //获取光标
+            mEditor.focusEditor();
             setTakePhoto();
+        }else if(action_type==CHOOSE_PHOTO){
+            mEditor.focusEditor();
+            setOpeanAlbum();
         }
     }
     private Toolbar.OnClickListener OnNavigationListener = new View.OnClickListener() {
@@ -335,24 +340,27 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
                 mEditor.setNumbers();
             }
         });
-        findViewById(R.id.action_insert_image).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.action_insert_camera).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                setTakePhoto();
             }
         });
-        findViewById(R.id.action_insert_camera).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.action_insert_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //检查权限
-                if (ContextCompat.checkSelfPermission(MemoDetailActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    //申请sd卡运行权限
-                    ActivityCompat.requestPermissions(MemoDetailActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                } else {
-                    editor.openAlbum(MemoDetailActivity.this);
-                }
+               setOpeanAlbum();
             }
         });
+    }
+    private void setOpeanAlbum(){
+        //检查权限
+        if (ContextCompat.checkSelfPermission(MemoDetailActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            //申请sd卡运行权限
+            ActivityCompat.requestPermissions(MemoDetailActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        } else {
+            editor.openAlbum(MemoDetailActivity.this);
+        }
     }
     private void setTakePhoto(){
         //创建File对象，用于存储拍照后的图片
@@ -451,8 +459,8 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
                 new AlertDialog.Builder(MemoDetailActivity.this);
         normalDialog.setIcon(R.drawable.vector_drawable_i);
         normalDialog.setTitle("笔记信息");
-        normalDialog.setMessage("创建时间："+ TimeUtils.getChatTimeStr(memo.getCreatat())+
-                "\n最后修改时间："+TimeUtils.getChatTimeStr(memo.getUpdateat()));
+        normalDialog.setMessage("创建时间：\n"+ TimeUtils.translateDate(TimeUtils.timestampFormate(memo.getCreatat()))+
+                "\n最后修改时间：\n"+TimeUtils.translateDate(TimeUtils.timestampFormate(memo.getUpdateat())));
         normalDialog.setNegativeButton("关闭",
                 new DialogInterface.OnClickListener() {
                     @Override

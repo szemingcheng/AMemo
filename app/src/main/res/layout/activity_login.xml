@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.szemingcheng.amemo.ui.login.activity.LoginActivity">
+
+    <com.szemingcheng.amemo.utils.TitleLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:text="登录小本本记下这chou"
+        android:textSize="20dp"
+        android:layout_gravity="center"
+        android:drawableTop="@drawable/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"/>
+
+    <RelativeLayout
+        android:id="@+id/login_div"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:layout_margin="15dp">
+
+        <EditText
+            android:id="@+id/login_username"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:hint="ID/手机" />
+
+        <EditText
+            android:id="@+id/login_password"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:layout_below="@id/login_username"
+            android:inputType="textPassword"
+            android:hint="密码"/>
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/login_password"
+            android:layout_centerHorizontal="true"
+            style="@style/common_button_style"
+            android:layout_margin="10dp"
+            android:text="登录"
+            android:textSize="@dimen/memo_title_txt"
+            />
+
+        <Button
+            android:id="@+id/login_register_byphone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/login"
+            android:layout_centerHorizontal="true"
+            style="@style/common_button_style"
+            android:layout_margin="10dp"
+            android:text="凭手机登录"
+            android:textSize="@dimen/memo_title_txt"
+            />
+    </RelativeLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/login_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="还没有账号?"
+        android:textColor="@color/colorAccent"
+        android:layout_margin="5dp"/>
+    <TextView
+        android:id="@+id/forget_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="忘记密码?"
+        android:textColor="@color/colorAccent"
+        android:layout_margin="5dp"/>
+</LinearLayout>
+</LinearLayout>
+

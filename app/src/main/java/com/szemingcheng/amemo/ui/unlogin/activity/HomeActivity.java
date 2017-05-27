@@ -26,12 +26,17 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.szemingcheng.amemo.App;
 import com.szemingcheng.amemo.R;
+import com.szemingcheng.amemo.ui.login.activity.LoginActivity;
 import com.szemingcheng.amemo.ui.unlogin.fragment.MemoListFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.SettingFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.notebk.NoteBKListFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.trash.TrashListFragment;
+import com.szemingcheng.amemo.utils.PreferencesUtils;
 import com.szemingcheng.amemo.view.HomeActivityView;
+
+import static com.szemingcheng.amemo.App.activityList;
 
 
 public class HomeActivity extends AppCompatActivity
@@ -53,10 +58,15 @@ public class HomeActivity extends AppCompatActivity
     public FloatingActionButton memo_txt;
     private long mExitTime = 0;
     String Fragment_tag=MEMOLIST_FRAGMENT;
+    String userid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        //activityList列表
+        activityList.add(HomeActivity.this);
+
          toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("所有笔记");
         setSupportActionBar(toolbar);
@@ -70,7 +80,15 @@ public class HomeActivity extends AppCompatActivity
         user_avatar=(ImageView)header.findViewById(R.id.default_avatar);
         user_name = (TextView)header.findViewById(R.id.onscreen_name);
         user_avatar.setImageResource(R.drawable.vector_drawable_defualt_avatar);
-        user_name.setText("请登录");
+
+        if(!PreferencesUtils.islogin(App.getAppcontext(),PreferencesUtils.LOGINED,false)){
+            user_name.setText("请登录");
+        }
+        else{
+            userid=App.getAppcontext().getUser_ID();
+            user_name.setText(userid);
+        }
+
         user_avatar.setOnClickListener(onLoginListener);
         user_name.setOnClickListener(onLoginListener);
         navigationView.setNavigationItemSelectedListener(this);
@@ -122,7 +140,11 @@ public class HomeActivity extends AppCompatActivity
                     mfloatingActionButton.toggle(false);
                     break;
                 case R.id.menu_item_pic:
-                    Toast.makeText(HomeActivity.this, memo_pic.getLabelText(), Toast.LENGTH_SHORT).show();
+                    Intent intent1 = new Intent();
+                    intent1.setAction("com.activity.MemoDetailActivity");
+                    intent1.putExtra("comefrom",MemoDetailActivity.CREATE_MEMO_MODE);
+                    intent1.putExtra("actiontype",MemoDetailActivity.CHOOSE_PHOTO);
+                    startActivity(intent1);
                     mfloatingActionButton.toggle(false);
                     break;
                 case R.id.menu_item_reminder:
@@ -136,6 +158,9 @@ public class HomeActivity extends AppCompatActivity
         @Override
         public void onClick(View v) {
             Toast.makeText(HomeActivity.this, "登录啊老铁",Toast.LENGTH_SHORT ).show();
+            PreferencesUtils.logined(App.getAppcontext(),PreferencesUtils.LOGINED,false);
+            App.getAppcontext().setUser_ID("");
+            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
         }
     };
 

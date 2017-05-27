@@ -32,8 +32,8 @@ public class MemoListFragmentPresentImp implements MemoListFragmentPresent {
     }
 
     @Override
-    public void getMemo_notebk(String note_title) {
-        memoListModel.memo_in_notebk(note_title,onDataFinishedListener);
+    public void getMemo_notebk(String notebk_id) {
+        memoListModel.memo_in_notebk(notebk_id,onDataFinishedListener);
     }
 
     @Override
