@@ -20,7 +20,7 @@ import java.util.List;
  * Created by szemingcheng on 2017/5/16.
  */
 @Entity
-public class NoteBK {
+public class NoteBK  {
     @Id(autoincrement = true)
     Long _ID;
 
@@ -168,5 +168,4 @@ public class NoteBK {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getNoteBKDao() : null;
     }
-
 }

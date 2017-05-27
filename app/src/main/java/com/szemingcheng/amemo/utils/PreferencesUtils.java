@@ -132,7 +132,7 @@ public class PreferencesUtils {
      * @param key4  password
      * @return User
      */
-    public static User getUserInfo(Context context,String key1,String key2,String key3, String key4 ){
+    public static User getUserInfo(Context context, String key1, String key2, String key3, String key4 ){
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         user=new User();
         user.set_ID(null);

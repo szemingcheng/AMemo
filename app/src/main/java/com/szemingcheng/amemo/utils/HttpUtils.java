@@ -1,7 +1,5 @@
 package com.szemingcheng.amemo.utils;
 
-import com.szemingcheng.amemo.entity.Response;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -17,7 +15,7 @@ public class HttpUtils {
      * @param callback 回调数据
      */
 
-    private static Response Response;
+    private static com.szemingcheng.amemo.entity.Response Response;
     public static void sendRequest( RequestBody requestBody, okhttp3.Callback callback){
         OkHttpClient client=new OkHttpClient();
         Request request=new Request.Builder()

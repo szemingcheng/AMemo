@@ -13,6 +13,8 @@ import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.presenter.Imp.Login_RegisterActivityPresentImp;
 import com.szemingcheng.amemo.view.LoginActivityView;
 
+import static com.szemingcheng.amemo.App.activityList;
+
 public class LoginActivity extends AppCompatActivity implements LoginActivityView, View.OnClickListener {
     EditText login_username, login_password;
     TextView forget_password;
@@ -27,6 +29,8 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //activityList列表
+        activityList.add(LoginActivity.this);
         init();
     }
 

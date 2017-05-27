@@ -28,9 +28,9 @@ public class UserManager {
 
     private static void initUserid() {
         if(!PreferencesUtils.islogin(App.getAppcontext(),PreferencesUtils.LOGINED,false)){
-            UserId=PreferencesUtils.getUserId(App.getAppcontext(),PreferencesUtils.USERID,"VISITOR");
+            UserId="";
         }else{
-            UserId=PreferencesUtils.getUserId(App.getAppcontext(),PreferencesUtils.USERID,"VISITOR");
+            UserId=PreferencesUtils.getUserId(App.getAppcontext(),PreferencesUtils.USERID,"");
         }
     }
 }

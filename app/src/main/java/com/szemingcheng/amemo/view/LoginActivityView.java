@@ -9,7 +9,7 @@ import com.szemingcheng.amemo.ui.login.activity.LoginActivity;
 public interface LoginActivityView {
     String getUserid();
     String getPassword();
-    void setUserInfo(String userid,String password);
+    void setUserInfo(String userid, String password);
     void clear();
     void UseridRequestFocus();
     void PasswordRequestFocus();

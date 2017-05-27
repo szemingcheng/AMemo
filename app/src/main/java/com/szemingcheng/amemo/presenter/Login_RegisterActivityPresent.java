@@ -9,7 +9,7 @@ public interface Login_RegisterActivityPresent {
 
     boolean matchChangePasswordActivityReges(String password1, String password2);
 
-    boolean matchRegisterActivityReges(String userid,String password1,String password2,String phone);
+    boolean matchRegisterActivityReges(String userid, String password1, String password2, String phone);
 
     boolean matchRegisterByPhoneActiviryRegex();
 

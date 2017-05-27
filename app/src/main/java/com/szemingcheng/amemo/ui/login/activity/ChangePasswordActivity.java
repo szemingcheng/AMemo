@@ -12,6 +12,8 @@ import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.presenter.Imp.Login_RegisterActivityPresentImp;
 import com.szemingcheng.amemo.view.ChangePasswordActivityView;
 
+import static com.szemingcheng.amemo.App.activityList;
+
 public class ChangePasswordActivity extends AppCompatActivity implements ChangePasswordActivityView, View.OnClickListener {
     EditText change_password1, change_password2, code_edit;
     Button getCode, change_password;
@@ -24,6 +26,8 @@ public class ChangePasswordActivity extends AppCompatActivity implements ChangeP
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+        //activityList列表
+        activityList.add(ChangePasswordActivity.this);
         init();
     }
 

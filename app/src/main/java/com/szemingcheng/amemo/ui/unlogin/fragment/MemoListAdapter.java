@@ -1,6 +1,8 @@
 package com.szemingcheng.amemo.ui.unlogin.fragment;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.entity.Memo;
 import com.szemingcheng.amemo.utils.TimeUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,33 +35,33 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context mcontext;
     private List<Memo> list=new ArrayList<>();
 
-     MemoListAdapter(Context context, OnItemClickListener onItemClickListener) {
+     public MemoListAdapter(Context context, OnItemClickListener onItemClickListener) {
         mcontext = context;
         this.onItemClickListener = onItemClickListener;
         Log.i("adapter","adapter assigned");
     }
 
-     void setData(List<Memo> data) {
+     public void setData(List<Memo> data) {
          Log.i("adapter","set data:"+data.size());
         list = data;
         this.notifyDataSetChanged();
     }
-    void clear() {
+    public void clear() {
         int size = list.size();
         list.clear();
         notifyItemRangeRemoved(0, size);
     }
-     void removeDataItem(int position) {
+    public void removeDataItem(int position) {
         list.remove(position);
         notifyItemRemoved(position);
     }
 
-     void insertData(Memo memo,int position){
+    public void insertData(Memo memo,int position){
         list.add(position,memo);
         notifyItemInserted(position);
     }
 
-     Memo getItemData(int position){
+    public Memo getItemData(int position){
         return list == null ? null : list.size() < position ? null : list.get(position);
     }
 
@@ -125,7 +128,14 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ((PicViewHolder) holder).memoTitle.setText(memo.getTitle());
             ((PicViewHolder) holder).memoContent.setText(memo.getMemotxt());
             ((PicViewHolder) holder).memoUpdateat.setText(TimeUtils.getChatTimeStr(memo.getUpdateat()));
-            ((PicViewHolder)holder).memoPic.setImageResource(Integer.parseInt(memo.getPic()));
+            String file = memo.getPic();
+           File file1 = new File(file);
+            if (file1.exists()) {
+                Bitmap bm = BitmapFactory.decodeFile(file);
+                ((PicViewHolder)holder).memoPic.setImageBitmap(bm);
+            }
+            else ((PicViewHolder)holder).memoPic.setImageResource(R.drawable.vector_drawable_pic_error);
+
         } else if (holder instanceof ReminderViewHolder) {
             Memo memo = list.get(position);
             ((ReminderViewHolder) holder).memoTitle.setText(memo.getTitle());
@@ -151,7 +161,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         else return 0;
     }
 
-    private class TextViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class TextViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private LinearLayout aMemoItem;
         private TextView memoTitle;
         private TextView memoContent;
@@ -166,6 +176,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             memoContent = (TextView) view.findViewById(R.id.memo_content);
             memoUpdateat = (TextView) view.findViewById(R.id.update_at);
             aMemoItem.setOnClickListener(this);
+            aMemoItem.setOnLongClickListener(this);
         }
 
         @Override
@@ -174,8 +185,16 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 this.onItemClickListener.onItemClick(v, getAdapterPosition());
             }
         }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (null != onItemClickListener) {
+                this.onItemClickListener.onItemLongClick(v, getAdapterPosition());
+            }
+            return true;
+        }
     }
-    private class PicViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class PicViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
             private LinearLayout aMemoItem;
             private TextView memoTitle;
             private TextView memoContent;
@@ -192,6 +211,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 memoPic = (ImageView) view.findViewById(R.id.memo_pic);
                 memoUpdateat = (TextView) view.findViewById(R.id.update_at);
                 aMemoItem.setOnClickListener(this);
+                aMemoItem.setOnLongClickListener(this);
             }
 
             @Override
@@ -200,8 +220,16 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     this.onItemClickListener.onItemClick(v, getAdapterPosition());
                 }
             }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (null != onItemClickListener) {
+                this.onItemClickListener.onItemLongClick(v, getAdapterPosition());
+            }
+            return true;
         }
-    private class ReminderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    }
+    private class ReminderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
             private LinearLayout aMemoItem;
             private TextView memoTitle;
             private TextView memoContent;
@@ -216,6 +244,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 memoContent = (TextView) view.findViewById(R.id.memo_content);
                 memoreminderDate = (TextView) view.findViewById(R.id.memo_reminder_date);
                 aMemoItem.setOnClickListener(this);
+                aMemoItem.setOnLongClickListener(this);
             }
 
             @Override
@@ -224,7 +253,14 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     this.onItemClickListener.onItemClick(v, getAdapterPosition());
                 }
             }
+        @Override
+        public boolean onLongClick(View v) {
+            if (null != onItemClickListener) {
+                this.onItemClickListener.onItemLongClick(v, getAdapterPosition());
+            }
+            return true;
         }
+    }
     private class EmptyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private FrameLayout emptyLayout;
         private TextView errorView;
@@ -235,6 +271,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             onItemClickListenerl = onItemClickListener;
             emptyLayout = (FrameLayout) view.findViewById(R.id.empty_layout);
             errorView = (TextView) view.findViewById(R.id.empty_view);
+
         }
 
         @Override

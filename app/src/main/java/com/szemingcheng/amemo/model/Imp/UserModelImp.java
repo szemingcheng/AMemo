@@ -26,7 +26,7 @@ private Response response;
     }
 
     @Override
-    public Response loadresponse(String resCode, String message,String password,String userid,String phone,String onscreen_name) {
+    public Response loadresponse(String resCode, String message, String password, String userid, String phone, String onscreen_name) {
         response=new Response(resCode,message,password,userid,phone,onscreen_name);
         return response;
     }

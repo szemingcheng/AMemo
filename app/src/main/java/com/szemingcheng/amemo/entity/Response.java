@@ -69,7 +69,7 @@ public class Response implements Serializable {
     public Response() {
     }
 
-    public Response(String resCode, String message, String password, String userid, String phone,String onscreen_name) {
+    public Response(String resCode, String message, String password, String userid, String phone, String onscreen_name) {
         this.resCode = resCode;
         this.message = message;
         this.password = password;

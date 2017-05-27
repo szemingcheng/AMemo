@@ -69,7 +69,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
         userModel = new UserModelImp();
     }
 
-    public  Login_RegisterActivityPresentImp(RegisterByPhoneActivityView registerByPhoneActivityView){
+    public Login_RegisterActivityPresentImp(RegisterByPhoneActivityView registerByPhoneActivityView){
         this.registerByPhoneActivityView=registerByPhoneActivityView;
         userModel=new UserModelImp();
     }
@@ -222,6 +222,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
                                                 PreferencesUtils.PASSWORD, loginActivityView.getPassword());
                                         //表示已登录
                                         PreferencesUtils.logined(App.getAppcontext(), PreferencesUtils.LOGINED, true);
+                                        App.getAppcontext().setUser_ID(Response.getUserid());
                                     }
 
                                     @Override
@@ -234,6 +235,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
                                         //表示已登录
                                         PreferencesUtils.logined(App.getAppcontext(), PreferencesUtils.LOGINED, true);
                                         DaoManger.getDaoSession(Response.getUserid());
+                                        App.getAppcontext().setUser_ID(Response.getUserid());
                                     }
                                 });
                                 loginActivityView.getContext().startActivity(new Intent(loginActivityView.getContext(), HomeActivity.class));
@@ -264,6 +266,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
                                 PreferencesUtils.logined(App.getAppcontext(), PreferencesUtils.LOGINED, true);
                                 DaoManger.getDaoSession(Response.getUserid());
                                 registerActivityView.getContext().startActivity((new Intent(registerActivityView.getContext(), HomeActivity.class)));
+                                App.getAppcontext().setUser_ID(Response.getUserid());
                             }
                         });
                         break;
@@ -309,6 +312,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
                                         //表示已登录
                                         PreferencesUtils.logined(App.getAppcontext(), PreferencesUtils.LOGINED, true);
                                         DaoManger.getDaoSession(Response.getUserid());
+                                        App.getAppcontext().setUser_ID(Response.getUserid());
                                     }
                                 });
                                 registerByPhoneActivityView.getContext().startActivity(new Intent(registerByPhoneActivityView.getContext(), HomeActivity.class));
@@ -344,6 +348,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
                                                 PreferencesUtils.PASSWORD,null);
                                         //表示已登录
                                         PreferencesUtils.logined(App.getAppcontext(), PreferencesUtils.LOGINED, true);
+                                        App.getAppcontext().setUser_ID(Response.getUserid());
                                     }
 
                                     @Override
@@ -356,6 +361,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
                                         //表示已登录
                                         PreferencesUtils.logined(App.getAppcontext(), PreferencesUtils.LOGINED, true);
                                         DaoManger.getDaoSession(Response.getUserid());
+                                        App.getAppcontext().setUser_ID(Response.getUserid());
                                     }
                                 });
                                 registerByPhoneActivityView.getContext().startActivity(new Intent(registerByPhoneActivityView.getContext(), HomeActivity.class));
@@ -438,14 +444,16 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
             case "1":
                 if (matchChangePasswordActivityReges(changePasswordActivityView.getPassword1(), changePasswordActivityView.getpassword2())) {
                     //测试用
-                    getJson(CAHNGPASSWORD);
-                   // SMSSDK.submitVerificationCode("86", changePasswordActivityView.getPhone(), changePasswordActivityView.getCode());
+                    //getJson(CAHNGPASSWORD);
+                    //启用
+                   SMSSDK.submitVerificationCode("86", changePasswordActivityView.getPhone(), changePasswordActivityView.getCode());
                 }
                 break;
             case "2":
                 //测试用
-                getJson(REGISTERBYPHONE);
-                //SMSSDK.submitVerificationCode("86", registerByPhoneActivityView.getPhone(), registerByPhoneActivityView.getCode());
+                //getJson(REGISTERBYPHONE);
+                //启用
+                SMSSDK.submitVerificationCode("86", registerByPhoneActivityView.getPhone(), registerByPhoneActivityView.getCode());
                 break;
         }
     }

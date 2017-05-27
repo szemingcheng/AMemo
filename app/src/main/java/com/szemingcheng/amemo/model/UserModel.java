@@ -11,6 +11,6 @@ public interface UserModel {
         void Useidexisted(String userid);
         void UseridUnexited(String userid);
     }
-void user_check(String Userid,UseridexistedListener useridexistedListener);
- Response loadresponse(String resCode, String message,String password,String userid,String phone,String onscreen_name);
+void user_check(String Userid, UseridexistedListener useridexistedListener);
+ Response loadresponse(String resCode, String message, String password, String userid, String phone, String onscreen_name);
 }

@@ -11,6 +11,8 @@ import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.presenter.Imp.Login_RegisterActivityPresentImp;
 import com.szemingcheng.amemo.view.RegisterByPhoneActivityView;
 
+import static com.szemingcheng.amemo.App.activityList;
+
 public class RegisterByPhoneActivity extends AppCompatActivity implements RegisterByPhoneActivityView,View.OnClickListener {
     EditText phone_edit, code_edit;
     Button code_bn, register;
@@ -21,6 +23,8 @@ public class RegisterByPhoneActivity extends AppCompatActivity implements Regist
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_by_phone);
+        //activityList列表
+        activityList.add(RegisterByPhoneActivity.this);
         init();
     }
 

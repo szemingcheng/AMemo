@@ -1,34 +1,31 @@
 package com.szemingcheng.amemo.ui.unlogin.fragment;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.szemingcheng.amemo.App;
 import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.entity.Memo;
 import com.szemingcheng.amemo.presenter.Imp.MemoListFragmentPresentImp;
 import com.szemingcheng.amemo.presenter.MemoListFragmentPresent;
+import com.szemingcheng.amemo.ui.unlogin.activity.HomeActivity;
+import com.szemingcheng.amemo.ui.unlogin.activity.MemoDetailActivity;
+import com.szemingcheng.amemo.view.HomeActivityView;
 import com.szemingcheng.amemo.view.MemoListFragmentView;
 
 import java.util.List;
@@ -43,24 +40,24 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
     public SwipeRefreshLayout mSwipeRefreshLayout;
     public FrameLayout mEmptyLayout;
     public TextView mErrorMessage;
-    public FloatingActionMenu mfloatingActionButton;
-    public FloatingActionButton memo_cam;
-    public FloatingActionButton memo_pic;
-    public FloatingActionButton memo_reminder;
-    public FloatingActionButton memo_txt;
     private MemoListFragmentPresent memoListFragmentPresent;
     private MemoListAdapter memoListAdapter;
     List<Memo> data;
-
+    HomeActivityView homeActivityView = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         memoListFragmentPresent = new MemoListFragmentPresentImp(this);
+        homeActivityView = ((HomeActivity)getActivity());
+        Bundle bundle = new Bundle();
+        bundle.putString("fragment","memolist");
+        homeActivityView.fragment_callback(bundle);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.layout_memo_list_fragment,container,false);
         mEmptyLayout = (FrameLayout)mView.findViewById(R.id.empty_layout);
         mErrorMessage = (TextView)mEmptyLayout.findViewById(R.id.empty_view);
@@ -69,7 +66,20 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
         memoListAdapter = new MemoListAdapter(getActivity().getApplication(), new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(App.getAppcontext(),"点了",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setAction("com.activity.MemoDetailActivity");
+                intent.putExtra("comefrom", MemoDetailActivity.VIEW_MEMO_MODE);
+                intent.putExtra("id",memoListAdapter.getItemData(position).get_ID());
+                startActivity(intent);
+            }
+            @Override
+            public void onMoreClick(View view, int position) {
+
+            }
+            @Override
+            public void onItemLongClick(View view, int positon) {
+                Memo memo = memoListAdapter.getItemData(positon);
+                showMultiBtnDialog(memo,positon);
             }
         });
         Log.i("setadapter","assigned,context:"+getActivity());
@@ -81,9 +91,9 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
                     @Override
                     public void run() {
                         if (data!=null) data.clear();
-                        memoListFragmentPresent.pulltorefresh("");
+                        memoListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
                         mSwipeRefreshLayout.setRefreshing(false);
-                        Toast.makeText(App.getAppcontext(), "更新了...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(App.getAppcontext(), "更新完成", Toast.LENGTH_SHORT).show();
                     }
                 }, 1000);
             }
@@ -92,74 +102,29 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(memoListAdapter);
         Log.i("setadapter","recyclerview assigned");
+        mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                    memoListFragmentPresent.getMemo("");
+                Log.i("用户的ID是：", App.getAppcontext().getUser_ID());
+                memoListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
+
         return mView;
     }
 
     @Override
-    public void onViewCreated(View view,Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mfloatingActionButton = (FloatingActionMenu) view.findViewById(R.id.fab_menu);
-        memo_cam = (FloatingActionButton)view.findViewById(R.id.menu_item_camera);
-        memo_pic = (FloatingActionButton)view.findViewById(R.id.menu_item_pic);
-        memo_reminder = (FloatingActionButton)view.findViewById(R.id.menu_item_reminder);
-        mfloatingActionButton.setClosedOnTouchOutside(true);
-        mfloatingActionButton.hideMenuButton(false);
-    }
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mfloatingActionButton.showMenuButton(true);
-        memo_cam.setOnClickListener(onClickListener);
-        memo_pic.setOnClickListener(onClickListener);
-        memo_reminder.setOnClickListener(onClickListener);
-        createCustomAnimation();
-        mfloatingActionButton.setOnMenuButtonClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mfloatingActionButton.isOpened()) {
-                    Toast.makeText(getActivity(), mfloatingActionButton.getMenuButtonLabelText(), Toast.LENGTH_SHORT).show();
-                }
-                mfloatingActionButton.toggle(true);
-            }
-        });
-    }
-    private void createCustomAnimation() {
-        AnimatorSet set = new AnimatorSet();
-
-        ObjectAnimator scaleOutX = ObjectAnimator.ofFloat(mfloatingActionButton.getMenuIconView(), "scaleX", 1.0f, 0.2f);
-        ObjectAnimator scaleOutY = ObjectAnimator.ofFloat(mfloatingActionButton.getMenuIconView(), "scaleY", 1.0f, 0.2f);
-
-        ObjectAnimator scaleInX = ObjectAnimator.ofFloat(mfloatingActionButton.getMenuIconView(), "scaleX", 0.2f, 1.0f);
-        ObjectAnimator scaleInY = ObjectAnimator.ofFloat(mfloatingActionButton.getMenuIconView(), "scaleY", 0.2f, 1.0f);
-
-        scaleOutX.setDuration(50);
-        scaleOutY.setDuration(50);
-
-        scaleInX.setDuration(150);
-        scaleInY.setDuration(150);
-
-        scaleInX.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                mfloatingActionButton.getMenuIconView().setImageResource(mfloatingActionButton.isOpened()
-                        ? R.drawable.vector_drawable_pen_memo : R.drawable.fab_add);
-            }
-        });
-
-        set.play(scaleOutX).with(scaleOutY);
-        set.play(scaleInX).with(scaleInY).after(scaleOutX);
-        set.setInterpolator(new OvershootInterpolator(2));
-        mfloatingActionButton.setIconToggleAnimatorSet(set);
-    }
-    @Override
     public void onResume() {
         super.onResume();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (data!=null) data.clear();
+                memoListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
+            }
+        }, 2000);
     }
 
     @Override
@@ -168,43 +133,11 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.menu_item_camera:
-                    Toast.makeText(getActivity(), memo_cam.getLabelText(), Toast.LENGTH_SHORT).show();
-                    mfloatingActionButton.toggle(false);
-                    break;
-                case R.id.menu_item_reminder:
-                    Toast.makeText(getActivity(), memo_reminder.getLabelText(), Toast.LENGTH_SHORT).show();
-                    mfloatingActionButton.toggle(false);
-                    break;
-                case R.id.memo_pic:
-                    Toast.makeText(getActivity(), memo_pic.getLabelText(), Toast.LENGTH_SHORT).show();
-                    mfloatingActionButton.toggle(false);
-            }
-        }
-    };
-
-    @Override
     public void updateListView(List<Memo> memos) {
         memoListAdapter.clear();
         memoListAdapter.setData(memos);
         memoListAdapter.notifyDataSetChanged();
         Log.i("setadapter","update List view");
-    }
-    @Override
-    public void showLoadingIcon() {
-     mSwipeRefreshLayout.setRefreshing(true);
-    }
-    @Override
-    public void hideLoadingIcon() {
-    mSwipeRefreshLayout.setRefreshing(false);
-
     }
 
     @Override
@@ -221,4 +154,46 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
         }
     }
 
+    @Override
+    public void showSuccess() {
+        Toast.makeText(App.getAppcontext(),"删除成功",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showError(String error) {
+        Toast.makeText(App.getAppcontext(),error,Toast.LENGTH_SHORT).show();
+    }
+
+    private void showMultiBtnDialog(final Memo memo, final int position){
+        AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(getActivity());
+        normalDialog.setTitle("笔记 "+memo.getTitle()).setMessage("您想进行什么操作呢？");
+        normalDialog.setPositiveButton("取消",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // ...To-do
+                    }
+                });
+        normalDialog.setNeutralButton("删除",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        memoListFragmentPresent.delete_memo(memo.get_ID());
+                        memoListAdapter.removeDataItem(position);
+                    }
+                });
+        normalDialog.setNegativeButton("查看", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent();
+                intent.setAction("com.activity.MemoDetailActivity");
+                intent.putExtra("comefrom", MemoDetailActivity.VIEW_MEMO_MODE);
+                intent.putExtra("id",memo.get_ID());
+                startActivity(intent);
+            }
+        });
+        // 创建实例并显示
+        normalDialog.show();
+    }
 }

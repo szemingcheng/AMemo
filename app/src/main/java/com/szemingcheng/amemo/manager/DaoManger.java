@@ -3,13 +3,10 @@ package com.szemingcheng.amemo.manager;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.szemingcheng.amemo.App;
-import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.dao.DaoMaster;
 import com.szemingcheng.amemo.dao.DaoSession;
-import com.szemingcheng.amemo.dao.MemoDao;
 import com.szemingcheng.amemo.dao.NoteBKDao;
 import com.szemingcheng.amemo.dao.UserDao;
-import com.szemingcheng.amemo.entity.Memo;
 import com.szemingcheng.amemo.entity.NoteBK;
 import com.szemingcheng.amemo.entity.User;
 import com.szemingcheng.amemo.utils.PreferencesUtils;
@@ -29,6 +26,7 @@ import com.szemingcheng.amemo.utils.PreferencesUtils;
 public class DaoManger {
     private static DaoSession mDaoSession;
     public static User user;
+    private static SQLiteDatabase db ;
 
 
     //线程锁，强制主进程优先进行数据库的初始化，保证异步操作安全
@@ -45,14 +43,14 @@ public class DaoManger {
         //建立数据库
         DaoMaster.DevOpenHelper helper =new DaoMaster.DevOpenHelper(App.getAppcontext(),"notetest-db",null);
         // 得到可写的数据库操作对象
-        SQLiteDatabase db = helper.getWritableDatabase();
+        db = helper.getWritableDatabase();
         // 获得Master实例,相当于给database包装工具
         DaoMaster daoMaster = new DaoMaster(db);
         // 获取类似于缓存管理器,提供各表的DAO类
         mDaoSession = daoMaster.newSession();
         //用户偏向，sharedPreference创建默认游客相关信息
         //判断是否为游客状态
-        if(PreferencesUtils.getUserId(App.getAppcontext(),PreferencesUtils.USERID,"VISITOR").equals("VISITOR")) {
+        if(PreferencesUtils.getUserId(App.getAppcontext(),PreferencesUtils.USERID,"").equals("")) {
             if (PreferencesUtils.getBoolean(App.getAppcontext(), PreferencesUtils.FIRST_START, true)) {
                 //创建默认游客user
                 mDaoSession.getUserDao().insert(new User(1L, Userid, null, null, Userid, null, User.TYPE_VISITOR));
@@ -62,52 +60,52 @@ public class DaoManger {
                 //PreferencesUtils.putUserid(App.getAppcontext(),PreferencesUtils.USERID,null,PreferencesUtils.PHONE,null,PreferencesUtils.ONSCREENNAME,null,PreferencesUtils.PASSWORD,null);
                 //插入测试数据
                 //创建user
-                UserDao userDao = mDaoSession.getUserDao();
-                User user = userDao.queryBuilder().where(UserDao.Properties._ID.eq(1L)).unique();
+//                UserDao userDao = mDaoSession.getUserDao();
+//                User user = userDao.queryBuilder().where(UserDao.Properties._ID.eq(1L)).unique();
 
                 //创建notebook
-                NoteBKDao noteBKDao = mDaoSession.getNoteBKDao();
-                NoteBK noteBK = noteBKDao.queryBuilder().where(NoteBKDao.Properties._ID.eq(1L)).unique();
+//                NoteBKDao noteBKDao = mDaoSession.getNoteBKDao();
+//                NoteBK noteBK = noteBKDao.queryBuilder().where(NoteBKDao.Properties._ID.eq(1L)).unique();
 
-                MemoDao memoDao = mDaoSession.getMemoDao();
-                for (int i = 0; i <= 2; i++) {
-                    Memo memo = new Memo();
-                    memo.setTitle("小本本标题" + i);
-                    memo.setMemotxt("好的这是文字item");
-                    memo.setUser(user);
-                    memo.setState(Memo.IS_EXSIT);
-                    memo.setType(Memo.TYPE_TXT);
-                    memo.setNoteBK(noteBK);
-                    memo.setCreatat((System.currentTimeMillis() - 86400000 * i - 31536000000L * i));
-                    memo.setUpdateat((System.currentTimeMillis() - 86400000 * i - 31536000000L * i + 3600000 * i));
-                    memoDao.insert(memo);
-                }
-                for (int i = 0; i <= 2; i++) {
-                    Memo memo = new Memo();
-                    memo.setTitle("小本本标题" + i);
-                    memo.setMemotxt("好的这是图片item");
-                    memo.setUser(user);
-                    memo.setState(Memo.IS_EXSIT);
-                    memo.setType(Memo.TYPE_CAM);
-                    memo.setPic(String.valueOf(R.drawable.user3));
-                    memo.setNoteBK(noteBK);
-                    memo.setCreatat((System.currentTimeMillis() - 86400000 * i - 31536000000L * i));
-                    memo.setUpdateat((System.currentTimeMillis() - 86400000 * i - 31536000000L * i + 3600000 * i));
-                    memoDao.insert(memo);
-                }
-                for (int i = 0; i <= 2; i++) {
-                    Memo memo = new Memo();
-                    memo.setTitle("小本本标题" + i);
-                    memo.setMemotxt("好的这是提醒item");
-                    memo.setUser(user);
-                    memo.setState(Memo.IS_EXSIT);
-                    memo.setType(Memo.TYPE_REMINDER);
-                    memo.setNoteBK(noteBK);
-                    memo.setReminder_date(System.currentTimeMillis() + 3600000 * 2);
-                    memo.setCreatat((System.currentTimeMillis() - 86400000 * i - 31536000000L * i));
-                    memo.setUpdateat((System.currentTimeMillis() - 86400000 * i - 31536000000L * i + 3600000 * i));
-                    memoDao.insert(memo);
-                }
+//                MemoDao memoDao = mDaoSession.getMemoDao();
+//                for (int i = 0; i <= 2; i++) {
+//                    Memo memo = new Memo();
+//                    memo.setTitle("小本本标题" + i);
+//                    memo.setMemotxt("好的这是文字item");
+//                    memo.setUser(user);
+//                    memo.setState(Memo.IS_EXSIT);
+//                    memo.setType(Memo.TYPE_TXT);
+//                    memo.setNoteBK(noteBK);
+//                    memo.setCreatat((System.currentTimeMillis() - 86400000 * i - 31536000000L * i));
+//                    memo.setUpdateat((System.currentTimeMillis() - 86400000 * i - 31536000000L * i + 3600000 * i));
+//                    memoDao.insert(memo);
+//                }
+//                for (int i = 0; i <= 2; i++) {
+//                    Memo memo = new Memo();
+//                    memo.setTitle("小本本标题" + i);
+//                    memo.setMemotxt("好的这是图片item");
+//                    memo.setUser(user);
+//                    memo.setState(Memo.IS_EXSIT);
+//                    memo.setType(Memo.TYPE_CAM);
+//                    memo.setPic(String.valueOf(R.drawable.user3));
+//                    memo.setNoteBK(noteBK);
+//                    memo.setCreatat((System.currentTimeMillis() - 86400000 * i - 31536000000L * i));
+//                    memo.setUpdateat((System.currentTimeMillis() - 86400000 * i - 31536000000L * i + 3600000 * i));
+//                    memoDao.insert(memo);
+//                }
+//                for (int i = 0; i <= 2; i++) {
+//                    Memo memo = new Memo();
+//                    memo.setTitle("小本本标题" + i);
+//                    memo.setMemotxt("好的这是提醒item");
+//                    memo.setUser(user);
+//                    memo.setState(Memo.IS_EXSIT);
+//                    memo.setType(Memo.TYPE_REMINDER);
+//                    memo.setNoteBK(noteBK);
+//                    memo.setReminder_date(System.currentTimeMillis() + 3600000 * 2);
+//                    memo.setCreatat((System.currentTimeMillis() - 86400000 * i - 31536000000L * i));
+//                    memo.setUpdateat((System.currentTimeMillis() - 86400000 * i - 31536000000L * i + 3600000 * i));
+//                    memoDao.insert(memo);
+//                }
             }
             //偏向识别关闭
             //将settings的FIRST_START关键字记录为false
@@ -132,8 +130,8 @@ public class DaoManger {
             PreferencesUtils.putBoolean(App.getAppcontext(), PreferencesUtils.FIRST_START, false);
         }
 }
-    private static void initUserDb(String Userid) {
-        getDaoSession(Userid);
-    }
+//    private static void initUserDb(String Userid) {
+//        getDaoSession(Userid);
+//    }
 
 }

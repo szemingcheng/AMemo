@@ -12,6 +12,8 @@ import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.presenter.Imp.Login_RegisterActivityPresentImp;
 import com.szemingcheng.amemo.view.RegisterActivityView;
 
+import static com.szemingcheng.amemo.App.activityList;
+
 public class RegisterActivity extends AppCompatActivity implements RegisterActivityView, View.OnClickListener {
     EditText register_username, register_password1, register_password2, register_phone;
     Button register, register_login;
@@ -24,6 +26,8 @@ public class RegisterActivity extends AppCompatActivity implements RegisterActiv
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        //activityList列表
+        activityList.add(RegisterActivity.this);
         init();
     }
 

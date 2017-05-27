@@ -1,13 +1,14 @@
 package com.szemingcheng.amemo.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.szemingcheng.amemo.App;
 import com.szemingcheng.amemo.R;
 
 /**
@@ -16,6 +17,7 @@ import com.szemingcheng.amemo.R;
 
 public class TitleLayout extends LinearLayout implements View.OnClickListener {
     Button titleBack;
+    private long mExitTime = 0;
 
     public TitleLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -28,10 +30,19 @@ public class TitleLayout extends LinearLayout implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.title_back:
-                ((Activity) getContext()).finish();
+                _exit();
                 break;
             default:
                 break;
+        }
+    }
+
+    private void _exit() {
+        if (System.currentTimeMillis() - mExitTime > 2000) {
+            Toast.makeText(getContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            mExitTime = System.currentTimeMillis();
+        } else {
+            App.getAppcontext().delete();
         }
     }
 }

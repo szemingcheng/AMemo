@@ -85,6 +85,6 @@
             android:paddingEnd="35dp"
             android:paddingLeft="0dp"
             android:paddingStart="0dp"
-            tool:src="@drawable/user1"/>
+            />
     </LinearLayout>
 </LinearLayout>
