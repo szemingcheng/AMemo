@@ -10,4 +10,9 @@
     <color name="memo_title">#2e2e2e</color>
     <color name="memo_content">#757575</color>
     <color name="reminder_color">#48a4e7</color>
+    <!-- 描边颜色 -->
+    <color name="border_clo">#ccc</color>
+    <color name="text_clo">#333</color>
+    <color name="white">#fff</color>
+    <color name="selector">#d0d0d0</color>
 </resources>

@@ -30,7 +30,7 @@ public class Editor implements EditorUtilInterface {
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
         //读取图片相册
         intent.setType("image/*");
-        fragmentActivity.startActivityForResult(intent, 1);
+        fragmentActivity.startActivityForResult(intent, 2);
     }
 
     @Override

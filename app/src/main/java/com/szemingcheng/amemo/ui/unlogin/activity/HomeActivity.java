@@ -26,12 +26,17 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.szemingcheng.amemo.App;
 import com.szemingcheng.amemo.R;
+import com.szemingcheng.amemo.ui.unlogin.activity.setting.UserInfoActivity;
 import com.szemingcheng.amemo.ui.unlogin.fragment.MemoListFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.SettingFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.notebk.NoteBKListFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.trash.TrashListFragment;
+import com.szemingcheng.amemo.utils.PreferencesUtils;
 import com.szemingcheng.amemo.view.HomeActivityView;
+
+import static com.szemingcheng.amemo.App.activityList;
 
 
 public class HomeActivity extends AppCompatActivity
@@ -46,6 +51,7 @@ public class HomeActivity extends AppCompatActivity
     View header;
     TextView user_name;
     ImageView user_avatar;
+
     public FloatingActionMenu mfloatingActionButton;
     public FloatingActionButton memo_cam;
     public FloatingActionButton memo_pic;
@@ -53,10 +59,16 @@ public class HomeActivity extends AppCompatActivity
     public FloatingActionButton memo_txt;
     private long mExitTime = 0;
     String Fragment_tag=MEMOLIST_FRAGMENT;
+    String userid;
+    String tagName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        //activityList列表
+        activityList.add(HomeActivity.this);
+
          toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("所有笔记");
         setSupportActionBar(toolbar);
@@ -69,8 +81,18 @@ public class HomeActivity extends AppCompatActivity
         header=navigationView.inflateHeaderView(R.layout.nav_header_home);
         user_avatar=(ImageView)header.findViewById(R.id.default_avatar);
         user_name = (TextView)header.findViewById(R.id.onscreen_name);
-        user_avatar.setImageResource(R.drawable.vector_drawable_defualt_avatar);
-        user_name.setText("请登录");
+        //user_avatar.setImageResource(R.drawable.vector_drawable_defualt_avatar);
+
+        if(!PreferencesUtils.islogin(App.getAppcontext(), PreferencesUtils.LOGINED,false)){
+            user_name.setText("请登录");
+            user_avatar.setImageResource(R.drawable.vector_drawable_defualt_avatar);
+        }
+        else{
+            userid= App.getAppcontext().getUser_ID();
+            user_name.setText(PreferencesUtils.getOnscreen_name(App.getAppcontext(), PreferencesUtils.ONSCREENNAME));
+            user_avatar.setImageResource(R.drawable.user1);
+        }
+
         user_avatar.setOnClickListener(onLoginListener);
         user_name.setOnClickListener(onLoginListener);
         navigationView.setNavigationItemSelectedListener(this);
@@ -82,7 +104,6 @@ public class HomeActivity extends AppCompatActivity
         memo_cam = (FloatingActionButton)findViewById(R.id.menu_item_camera);
         memo_pic = (FloatingActionButton)findViewById(R.id.menu_item_pic);
         memo_reminder = (FloatingActionButton)findViewById(R.id.menu_item_reminder);
-       // mfloatingActionButton.hideMenuButton(false);
         mfloatingActionButton.showMenuButton(true);
         memo_cam.setOnClickListener(onClickListener);
         memo_pic.setOnClickListener(onClickListener);
@@ -95,7 +116,7 @@ public class HomeActivity extends AppCompatActivity
 
                     Intent intent = new Intent();
                     intent.setAction("com.activity.MemoDetailActivity");
-                    intent.putExtra("comefrom",MemoDetailActivity.CREATE_MEMO_MODE);
+                    intent.putExtra("comefrom", MemoDetailActivity.CREATE_MEMO_MODE);
                     startActivity(intent);
                 }
                 mfloatingActionButton.toggle(true);
@@ -116,13 +137,17 @@ public class HomeActivity extends AppCompatActivity
                 case R.id.menu_item_camera:
                     Intent intent = new Intent();
                     intent.setAction("com.activity.MemoDetailActivity");
-                    intent.putExtra("comefrom",MemoDetailActivity.CREATE_MEMO_MODE);
-                    intent.putExtra("actiontype",MemoDetailActivity.TAKE_PHOTO);
+                    intent.putExtra("comefrom", MemoDetailActivity.CREATE_MEMO_MODE);
+                    intent.putExtra("actiontype", MemoDetailActivity.TAKE_PHOTO);
                     startActivity(intent);
                     mfloatingActionButton.toggle(false);
                     break;
                 case R.id.menu_item_pic:
-                    Toast.makeText(HomeActivity.this, memo_pic.getLabelText(), Toast.LENGTH_SHORT).show();
+                    Intent intent1 = new Intent();
+                    intent1.setAction("com.activity.MemoDetailActivity");
+                    intent1.putExtra("comefrom", MemoDetailActivity.CREATE_MEMO_MODE);
+                    intent1.putExtra("actiontype", MemoDetailActivity.CHOOSE_PHOTO);
+                    startActivity(intent1);
                     mfloatingActionButton.toggle(false);
                     break;
                 case R.id.menu_item_reminder:
@@ -135,7 +160,12 @@ public class HomeActivity extends AppCompatActivity
     private View.OnClickListener onLoginListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Toast.makeText(HomeActivity.this, "登录啊老铁",Toast.LENGTH_SHORT ).show();
+            if(!PreferencesUtils.islogin(App.getAppcontext(),PreferencesUtils.LOGINED,false)){
+                Toast.makeText(HomeActivity.this, "登录啊老铁",Toast.LENGTH_SHORT ).show();
+            }else {
+               startActivity(new Intent(HomeActivity.this, UserInfoActivity.class));
+                finish();
+            }
         }
     };
 
@@ -181,24 +211,26 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
         switch (id) {
             case R.id.nav_memo_all:
+                mfloatingActionButton.showMenuButton(true);
                 getSupportFragmentManager().beginTransaction().
                         replace(R.id.fragment,new MemoListFragment(),MEMOLIST_FRAGMENT).commit();
-
+//                replaceFragment(R.id.fragment,new MemoListFragment(),MEMOLIST_FRAGMENT);
                 getSupportActionBar().setTitle("所有笔记");
                 break;
             case R.id.nav_note_books:
-                getSupportFragmentManager().beginTransaction().
-                        replace(R.id.fragment,new NoteBKListFragment(),NOTEBKLIST_FRAGMENT).commit();
-//                replaceFragment(R.id.fragment,new NoteBKListFragment(),NOTEBKLIST_FRAGMENT);
+                mfloatingActionButton.showMenuButton(true);
+                replaceFragment(R.id.fragment,new NoteBKListFragment(),NOTEBKLIST_FRAGMENT);
                 getSupportActionBar().setTitle("笔记本");
                 break;
             case R.id.nav_trash:
+                mfloatingActionButton.showMenuButton(true);
                 getSupportFragmentManager().beginTransaction().
                         replace(R.id.fragment,new TrashListFragment(),TRASHLIST_FRAGMENT).commit();
 //                replaceFragment(R.id.fragment,new TrashListFragment(),TRASHLIST_FRAGMENT);
                 getSupportActionBar().setTitle("乐色桶");
                 break;
             case R.id.nav_setting:
+                mfloatingActionButton.hideMenuButton(true);
                 getSupportFragmentManager().beginTransaction().
                         replace(R.id.fragment,new SettingFragment(),SETTING_FRAGMENT).commit();
 //                replaceFragment(R.id.fragment,new SettingFragment(),SETTING_FRAGMENT);
@@ -218,7 +250,8 @@ public class HomeActivity extends AppCompatActivity
             fragmentTransaction.replace(containerViewId, fragment, tag);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             // 这里要设置tag，上面也要设置tag
-            fragmentTransaction.addToBackStack(tag);
+            //设置fragment加入回退栈
+            //fragmentTransaction.addToBackStack(tag);
             fragmentTransaction.commit();
         } else {
             // 存在则弹出在它上面的所有fragment，并显示对应fragment
@@ -231,7 +264,7 @@ public class HomeActivity extends AppCompatActivity
             Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
              mExitTime = System.currentTimeMillis();
         } else {
-            finish();
+            App.getAppcontext().delete();
         }
     }
 
@@ -268,4 +301,6 @@ public class HomeActivity extends AppCompatActivity
     public void fragment_callback(Bundle arg) {
         Fragment_tag = arg.getString("fragment");
     }
+
 }
+

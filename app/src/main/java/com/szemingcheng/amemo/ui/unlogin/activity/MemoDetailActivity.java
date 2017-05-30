@@ -82,16 +82,16 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
         notebk_title = (TextView) findViewById(R.id.memo_detail_notebk);
         information = (ImageView)findViewById(R.id.memo_detail_information);
         horizontalScrollView = (HorizontalScrollView)findViewById(R.id.edit_tool);
-            editor = new Editor();
-            mEditor = (RichEditor) findViewById(R.id.editor);
-            initEditor();
-            mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
-                @Override
-                public void onTextChange(String text) {
-                    toolbar.setNavigationIcon(R.drawable.vector_drawable_check);
-                }
-            });
-            initAction();
+        editor = new Editor();
+        mEditor = (RichEditor) findViewById(R.id.editor);
+        initEditor();
+        mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
+            @Override
+            public void onTextChange(String text) {
+                toolbar.setNavigationIcon(R.drawable.vector_drawable_check);
+            }
+        });
+        initAction();
         switch (come_from){
 
             case CREATE_MEMO_MODE:
@@ -101,16 +101,22 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
             case VIEW_MEMO_MODE:
                 Long id = intent.getExtras().getLong("id");
                 memoDetailActivityPresent.load_memo_detail(id);
+                mEditor.setFocusableInTouchMode(false);
                 break;
             case VIEW_DELETE_MODE:
-               Long id2 = intent.getExtras().getLong("id");
+                Long id2 = intent.getExtras().getLong("id");
                 memoDetailActivityPresent.load_memo_detail(id2);
                 Toast.makeText(MemoDetailActivity.this,"删除的笔记不可编辑",Toast.LENGTH_LONG).show();
                 break;
         }
         toolbar.setNavigationOnClickListener(OnNavigationListener);
         if (action_type==TAKE_PHOTO){
+            //获取光标
+            mEditor.focusEditor();
             setTakePhoto();
+        }else if(action_type==CHOOSE_PHOTO){
+            mEditor.focusEditor();
+            setOpeanAlbum();
         }
     }
     private Toolbar.OnClickListener OnNavigationListener = new View.OnClickListener() {
@@ -137,7 +143,7 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
         }
         return super.onPrepareOptionsMenu(menu);
     }
-        @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.memo_detail_activity, menu);
         return true;
@@ -162,8 +168,9 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
             return true;
         }
         if (id == R.id.memo_detail_edit){
+            mEditor.setFocusableInTouchMode(true);
             horizontalScrollView.setVisibility(View.VISIBLE);
-            mEditor.setFocusable(true);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -335,24 +342,27 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
                 mEditor.setNumbers();
             }
         });
-        findViewById(R.id.action_insert_image).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               setTakePhoto();
-            }
-        });
         findViewById(R.id.action_insert_camera).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //检查权限
-                if (ContextCompat.checkSelfPermission(MemoDetailActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    //申请sd卡运行权限
-                    ActivityCompat.requestPermissions(MemoDetailActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                } else {
-                    editor.openAlbum(MemoDetailActivity.this);
-                }
+                setTakePhoto();
             }
         });
+        findViewById(R.id.action_insert_image).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setOpeanAlbum();
+            }
+        });
+    }
+    private void setOpeanAlbum(){
+        //检查权限
+        if (ContextCompat.checkSelfPermission(MemoDetailActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            //申请sd卡运行权限
+            ActivityCompat.requestPermissions(MemoDetailActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        } else {
+            editor.openAlbum(MemoDetailActivity.this);
+        }
     }
     private void setTakePhoto(){
         //创建File对象，用于存储拍照后的图片

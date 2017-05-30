@@ -195,7 +195,7 @@
 
 
             <ImageButton
-                android:id="@+id/action_insert_image"
+                android:id="@+id/action_insert_camera"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="?android:attr/selectableItemBackground"
@@ -203,7 +203,7 @@
                 android:src="@drawable/vector_drawable_fi_camera"
                 />
             <ImageButton
-                android:id="@+id/action_insert_camera"
+                android:id="@+id/action_insert_image"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="?android:attr/selectableItemBackground"

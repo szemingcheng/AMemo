@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_register"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.szemingcheng.amemo.ui.login.activity.RegisterActivity">
+
+    <com.szemingcheng.amemo.utils.TitleLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawableTop="@drawable/logo3"
+        android:gravity="center"
+        android:text="注册小本本一起记chou"
+        android:textSize="20dp"
+        android:textColor="@color/colorPrimaryDark"/>
+
+    <RelativeLayout
+        android:id="@+id/register_div"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:padding="15dp">
+
+        <EditText
+            android:singleLine="true"
+            android:id="@+id/register_username"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:hint="用户名" />
+
+        <EditText
+            android:singleLine="true"
+            android:id="@+id/register_password1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/register_username"
+            android:layout_margin="2dp"
+            android:hint="密码"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:singleLine="true"
+            android:id="@+id/register_password2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/register_password1"
+            android:layout_margin="2dp"
+            android:hint="重复密码"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:singleLine="true"
+            android:id="@+id/register_phone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/register_password2"
+            android:layout_margin="2dp"
+            android:hint="手机" />
+
+        <Button
+            android:id="@+id/register"
+            android:layout_width="2000dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/register_phone"
+            android:layout_centerHorizontal="true"
+            style="@style/common_button_style"
+            android:layout_margin="10dp"
+            android:text="注册"
+            android:textSize="@dimen/memo_title_txt"/>
+
+        <TextView
+            android:id="@+id/register_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/register"
+            android:text="已经有账号?"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorAccent"
+            android:layout_margin="10dp"/>
+    </RelativeLayout>
+
+</LinearLayout>

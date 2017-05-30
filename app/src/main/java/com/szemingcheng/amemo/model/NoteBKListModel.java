@@ -19,7 +19,7 @@ public interface NoteBKListModel {
         void onError(String error);
     }
     void notebk_list(String userid, OnDataFinishedListener onDataFinishedListener);
-    void notebk_delete(Long _id,OnRequestListener onRequestListener );
+    void notebk_delete(Long _id, OnRequestListener onRequestListener);
     void notebk_add(NoteBK noteBK, OnRequestListener onRequestListener);
     void notebk_save(NoteBK noteBK, OnRequestListener onRequestListener);
 }

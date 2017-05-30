@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.szemingcheng.amemo.App;
 import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.entity.NoteBK;
 import com.szemingcheng.amemo.presenter.Imp.NoteBKListFragmentPresentImp;
@@ -63,7 +64,7 @@ public class NoteBKSelectDialogActivity extends Activity implements NoteBKListFr
         LinearLayoutManager layoutManager = new LinearLayoutManager(NoteBKSelectDialogActivity.this);
         memoDetailNotebkList.setLayoutManager(layoutManager);
         memoDetailNotebkList.setAdapter(layoutMemoDetailNotebkItemAdapter);
-        noteBKListFragmentPresent.getMemo("");
+        noteBKListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
     }
 
     private EditText getEditNoteBK(){
@@ -121,7 +122,7 @@ public class NoteBKSelectDialogActivity extends Activity implements NoteBKListFr
     @Override
     public void AddSuccess(NoteBK noteBK) {
         layoutMemoDetailNotebkItemAdapter.insertData(noteBK,0);
-        noteBKListFragmentPresent.getMemo("");
+        noteBKListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
     }
 
     @Override
