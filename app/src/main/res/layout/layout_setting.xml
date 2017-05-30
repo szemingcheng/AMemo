@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F0F3F6"
+    >
+
+
+    <LinearLayout style="@style/wrap_layout"
+        android:id="@+id/setting_logined">
+        <LinearLayout style="@style/top_layout"
+            android:id="@+id/setting_avatar">
+            <TextView style="@style/usertext"
+                android:text="头像" />
+            <com.szemingcheng.amemo.utils.CircleImageView
+                android:id="@+id/default_avatar"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/vector_drawable_defualt_avatar"/>
+        </LinearLayout>
+        <View style="@style/bg_line"/>
+        <LinearLayout style="@style/mid_layout"
+            android:id="@+id/setting_userinfo">
+            <TextView style="@style/usertext"
+                android:text="用户信息" />
+            <ImageView style="@style/img_arrow"/>
+        </LinearLayout>
+        <View style="@style/bg_line"/>
+        <LinearLayout style="@style/mid_layout"
+            android:id="@+id/setting_sync">
+            <TextView style="@style/usertext"
+                android:text="信息同步" />
+            <ImageView style="@style/img_arrow"/>
+        </LinearLayout>
+        <View style="@style/bg_line"/>
+        <LinearLayout style="@style/bottom_layout"
+            android:id="@+id/setting_phone">
+            <TextView style="@style/usertext"
+                android:text="手机号码" />
+            <ImageView style="@style/img_arrow"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/wrap_layout">
+        <LinearLayout style="@style/top_layout"
+            android:id="@+id/setting_about">
+            <TextView style="@style/usertext"
+                android:text="关于小本本"/>
+            <ImageView style="@style/img_arrow"/>
+        </LinearLayout>
+        <View style="@style/bg_line"/>
+        <LinearLayout style="@style/bottom_layout"
+            android:id="@+id/setting_help">
+            <TextView style="@style/usertext"
+                android:text="帮助与反馈" />
+            <ImageView style="@style/img_arrow"/>
+        </LinearLayout>
+        <View style="@style/bg_line"/>
+    </LinearLayout>
+
+    <LinearLayout style="@style/wrap_layout">
+        <LinearLayout style="@style/bottom_layout"
+            android:id="@+id/setting_back">
+        <TextView style="@style/usertext"
+            android:text="退出" />
+        <ImageView style="@style/img_arrow"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -70,7 +70,7 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
                         MemoListInNBFragment.newInstance(noteBKListAdapter.getItemData(position).getTitle(),
                                 noteBKListAdapter.getItemData(position).getNotebk_id());
                 ((HomeActivity)getActivity()).replaceFragment
-                        (R.id.fragment,memoListInNBFragment,"memolistinb");
+                        (R.id.fragment,memoListInNBFragment,"memolistinbk");
             }
             @Override
             public void onMoreClick(View view, int position) {

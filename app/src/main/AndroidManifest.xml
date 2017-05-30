@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -24,25 +25,29 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.unlogin.activity.MemoDetailActivity">
             <intent-filter>
-                <action android:name="com.activity.MemoDetailActivity"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="com.activity.MemoDetailActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            </activity>
+        </activity>
         <activity android:name=".ui.unlogin.activity.NoteBKSelectDialogActivity">
             <intent-filter>
-            <action android:name="com.activity.NoteBKSelectDialogActivity"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="com.activity.NoteBKSelectDialogActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.login.activity.LoginActivity" />
         <activity android:name=".ui.login.activity.RegisterActivity" />
         <activity android:name=".ui.login.activity.ChangePasswordActivity" />
-        <activity android:name=".ui.login.activity.RegisterByPhoneActivity"></activity>
+        <activity android:name=".ui.login.activity.RegisterByPhoneActivity" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="nullteam.richeditortest.fileprovider"
@@ -52,6 +57,12 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <activity
+            android:name=".ui.unlogin.activity.setting.SettingDeatilActivity"
+            android:label="@string/title_activity_change_avatar"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.unlogin.activity.setting.UserInfoActivity"></activity>
     </application>
 
 </manifest>

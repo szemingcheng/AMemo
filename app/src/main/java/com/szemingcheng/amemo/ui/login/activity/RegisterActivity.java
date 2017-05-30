@@ -6,10 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-<<<<<<< HEAD
 import android.widget.TextView;
-=======
->>>>>>> 2703da20c11591e192b590ca5e928911cca45848
 import android.widget.Toast;
 
 import com.szemingcheng.amemo.R;
@@ -20,12 +17,8 @@ import static com.szemingcheng.amemo.App.activityList;
 
 public class RegisterActivity extends AppCompatActivity implements RegisterActivityView, View.OnClickListener {
     EditText register_username, register_password1, register_password2, register_phone;
-<<<<<<< HEAD
     TextView register_login;
     Button register;
-=======
-    Button register, register_login;
->>>>>>> 2703da20c11591e192b590ca5e928911cca45848
     String username, password1, password2, phone;
     Login_RegisterActivityPresentImp registerActivityPresentImp;
     RegisterActivity context;
@@ -46,11 +39,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterActiv
         register_password2 = (EditText) findViewById(R.id.register_password2);
         register_phone = (EditText) findViewById(R.id.register_phone);
         register = (Button) findViewById(R.id.register);
-<<<<<<< HEAD
         register_login = (TextView) findViewById(R.id.register_login);
-=======
-        register_login = (Button) findViewById(R.id.register_login);
->>>>>>> 2703da20c11591e192b590ca5e928911cca45848
         register.setOnClickListener(this);
         register_login.setOnClickListener(this);
         registerActivityPresentImp=new Login_RegisterActivityPresentImp(RegisterActivity.this);

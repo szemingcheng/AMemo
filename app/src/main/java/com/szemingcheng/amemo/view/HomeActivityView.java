@@ -1,11 +1,9 @@
-<<<<<<< HEAD
 package com.szemingcheng.amemo.view;
 
 import android.os.Bundle;
 
-=======
->>>>>>> 2703da20c11591e192b590ca5e928911cca45848
 /**
+ * Created by szemingcheng on 2017/5/21.
  */
 
 public interface HomeActivityView {

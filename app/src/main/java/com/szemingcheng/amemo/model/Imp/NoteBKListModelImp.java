@@ -20,7 +20,7 @@ import java.util.List;
 public class NoteBKListModelImp implements NoteBKListModel {
     private NoteBKHelper noteBKHelper = DBUtils.getNoteBKDriverHelper();
     private UserHelper userHelper = DBUtils.getUserDriverHelper();
-        List<NoteBK> noteBKs;
+    List<NoteBK> noteBKs;
     @Override
     public void notebk_list(String userid, OnDataFinishedListener onDataFinishedListener) {
         if (userid.equals("")){
@@ -43,12 +43,14 @@ public class NoteBKListModelImp implements NoteBKListModel {
     @Override
     public void notebk_delete(Long _id, OnRequestListener onRequestListener) {
         List<Memo> memos = noteBKHelper.query(_id).getMemos();
-        List<NoteBK>noteBKs=noteBKHelper.queryBuilder().where(NoteBKDao.Properties._ID.eq(_id)).list();
+        User user = userHelper.queryBuilder().where(UserDao.Properties.User_id.eq(App.getAppcontext().getUser_ID())).unique();
+        Long _Id = user.get_ID();
+        List<NoteBK>noteBKs=noteBKHelper.queryBuilder().where(NoteBKDao.Properties.User_id.eq(_Id)).list();
         if (memos.size()>0){
             onRequestListener.onError("该笔记本不为空");
         }else if(noteBKs.size()<=1){
             onRequestListener.onError("该笔记为最后一本笔记，恳请您不要删除" +
-                    "        (ಥ _ ಥ)");
+                    "\n(ಥ _ ಥ)");
         }
         else {
             noteBKHelper.deleteByKey(_id);
@@ -66,12 +68,12 @@ public class NoteBKListModelImp implements NoteBKListModel {
                     .unique();
             List<NoteBK> notes = noteBKHelper.queryBuilder()
                     .where(NoteBKDao.Properties.User_id.eq(1L)).list();
-                for (NoteBK noteBK1 : notes) {
-                    if (noteBK1.getTitle().equals(noteBK.getTitle())) {
-                        error = true;
-                        onRequestListener.onError("笔记本标题不能重复！");
-                    }
+            for (NoteBK noteBK1 : notes) {
+                if (noteBK1.getTitle().equals(noteBK.getTitle())) {
+                    error = true;
+                    onRequestListener.onError("笔记本标题不能重复！");
                 }
+            }
             if (!error){
                 noteBK.setNotebk_id(String.valueOf(System.currentTimeMillis()));
                 noteBK.setUser(user);

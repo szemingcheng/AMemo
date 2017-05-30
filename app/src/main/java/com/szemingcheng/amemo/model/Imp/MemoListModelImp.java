@@ -37,6 +37,7 @@ public class MemoListModelImp implements MemoListModel {
             Log.i("memo_all",userid);
             User user = userHelper.queryBuilder().where(UserDao.Properties.User_id.eq(userid)).unique();
             Long _id = user.get_ID();
+            Log.i("_id", String.valueOf(_id));
             memos = memoHelper.queryBuilder().where(MemoDao.Properties.User_ID.eq(_id),
                     MemoDao.Properties.State.eq(Memo.IS_EXSIT)).orderDesc(MemoDao.Properties.Updateat).list();
             onDataFinishedListener.getDataFinish(memos);
@@ -53,7 +54,7 @@ public class MemoListModelImp implements MemoListModel {
             onDataFinishedListener.onError("error!");
         }
         else if (!notebk_id.equals("")&&!notebk_id.isEmpty()){
-          NoteBK noteBK = noteBKHelper.queryBuilder().where(NoteBKDao.Properties.Notebk_id.eq(notebk_id)).unique();
+            NoteBK noteBK = noteBKHelper.queryBuilder().where(NoteBKDao.Properties.Notebk_id.eq(notebk_id)).unique();
             Long _id=noteBK.get_ID();
             memos = memoHelper.queryBuilder().where(MemoDao.Properties.NoteBK_ID.eq(_id),
                     MemoDao.Properties.State.eq(Memo.IS_EXSIT)).orderDesc(MemoDao.Properties.Updateat).list();

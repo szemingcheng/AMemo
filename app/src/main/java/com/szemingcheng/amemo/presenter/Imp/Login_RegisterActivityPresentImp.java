@@ -234,7 +234,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
                                         PreferencesUtils.putBoolean(App.getAppcontext(), PreferencesUtils.FIRST_START, true);
                                         //表示已登录
                                         PreferencesUtils.logined(App.getAppcontext(), PreferencesUtils.LOGINED, true);
-                                        DaoManger.getDaoSession(Response.getUserid());
+                                        DaoManger.initDaoSession(Response.getUserid());
                                         App.getAppcontext().setUser_ID(Response.getUserid());
                                     }
                                 });
@@ -264,7 +264,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
                                 PreferencesUtils.putBoolean(App.getAppcontext(), PreferencesUtils.FIRST_START, true);
                                 //表示已登录
                                 PreferencesUtils.logined(App.getAppcontext(), PreferencesUtils.LOGINED, true);
-                                DaoManger.getDaoSession(Response.getUserid());
+                                DaoManger.initDaoSession(Response.getUserid());
                                 registerActivityView.getContext().startActivity((new Intent(registerActivityView.getContext(), HomeActivity.class)));
                                 App.getAppcontext().setUser_ID(Response.getUserid());
                             }
@@ -279,7 +279,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
                                         PreferencesUtils.PASSWORD, changePasswordActivityView.getPassword1());
                                 changePasswordActivityView.ChangedSuccess();
                                 try {
-                                    Thread.sleep(3000);
+                                    Thread.sleep(5000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -311,7 +311,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
                                         PreferencesUtils.putBoolean(App.getAppcontext(), PreferencesUtils.FIRST_START, true);
                                         //表示已登录
                                         PreferencesUtils.logined(App.getAppcontext(), PreferencesUtils.LOGINED, true);
-                                        DaoManger.getDaoSession(Response.getUserid());
+                                        DaoManger.initDaoSession(Response.getUserid());
                                         App.getAppcontext().setUser_ID(Response.getUserid());
                                     }
                                 });
@@ -360,7 +360,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
                                         PreferencesUtils.putBoolean(App.getAppcontext(), PreferencesUtils.FIRST_START, true);
                                         //表示已登录
                                         PreferencesUtils.logined(App.getAppcontext(), PreferencesUtils.LOGINED, true);
-                                        DaoManger.getDaoSession(Response.getUserid());
+                                        DaoManger.initDaoSession(Response.getUserid());
                                         App.getAppcontext().setUser_ID(Response.getUserid());
                                     }
                                 });
@@ -389,7 +389,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
     @Override
     public void LoadUserInfo() {
         user = PreferencesUtils.getUserInfo(App.getAppcontext(), PreferencesUtils.USERID, PreferencesUtils.PHONE, PreferencesUtils.ONSCREENNAME, PreferencesUtils.PASSWORD);
-            loginActivityView.setUserInfo(user.getUser_id(), user.getPasswrd());
+        loginActivityView.setUserInfo(user.getUser_id(), user.getPasswrd());
     }
 
     @Override
@@ -446,7 +446,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
                     //测试用
                     //getJson(CAHNGPASSWORD);
                     //启用
-                   SMSSDK.submitVerificationCode("86", changePasswordActivityView.getPhone(), changePasswordActivityView.getCode());
+                    SMSSDK.submitVerificationCode("86", changePasswordActivityView.getPhone(), changePasswordActivityView.getCode());
                 }
                 break;
             case "2":
@@ -481,7 +481,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
                             Smssdkhandler1.sendEmptyMessage(-9);
                             break;
                         case "2":
-                            Smssdkhandler2.sendEmptyMessage(-9);
+                            Smssdkhandler2.sendEmptyMessage(-7);
                             break;
                     }
                     if (i <= 0) {
@@ -498,7 +498,7 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
                         Smssdkhandler1.sendEmptyMessage(-8);// 在60秒后重新显示为获取验证码
                         break;
                     case "2":
-                        Smssdkhandler2.sendEmptyMessage(-8);// 在60秒后重新显示为获取验证码
+                        Smssdkhandler2.sendEmptyMessage(-6);// 在60秒后重新显示为获取验证码
                         break;
                 }
             }
@@ -530,8 +530,6 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
                         // 验证成功
                         getJson(CAHNGPASSWORD);
                         Log.e("注册", "成功！");
-                        changePasswordActivityView.getContext().startActivity(new Intent(changePasswordActivityView.getContext(), LoginActivity.class));
-                        changePasswordActivityView.getContext().finish();
                         // 成功跳转之后销毁当前页面
 
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
@@ -548,9 +546,9 @@ public class Login_RegisterActivityPresentImp implements Login_RegisterActivityP
     };
     Handler Smssdkhandler2 = new Handler() {
         public void handleMessage(Message msg) {
-            if (msg.what == -9) {
+            if (msg.what == -7) {
                 registerByPhoneActivityView.CodeReminder("重新发送(" + i + ")");
-            } else if (msg.what == -8) {
+            } else if (msg.what == -6) {
                 registerByPhoneActivityView.CodeReminder("获取验证码");
                 registerByPhoneActivityView.CodeClickable(true);  // 设置可点击
                 i = 60;

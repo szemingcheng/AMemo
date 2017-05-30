@@ -9,27 +9,18 @@
 
     <com.szemingcheng.amemo.utils.TitleLayout
         android:layout_width="wrap_content"
-<<<<<<< HEAD
         android:layout_height="wrap_content"
         android:layout_margin="10dp"/>
-=======
-        android:layout_height="wrap_content" />
->>>>>>> 2703da20c11591e192b590ca5e928911cca45848
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-<<<<<<< HEAD
         android:drawableTop="@drawable/logo3"
         android:gravity="center"
         android:text="注册小本本一起记chou"
         android:textSize="20dp"
         android:textColor="@color/colorPrimaryDark"/>
-=======
-        android:text="创建用户"
-        android:textSize="20dp" />
->>>>>>> 2703da20c11591e192b590ca5e928911cca45848
 
     <RelativeLayout
         android:id="@+id/register_div"
@@ -39,48 +30,40 @@
         android:padding="15dp">
 
         <EditText
+            android:singleLine="true"
             android:id="@+id/register_username"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-<<<<<<< HEAD
             android:layout_margin="2dp"
-=======
->>>>>>> 2703da20c11591e192b590ca5e928911cca45848
             android:hint="用户名" />
 
         <EditText
+            android:singleLine="true"
             android:id="@+id/register_password1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/register_username"
-<<<<<<< HEAD
             android:layout_margin="2dp"
-=======
->>>>>>> 2703da20c11591e192b590ca5e928911cca45848
             android:hint="密码"
             android:inputType="textPassword" />
 
         <EditText
+            android:singleLine="true"
             android:id="@+id/register_password2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/register_password1"
-<<<<<<< HEAD
             android:layout_margin="2dp"
-=======
->>>>>>> 2703da20c11591e192b590ca5e928911cca45848
             android:hint="重复密码"
             android:inputType="textPassword" />
 
         <EditText
+            android:singleLine="true"
             android:id="@+id/register_phone"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/register_password2"
-<<<<<<< HEAD
             android:layout_margin="2dp"
-=======
->>>>>>> 2703da20c11591e192b590ca5e928911cca45848
             android:hint="手机" />
 
         <Button
@@ -89,7 +72,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/register_phone"
             android:layout_centerHorizontal="true"
-<<<<<<< HEAD
             style="@style/common_button_style"
             android:layout_margin="10dp"
             android:text="注册"
@@ -104,17 +86,6 @@
             android:layout_centerHorizontal="true"
             android:textColor="@color/colorAccent"
             android:layout_margin="10dp"/>
-=======
-            android:text="注册" />
-
-        <Button
-            android:id="@+id/register_login"
-            android:layout_width="2000dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/register"
-            android:layout_centerHorizontal="true"
-            android:text="已经有账号?" />
->>>>>>> 2703da20c11591e192b590ca5e928911cca45848
     </RelativeLayout>
 
 </LinearLayout>

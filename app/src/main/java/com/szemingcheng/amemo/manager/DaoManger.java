@@ -16,17 +16,16 @@ import com.szemingcheng.amemo.utils.PreferencesUtils;
  */
 
 /**
-* @author Jaygren
-* @title  DaoManger
-* @describe 唯一数据库控制
-*
-*/
+ * @author Jaygren
+ * @title  DaoManger
+ * @describe 唯一数据库控制
+ *
+ */
 
 
 public class DaoManger {
     private static DaoSession mDaoSession;
     public static User user;
-    private static SQLiteDatabase db ;
 
 
     //线程锁，强制主进程优先进行数据库的初始化，保证异步操作安全
@@ -37,13 +36,13 @@ public class DaoManger {
         return mDaoSession;
     }
 
-    private static void initDaoSession(String Userid) {
+    public static void initDaoSession(String Userid) {
         // 相当于得到数据库帮助对象，用于便捷获取db
         // 这里会自动执行upgrade的逻辑.backup all table→del all table→create all new table→restore data
         //建立数据库
         DaoMaster.DevOpenHelper helper =new DaoMaster.DevOpenHelper(App.getAppcontext(),"notetest-db",null);
         // 得到可写的数据库操作对象
-        db = helper.getWritableDatabase();
+        SQLiteDatabase db  = helper.getWritableDatabase();
         // 获得Master实例,相当于给database包装工具
         DaoMaster daoMaster = new DaoMaster(db);
         // 获取类似于缓存管理器,提供各表的DAO类
@@ -125,11 +124,11 @@ public class DaoManger {
                 noteBK.setNotebk_id(String.valueOf(System.currentTimeMillis()));
                 noteBK.setTitle("第一本笔记本");
                 noteBKDao.insert(noteBK);
-                PreferencesUtils.logined(App.getAppcontext(),PreferencesUtils.LOGINED,false);
+                PreferencesUtils.logined(App.getAppcontext(),PreferencesUtils.LOGINED,true);
             }
             PreferencesUtils.putBoolean(App.getAppcontext(), PreferencesUtils.FIRST_START, false);
         }
-}
+    }
 //    private static void initUserDb(String Userid) {
 //        getDaoSession(Userid);
 //    }

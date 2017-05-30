@@ -82,16 +82,16 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
         notebk_title = (TextView) findViewById(R.id.memo_detail_notebk);
         information = (ImageView)findViewById(R.id.memo_detail_information);
         horizontalScrollView = (HorizontalScrollView)findViewById(R.id.edit_tool);
-            editor = new Editor();
-            mEditor = (RichEditor) findViewById(R.id.editor);
-            initEditor();
-            mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
-                @Override
-                public void onTextChange(String text) {
-                    toolbar.setNavigationIcon(R.drawable.vector_drawable_check);
-                }
-            });
-            initAction();
+        editor = new Editor();
+        mEditor = (RichEditor) findViewById(R.id.editor);
+        initEditor();
+        mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
+            @Override
+            public void onTextChange(String text) {
+                toolbar.setNavigationIcon(R.drawable.vector_drawable_check);
+            }
+        });
+        initAction();
         switch (come_from){
 
             case CREATE_MEMO_MODE:
@@ -101,9 +101,10 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
             case VIEW_MEMO_MODE:
                 Long id = intent.getExtras().getLong("id");
                 memoDetailActivityPresent.load_memo_detail(id);
+                mEditor.setFocusableInTouchMode(false);
                 break;
             case VIEW_DELETE_MODE:
-               Long id2 = intent.getExtras().getLong("id");
+                Long id2 = intent.getExtras().getLong("id");
                 memoDetailActivityPresent.load_memo_detail(id2);
                 Toast.makeText(MemoDetailActivity.this,"删除的笔记不可编辑",Toast.LENGTH_LONG).show();
                 break;
@@ -142,7 +143,7 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
         }
         return super.onPrepareOptionsMenu(menu);
     }
-        @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.memo_detail_activity, menu);
         return true;
@@ -167,8 +168,9 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
             return true;
         }
         if (id == R.id.memo_detail_edit){
+            mEditor.setFocusableInTouchMode(true);
             horizontalScrollView.setVisibility(View.VISIBLE);
-            mEditor.setFocusable(true);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -343,13 +345,13 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
         findViewById(R.id.action_insert_camera).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               setTakePhoto();
+                setTakePhoto();
             }
         });
         findViewById(R.id.action_insert_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               setOpeanAlbum();
+                setOpeanAlbum();
             }
         });
     }
@@ -459,13 +461,8 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
                 new AlertDialog.Builder(MemoDetailActivity.this);
         normalDialog.setIcon(R.drawable.vector_drawable_i);
         normalDialog.setTitle("笔记信息");
-<<<<<<< HEAD
-        normalDialog.setMessage("创建时间：\n"+ TimeUtils.translateDate(TimeUtils.timestampFormate(memo.getCreatat()))+
-                "\n最后修改时间：\n"+TimeUtils.translateDate(TimeUtils.timestampFormate(memo.getUpdateat())));
-=======
         normalDialog.setMessage("创建时间："+ TimeUtils.getChatTimeStr(memo.getCreatat())+
                 "\n最后修改时间："+TimeUtils.getChatTimeStr(memo.getUpdateat()));
->>>>>>> 2703da20c11591e192b590ca5e928911cca45848
         normalDialog.setNegativeButton("关闭",
                 new DialogInterface.OnClickListener() {
                     @Override

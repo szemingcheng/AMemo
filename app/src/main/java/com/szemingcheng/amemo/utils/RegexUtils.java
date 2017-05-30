@@ -34,4 +34,15 @@ public class RegexUtils {
         }
         return 1;
     }
+
+    public static int OnscreenNameRegex(String OnscreenName){
+        String onscreennameRegex = "\\w{4,15}";
+        if(!OnscreenName.matches(onscreennameRegex)){
+            return 0;
+        }
+        return 1;
+    }
+    public static String phoneNumberReplace(String phoneNumber){
+        return phoneNumber.substring(0,3)+"****"+phoneNumber.substring(7,11);
+    }
 }

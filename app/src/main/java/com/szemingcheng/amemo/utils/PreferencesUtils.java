@@ -10,12 +10,12 @@ import android.content.SharedPreferences;
 import com.szemingcheng.amemo.entity.User;
 
 /**
-* @date on 2017/5/22
-* @author Jaygren
-* @title  PreferencesUtils
-* @describe 关于记录系统的默认偏好设置
-*
-*/
+ * @date on 2017/5/22
+ * @author Jaygren
+ * @title  PreferencesUtils
+ * @describe 关于记录系统的默认偏好设置
+ *
+ */
 
 
 public class PreferencesUtils {
@@ -143,9 +143,17 @@ public class PreferencesUtils {
         return  user;
     }
 
+    public static String getOnscreen_name(Context context,String key){
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        return settings.getString(key,null);
+    }
 
-
-
+    public static boolean putOnscreen_name(Context context,String key,String value){
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(key, value);
+        return editor.commit();
+    }
     /**
      *
      * @param context .APP(全应用可控Application)
