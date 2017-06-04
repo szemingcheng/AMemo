@@ -1,5 +1,50 @@
 # AMemo
 Hmm..This is our Android homework. <br>
+AMemo based on MVP.<br> 
 It is in progress.<br>
 We both are beginners and sorry that may be AMemo can not help you.<br>
-没有参考价值未完成又不知道什么时候完成的安卓作业：）
+小本本是一个备忘录APP（正在不断完善中），项目采用 MVP + OKHttp + Material Design + GreenDao构建。<br>
+我们都是新手上路，仅供参考！
+## Preview
+<img src="/image/sign_in_up.png" alt="登陆/注册" title="登陆/注册"/> 
+<img src="/image/1.png"/>
+<img src="/image/2.png" alt="创建新的笔记、笔记本" title="创建新的笔记、笔记本"/> 
+<img src="/image/3.png" alt="笔记操作" title="笔记操作"/>
+<img src="/image/4.png"/>
+<img src="/image/5.png" alt="不同状态下的设置页" title="不同状态下的设置页"/>
+## Version
+### V1.0(5/31)
+- 登陆功能
+- 用户信息基本操作
+- 浮动按钮菜单中可开启相机和相册图片选择功能
+## TODO
+- [x] 本地数据库存储笔记
+- [x] 默认至少有一本笔记本
+- [x] 笔记必须有所属的笔记本
+- [x] 支持有基本功能的富文本编辑框
+- [x] 创建文字类笔记
+- [x] 创建拍照类笔记
+- [x] 创建图片类笔记
+- [x] 凭手机登录
+- [x] 修改用户昵称
+- [x] 修改绑定手机
+- [ ] 笔记按要求排序
+- [ ] 创建提醒类笔记
+- [ ] 提醒类笔记完成和未完成的标记
+- [ ] 搜索
+- [ ] 用户头像上传
+- [ ] 笔记同步
+## Thanks
+- [greenDAO](https://github.com/greenrobot/greenDAO)
+- [wasabeef/richeditor-android](https://github.com/wasabeef/richeditor-android)
+- [Clans/FloatingActionButton](https://github.com/Clans/FloatingActionButton)
+- [square/okhttp](https://github.com/square/okhttp)
+- [facebook/stetho](https://github.com/facebook/stetho)
+## Statement
+- 由于应用的登录功能使用到远程服务器，登录功能会受到影响，游客状态不影响使用
+## About us
+广大华软15级在读
+- **Email：** zhengszeming@gmail.com
+
+
+
