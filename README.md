@@ -7,13 +7,9 @@ We both are beginners and sorry that may be AMemo can not help you.<br>
 我们都是新手上路，仅供参考！
 ## Preview
 
-<img src="/image/sign_in_up.jpg" alt="登陆/注册" title="登陆/注册"/> 
-<img src="/image/1.jpg"/>
-<img src="/image/2.jpg" alt="创建新的笔记、笔记本" title="创建新的笔记、笔记本"/> 
-<img src="/image/3.jpg" alt="笔记操作" title="笔记操作"/>
-<img src="/image/4.jpg"/>
-<img src="/image/5.jpg" alt="不同状态下的设置页" title="不同状态下的设置页"/>
-
+<img src="/image/sign_in_up.jpg" alt="登陆/注册" title="登陆/注册" width="50%" height="265"/><img src="/image/1.jpg" width="50%" height="265"/>
+<img src="/image/2.jpg" alt="创建新的笔记、笔记本" title="创建新的笔记、笔记本" width="75%" height="60%"/> 
+<img src="/image/4.jpg" width="500" height="389"/>
 ## Version
 
 ### V1.0(5/31)
