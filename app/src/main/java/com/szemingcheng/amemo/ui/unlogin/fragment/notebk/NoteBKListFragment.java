@@ -1,6 +1,7 @@
 package com.szemingcheng.amemo.ui.unlogin.fragment.notebk;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -66,11 +67,16 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
         noteBKListAdapter = new NoteBKListAdapter(getActivity().getApplicationContext(), new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                MemoListInNBFragment memoListInNBFragment =
-                        MemoListInNBFragment.newInstance(noteBKListAdapter.getItemData(position).getTitle(),
-                                noteBKListAdapter.getItemData(position).getNotebk_id());
-                ((HomeActivity)getActivity()).replaceFragment
-                        (R.id.fragment,memoListInNBFragment,"memolistinbk");
+//                MemoListInNB memoListInNBFragment =
+//                        MemoListInNB.newInstance(noteBKListAdapter.getItemData(position).getTitle(),
+//                                noteBKListAdapter.getItemData(position).getNotebk_id());
+//                ((HomeActivity)getActivity()).replaceFragment
+//                        (R.id.fragment,memoListInNBFragment,"memolistinbk");
+                Intent intent = new Intent();
+                intent.setAction("com.activity.MemoListInNBActivity");
+                intent.putExtra("notebk_id",noteBKListAdapter.getItemData(position).getNotebk_id());
+                intent.putExtra("notebk_title",noteBKListAdapter.getItemData(position).getTitle());
+                startActivity(intent);
             }
             @Override
             public void onMoreClick(View view, int position) {
@@ -90,7 +96,7 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
                     @Override
                     public void run() {
                         if (data!=null) data.clear();
-                        noteBKListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
+                        noteBKListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
                         mSwipeRefreshLayout.setRefreshing(false);
                         Toast.makeText(App.getAppcontext(), "更新了...", Toast.LENGTH_SHORT).show();
                     }
@@ -126,7 +132,6 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
         noteBKListAdapter.clear();
         noteBKListAdapter.setData(noteBKs);
         noteBKListAdapter.notifyDataSetChanged();
-        Log.i("setadapter","update List view");
     }
     @Override
     public void showLoadingIcon() {
@@ -159,17 +164,24 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
     }
 
     @Override
-    public void showSuccess() {
+    public void showDeleteSuccess() {
         Toast.makeText(App.getAppcontext(),"删除成功",Toast.LENGTH_SHORT).show();
         noteBKListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
     }
 
+    @Override
+    public void showRenameSuccess() {
+        Toast.makeText(App.getAppcontext(),"修改成功",Toast.LENGTH_SHORT).show();
+        noteBKListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
+    }
     private void showMultiBtnDialog(final NoteBK noteBK){
-        final EditText editText = new EditText(getActivity());
         AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(getActivity());
         normalDialog.setTitle("笔记本 "+noteBK.getTitle());
-        normalDialog.setMessage("您想进行什么操作呢？\n笔记本不为空时，不能进行删除操作");
+        View view = View.inflate(getActivity(), R.layout.layout_notebk_list_dialog, null);
+        final EditText rename = (EditText)view.findViewById(R.id.notebk_rename);
+        rename.setHint("修改标题 原："+noteBK.getTitle());
+        normalDialog.setView(view);
         normalDialog.setPositiveButton("取消",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -184,12 +196,19 @@ public class NoteBKListFragment extends Fragment implements NoteBKListFragmentVi
                         noteBKListFragmentPresent.delete_NoteBK(noteBK.get_ID());
                     }
                 });
-//        normalDialog.setNegativeButton("修改", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//
-//            }
-//        });
+        normalDialog.setNegativeButton("修改", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String notebk_title = rename.getText().toString().trim();
+                if (notebk_title == null || notebk_title.equals("")) {
+                    Toast.makeText(App.getAppcontext(),"输入正确的笔记本标题！",Toast.LENGTH_SHORT).show();
+                } else {
+                    NoteBK noteBK1 = new NoteBK();
+                    noteBK1.setTitle(notebk_title);
+                    noteBKListFragmentPresent.update_NoteBK(noteBK1, noteBK);
+                }
+            }
+        });
         normalDialog.show();
     }
 }

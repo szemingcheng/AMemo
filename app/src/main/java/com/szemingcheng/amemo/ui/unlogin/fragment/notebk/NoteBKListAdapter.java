@@ -3,6 +3,7 @@ package com.szemingcheng.amemo.ui.unlogin.fragment.notebk;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +86,8 @@ public class NoteBKListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         else {
             NoteBK noteBK = list.get(position);
             ((NoteBKViewHolder) holder).noteBookTitle.setText(noteBK.getTitle());
-//            ((NoteBKViewHolder) holder).memoQuantity.setText(noteBK.getMemos().size()+"条笔记");
+            ((NoteBKViewHolder) holder).memoQuantity.setText(noteBK.getMemos().size()+"条笔记");
+            Log.i("notebk","notebk size"+noteBK.getMemos().size());
         }
     }
 

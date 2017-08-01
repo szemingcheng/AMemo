@@ -16,5 +16,6 @@ public interface NoteBKListFragmentView {
     void hideRecyclerView();
     void showError(String error);
     void AddSuccess(NoteBK noteBK);
-    void showSuccess();
+    void showDeleteSuccess();
+    void showRenameSuccess();
 }

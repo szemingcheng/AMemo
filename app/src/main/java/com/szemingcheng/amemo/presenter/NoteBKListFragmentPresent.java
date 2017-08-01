@@ -11,5 +11,6 @@ public interface NoteBKListFragmentPresent {
     void pulltorefresh(String user_id);
     void add_NoteBK(NoteBK noteBK);
     void delete_NoteBK(Long notebk_id);
-    void update_NoteBK(NoteBK noteBK);
+    void update_NoteBK(NoteBK noteBK1,NoteBK noteBK);
+
 }

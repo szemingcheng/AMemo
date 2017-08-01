@@ -3,8 +3,8 @@ package com.szemingcheng.amemo.presenter.Imp;
 import com.szemingcheng.amemo.entity.Memo;
 import com.szemingcheng.amemo.model.Imp.MemoListModelImp;
 import com.szemingcheng.amemo.model.MemoListModel;
-import com.szemingcheng.amemo.presenter.MemoListFragmentPresent;
-import com.szemingcheng.amemo.view.MemoListFragmentView;
+import com.szemingcheng.amemo.presenter.MemoListPresent;
+import com.szemingcheng.amemo.view.MemoListView;
 
 import java.util.List;
 
@@ -12,12 +12,12 @@ import java.util.List;
  * Created by szemingcheng on 2017/5/16.
  */
 
-public class MemoListFragmentPresentImp implements MemoListFragmentPresent {
+public class MemoListPresentImp implements MemoListPresent {
    private MemoListModel memoListModel;
-   private MemoListFragmentView memoListFragmentView;
+   private MemoListView memoListView;
 
-    public MemoListFragmentPresentImp(MemoListFragmentView memoListFragmentView) {
-        this.memoListFragmentView = memoListFragmentView;
+    public MemoListPresentImp(MemoListView memoListView) {
+        this.memoListView = memoListView;
         this.memoListModel = new MemoListModelImp();
     }
 
@@ -49,25 +49,25 @@ public class MemoListFragmentPresentImp implements MemoListFragmentPresent {
     private MemoListModel.OnDataFinishedListener  onDataFinishedListener = new MemoListModel.OnDataFinishedListener() {
         @Override
         public void getDataFinish(List<Memo> memos) {
-            memoListFragmentView.showRecyclerView();
-            memoListFragmentView.updateListView(memos);
+            memoListView.showRecyclerView();
+            memoListView.updateListView(memos);
         }
 
         @Override
         public void onError(String error) {
-            memoListFragmentView.hideRecyclerView();
+            memoListView.hideRecyclerView();
         }
     };
 
     private MemoListModel.OnRequestListener onRequestListener = new MemoListModel.OnRequestListener() {
         @Override
         public void onSuccess() {
-            memoListFragmentView.showSuccess();
+            memoListView.showSuccess();
         }
 
         @Override
         public void onError(String error) {
-            memoListFragmentView.showError(error);
+            memoListView.showError(error);
         }
     };
 }

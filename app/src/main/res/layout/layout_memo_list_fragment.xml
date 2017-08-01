@@ -10,6 +10,9 @@
     android:id="@+id/swipe_refresh_widget"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
@@ -17,8 +20,9 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:scrollbars="vertical"
             />
+        <include layout="@layout/layout_memo_list_stick_header"/>
+        </FrameLayout>
 </android.support.v4.widget.SwipeRefreshLayout>
-<!--<include layout="@layout/floating_aciton_button"/>-->
 <include layout="@layout/layput_empty"/>
 <include layout="@layout/layout_error"/>
 </FrameLayout>

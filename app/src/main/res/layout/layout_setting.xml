@@ -3,15 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F0F3F6"
+    android:background="#f9f9f9"
     >
-
-
-    <LinearLayout style="@style/wrap_layout"
+    <LinearLayout
+        style="@style/wrap_layout"
         android:id="@+id/setting_logined">
-        <LinearLayout style="@style/top_layout"
+        <LinearLayout
+            style="@style/top_layout"
             android:id="@+id/setting_avatar">
-            <TextView style="@style/usertext"
+            <TextView
+                style="@style/usertext"
                 android:text="头像" />
             <com.szemingcheng.amemo.utils.CircleImageView
                 android:id="@+id/default_avatar"
@@ -20,11 +21,14 @@
                 android:src="@drawable/vector_drawable_defualt_avatar"/>
         </LinearLayout>
         <View style="@style/bg_line"/>
-        <LinearLayout style="@style/mid_layout"
+        <LinearLayout
+            style="@style/mid_layout"
             android:id="@+id/setting_userinfo">
-            <TextView style="@style/usertext"
+            <TextView
+                style="@style/usertext"
                 android:text="用户信息" />
-            <ImageView style="@style/img_arrow"/>
+            <ImageView
+                style="@style/img_arrow"/>
         </LinearLayout>
         <View style="@style/bg_line"/>
         <LinearLayout style="@style/mid_layout"

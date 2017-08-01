@@ -1,79 +1,61 @@
-package com.szemingcheng.amemo.ui.unlogin.fragment.notebk;
+package com.szemingcheng.amemo.ui.unlogin.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.szemingcheng.amemo.App;
 import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.entity.Memo;
-import com.szemingcheng.amemo.presenter.Imp.MemoListFragmentPresentImp;
-import com.szemingcheng.amemo.presenter.MemoListFragmentPresent;
-import com.szemingcheng.amemo.ui.unlogin.activity.MemoDetailActivity;
+import com.szemingcheng.amemo.presenter.Imp.MemoListPresentImp;
+import com.szemingcheng.amemo.presenter.MemoListPresent;
 import com.szemingcheng.amemo.ui.unlogin.fragment.MemoListAdapter;
 import com.szemingcheng.amemo.ui.unlogin.fragment.OnItemClickListener;
-import com.szemingcheng.amemo.view.MemoListFragmentView;
+import com.szemingcheng.amemo.view.MemoListView;
 
 import java.util.List;
 
 /**
- * Created by szemingcheng on 2017/5/20.
+ * Created by szemingcheng on 2017/8/1.
  */
 
-public class MemoListInNBFragment extends Fragment implements MemoListFragmentView {
-    public View mView;
+public class MemoListInNBActivity extends AppCompatActivity implements MemoListView {
     public RecyclerView mRecyclerView;
     public SwipeRefreshLayout mSwipeRefreshLayout;
-    private MemoListFragmentPresent memoListFragmentPresent;
+    private MemoListPresent memoListPresent;
     private MemoListAdapter memoListAdapter;
     private FrameLayout memolist;
     List<Memo> data;
     String notebk_title;
     String notebk_id;
     Toolbar mToolbar;
-    public static MemoListInNBFragment newInstance(String title,String notebk_id){
-        Bundle bundle = new Bundle();
-        bundle.putString("note_title", title);
-        bundle.putString("note_id",notebk_id);
-        MemoListInNBFragment fragment = new MemoListInNBFragment();
-        fragment.setArguments(bundle);
-        return fragment;
-    }
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        memoListFragmentPresent = new MemoListFragmentPresentImp(this);
-        notebk_title = getArguments().getString("note_title");
-        notebk_id = getArguments().getString("note_id");
-        Log.i("fragment",notebk_title);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.layout_memo_list_in_notebk_fragment,container,false);
-        mToolbar = (Toolbar)mView.findViewById(R.id.toolbar_in_fragment);
+        setContentView(R.layout.layout_memo_list_in_notebk);
+        memoListPresent = new MemoListPresentImp(this);
+        final Intent intent = getIntent();
+        notebk_id = intent.getExtras().getString("notebk_id");
+        notebk_title = intent.getExtras().getString("notebk_title");
+        mToolbar = (Toolbar)findViewById(R.id.toolbar_in_memo_list_in_nb);
+        mToolbar.setNavigationIcon(R.drawable.vector_drawable_back_white);
         mToolbar.setTitle(notebk_title);
-        memolist = (FrameLayout)mView.findViewById(R.id.memo_list_in_nb);
-        mSwipeRefreshLayout = (SwipeRefreshLayout)mView.findViewById(R.id.swipe_refresh_widget);
+        setSupportActionBar(mToolbar);
+        memolist = (FrameLayout)findViewById(R.id.memo_list_in_nb);
+        mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-        memoListAdapter = new MemoListAdapter(getActivity().getApplication(), new OnItemClickListener() {
+        memoListAdapter = new MemoListAdapter(MemoListInNBActivity.this, new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent();
@@ -92,7 +74,6 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
                 showMultiBtnDialog(memoListAdapter.getItemData(positon),positon);
             }
         });
-        Log.i("setadapter","assigned,context:"+getActivity());
         mRecyclerView = (RecyclerView)memolist.findViewById(R.id.recyclerview);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -101,42 +82,42 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
                     @Override
                     public void run() {
                         if (data!=null) data.clear();
-                        memoListFragmentPresent.pulltorefresh_notebk(notebk_id);
+                        memoListPresent.pulltorefresh_notebk(notebk_id);
                         mSwipeRefreshLayout.setRefreshing(false);
                         Toast.makeText(App.getAppcontext(), "更新了...", Toast.LENGTH_SHORT).show();
                     }
                 }, 1000);
             }
         });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(MemoListInNBActivity.this.getApplicationContext());
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(memoListAdapter);
         Log.i("setadapter","recyclerview assigned");
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                memoListFragmentPresent.getMemo_notebk(notebk_id);
+                memoListPresent.getMemo_notebk(notebk_id);
             }
         });
-        return mView;
+        mToolbar.setNavigationOnClickListener(OnNavigationListener);
     }
+    private Toolbar.OnClickListener OnNavigationListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+           finish();
+        }
+    };
 
     @Override
     public void onResume() {
         super.onResume();
-        memoListFragmentPresent.getMemo_notebk(notebk_id);
+        memoListPresent.getMemo_notebk(notebk_id);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
     @Override
     public void updateListView(List<Memo> memos) {
         memoListAdapter.clear();
@@ -169,7 +150,7 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
     }
     private void showMultiBtnDialog(final Memo memo, final int position){
         AlertDialog.Builder normalDialog =
-                new AlertDialog.Builder(getActivity());
+                new AlertDialog.Builder(MemoListInNBActivity.this);
         normalDialog.setTitle(memo.getTitle()).setMessage("您想进行什么操作呢？");
         normalDialog.setPositiveButton("取消",
                 new DialogInterface.OnClickListener() {
@@ -182,7 +163,7 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        memoListFragmentPresent.delete_memo(memo.get_ID());
+                        memoListPresent.delete_memo(memo.get_ID());
                         memoListAdapter.removeDataItem(position);
                     }
                 });
@@ -199,5 +180,4 @@ public class MemoListInNBFragment extends Fragment implements MemoListFragmentVi
         // 创建实例并显示
         normalDialog.show();
     }
-
 }

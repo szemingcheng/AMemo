@@ -8,7 +8,7 @@ import java.util.List;
  * Created by szemingcheng on 2017/5/16.
  */
 
-public interface MemoListFragmentView {
+public interface MemoListView {
    void updateListView(List<Memo> memos);
      void showRecyclerView();
      void hideRecyclerView();

@@ -77,7 +77,7 @@ public class NoteBKSelectDialogActivity extends Activity implements NoteBKListFr
                 String noteText = editText.getText().toString();
                 editText.setText("");
                 if (noteText == null || noteText.equals("")) {
-                    Toast.makeText(getApplicationContext(),"输入正确的笔记本标题！",Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(),"输入正确的笔记本标题！",Toast.LENGTH_SHORT).show();
                 } else {
                     NoteBK noteBK = new NoteBK();
                     noteBK.setTitle(noteText);
@@ -126,7 +126,12 @@ public class NoteBKSelectDialogActivity extends Activity implements NoteBKListFr
     }
 
     @Override
-    public void showSuccess() {
+    public void showDeleteSuccess() {
+
+    }
+
+    @Override
+    public void showRenameSuccess() {
 
     }
 

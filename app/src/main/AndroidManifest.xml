@@ -43,6 +43,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.unlogin.activity.MemoListInNBActivity">
+            <intent-filter>
+                <action android:name="com.activity.MemoListInNBActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.login.activity.LoginActivity" />
         <activity android:name=".ui.login.activity.RegisterActivity" />
         <activity android:name=".ui.login.activity.ChangePasswordActivity" />
@@ -62,7 +68,7 @@
             android:name=".ui.unlogin.activity.setting.SettingDeatilActivity"
             android:label="@string/title_activity_change_avatar"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ui.unlogin.activity.setting.UserInfoActivity"></activity>
+        <activity android:name=".ui.unlogin.activity.setting.UserInfoActivity"/>
     </application>
 
 </manifest>

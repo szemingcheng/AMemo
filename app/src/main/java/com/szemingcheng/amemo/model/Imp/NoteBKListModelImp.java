@@ -69,7 +69,7 @@ public class NoteBKListModelImp implements NoteBKListModel {
             List<NoteBK> notes = noteBKHelper.queryBuilder()
                     .where(NoteBKDao.Properties.User_id.eq(1L)).list();
             for (NoteBK noteBK1 : notes) {
-                if (noteBK1.getTitle().equals(noteBK.getTitle())) {
+                if (noteBK.getTitle().equals(noteBK1.getTitle())) {
                     error = true;
                     onRequestListener.onError("笔记本标题不能重复！");
                 }
@@ -89,7 +89,7 @@ public class NoteBKListModelImp implements NoteBKListModel {
             List<NoteBK> notes = noteBKHelper.queryBuilder()
                     .where(NoteBKDao.Properties.User_id.eq(user_id)).list();
             for (NoteBK noteBK1:notes){
-                if (noteBK1.getTitle().equals(noteBK.getTitle())) {
+                if (noteBK.getTitle().equals(noteBK1.getTitle())) {
                     error = true;
                     onRequestListener.onError("笔记本标题不能重复！");
                 }
@@ -105,24 +105,22 @@ public class NoteBKListModelImp implements NoteBKListModel {
     }
 
     @Override
-    public void notebk_save(NoteBK noteBK, OnRequestListener onRequestListener) {
+    public void notebk_save(NoteBK noteBK,NoteBK noteBK2, OnRequestListener onRequestListener) {
         boolean error = false;
         String userid = App.getAppcontext().getUser_ID();
         if (userid.equals("")){
-            User user = userHelper.queryBuilder()
-                    .where(UserDao.Properties._ID.eq(1L))
-                    .unique();
             List<NoteBK> notes = noteBKHelper.queryBuilder()
                     .where(NoteBKDao.Properties.User_id.eq(1L)).list();
             for (NoteBK noteBK1 : notes) {
-                if (noteBK1.getTitle().equals(noteBK.getTitle())) {
+                if (noteBK.getTitle().equals(noteBK1.getTitle())) {
                     error = true;
                     onRequestListener.onError("笔记本标题不能重复！");
                 }
             }
             if (!error){
-                noteBKHelper.update(noteBK);
-                onRequestListener.onSuccess();
+                noteBK2.setTitle(noteBK.getTitle());
+                noteBKHelper.update(noteBK2);
+                onRequestListener.onRenameSuccess();
             }
         }
         else {
@@ -133,14 +131,15 @@ public class NoteBKListModelImp implements NoteBKListModel {
             List<NoteBK> notes = noteBKHelper.queryBuilder()
                     .where(NoteBKDao.Properties.User_id.eq(user_id)).list();
             for (NoteBK noteBK1:notes){
-                if (noteBK1.getTitle().equals(noteBK.getTitle())) {
+                if (noteBK.getTitle().equals(noteBK1.getTitle())) {
                     error = true;
                     onRequestListener.onError("笔记本标题不能重复！");
                 }
             }
             if (!error){
-                noteBKHelper.update(noteBK);
-                onRequestListener.onSuccess();
+                noteBK2.setTitle(noteBK.getTitle());
+                noteBKHelper.update(noteBK2);
+                onRequestListener.onRenameSuccess();
             }
         }
     }

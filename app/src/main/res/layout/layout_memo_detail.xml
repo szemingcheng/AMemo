@@ -7,7 +7,7 @@
 <RelativeLayout
     android:id="@+id/memo_detail_layout"
     android:layout_width="match_parent"
-    android:layout_height="130dp"
+    android:layout_height="90dp"
     android:orientation="vertical"
     android:background="#ffffff"
     android:focusable="true"
@@ -15,10 +15,10 @@
     android:layout_below="@+id/toolbar_in_memo_detail">
     <EditText
         android:id="@+id/memo_detail_title"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="45dp"
         android:background="@null"
         android:inputType="text"
         android:hint="笔记标题"
@@ -26,9 +26,9 @@
         />
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_margin="15dp"
-        android:padding="5dp"
+        android:layout_height="25dp"
+        android:layout_margin="12dp"
+        android:padding="2dp"
         android:layout_below="@+id/memo_detail_title">
         <TextView
             android:id="@+id/memo_detail_notebk"
@@ -54,6 +54,7 @@
 
     </RelativeLayout>
     <View
+        android:id="@+id/line"
         android:background="@color/line"
         android:layout_width="match_parent"
         android:layout_height="2dp"
@@ -63,13 +64,14 @@
         android:layout_marginRight="15dp"
         android:layout_alignParentBottom="true"
         />
+
     </RelativeLayout>
     <jp.wasabeef.richeditor.RichEditor
         android:id="@+id/editor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/memo_detail_layout"
+        android:layout_below="@id/memo_detail_layout"
         />
     <HorizontalScrollView
         android:id="@+id/edit_tool"
@@ -214,10 +216,4 @@
 
         </LinearLayout>
     </HorizontalScrollView>
-    <!--<TextView-->
-        <!--android:id="@+id/result"-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:background="#ffffffff"/>-->
 </RelativeLayout>

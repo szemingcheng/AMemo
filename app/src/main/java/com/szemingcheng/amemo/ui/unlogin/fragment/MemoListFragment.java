@@ -21,12 +21,12 @@ import android.widget.Toast;
 import com.szemingcheng.amemo.App;
 import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.entity.Memo;
-import com.szemingcheng.amemo.presenter.Imp.MemoListFragmentPresentImp;
-import com.szemingcheng.amemo.presenter.MemoListFragmentPresent;
+import com.szemingcheng.amemo.presenter.Imp.MemoListPresentImp;
+import com.szemingcheng.amemo.presenter.MemoListPresent;
 import com.szemingcheng.amemo.ui.unlogin.activity.HomeActivity;
 import com.szemingcheng.amemo.ui.unlogin.activity.MemoDetailActivity;
 import com.szemingcheng.amemo.view.HomeActivityView;
-import com.szemingcheng.amemo.view.MemoListFragmentView;
+import com.szemingcheng.amemo.view.MemoListView;
 
 import java.util.List;
 
@@ -34,20 +34,20 @@ import java.util.List;
  * Created by szemingcheng on 2017/5/15.
  */
 
-public class MemoListFragment extends Fragment implements MemoListFragmentView {
+public class MemoListFragment extends Fragment implements MemoListView {
     public  View mView;
     public RecyclerView mRecyclerView;
     public SwipeRefreshLayout mSwipeRefreshLayout;
     public FrameLayout mEmptyLayout;
     public TextView mErrorMessage;
-    private MemoListFragmentPresent memoListFragmentPresent;
+    private MemoListPresent memoListPresent;
     private MemoListAdapter memoListAdapter;
     List<Memo> data;
     HomeActivityView homeActivityView = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        memoListFragmentPresent = new MemoListFragmentPresentImp(this);
+        memoListPresent = new MemoListPresentImp(this);
         homeActivityView = ((HomeActivity)getActivity());
         Bundle bundle = new Bundle();
         bundle.putString("fragment","memolist");
@@ -91,7 +91,7 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
                     @Override
                     public void run() {
                         if (data!=null) data.clear();
-                        memoListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
+                        memoListPresent.pulltorefresh(App.getAppcontext().getUser_ID());
                         mSwipeRefreshLayout.setRefreshing(false);
                         Toast.makeText(App.getAppcontext(), "更新完成", Toast.LENGTH_SHORT).show();
                     }
@@ -107,8 +107,8 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
             @Override
             public void run() {
                 Log.i("用户的ID是", App.getAppcontext().getUser_ID());
-                // memoListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
-                memoListFragmentPresent.pulltorefresh(App.getAppcontext().getUser_ID());
+                // memoListPresent.pulltorefresh(App.getAppcontext().getUser_ID());
+                memoListPresent.pulltorefresh(App.getAppcontext().getUser_ID());
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -123,7 +123,7 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
             @Override
             public void run() {
                 if (data!=null) data.clear();
-                memoListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
+                memoListPresent.getMemo(App.getAppcontext().getUser_ID());
             }
         }, 2000);
     }
@@ -180,7 +180,7 @@ public class MemoListFragment extends Fragment implements MemoListFragmentView {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        memoListFragmentPresent.delete_memo(memo.get_ID());
+                        memoListPresent.delete_memo(memo.get_ID());
                         memoListAdapter.removeDataItem(position);
                     }
                 });

@@ -31,6 +31,9 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int PIC_VIEW = 2;
     private final int REMINDER_VIEW = 3;
     private final int EMPTY_TYPE = -1;
+    public static final int FIRST_STICKY_VIEW = 1;
+    public static final int HAS_STICKY_VIEW= 2;
+    public static final int NONE_STICKY_VIEW= 3;
     private OnItemClickListener onItemClickListener;
     private Context mcontext;
     private List<Memo> list=new ArrayList<>();
@@ -41,7 +44,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Log.i("adapter","adapter assigned");
     }
 
-     public void setData(List<Memo> data) {
+    public void setData(List<Memo> data) {
          Log.i("adapter","set data:"+data.size());
         list = data;
         this.notifyDataSetChanged();
@@ -55,16 +58,13 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         list.remove(position);
         notifyItemRemoved(position);
     }
-
     public void insertData(Memo memo,int position){
         list.add(position,memo);
         notifyItemInserted(position);
     }
-
     public Memo getItemData(int position){
         return list == null ? null : list.size() < position ? null : list.get(position);
     }
-
 
     @Override
     public int getItemViewType(int position) {
@@ -116,38 +116,35 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        Log.i("adapter","bind view holder:"+holder);
-        if (holder instanceof TextViewHolder) {
-            Memo memo = list.get(position);
-            ((TextViewHolder)holder).memoTitle.setText(memo.getTitle());
-            ((TextViewHolder)holder).memoContent.setText(memo.getMemotxt());
-            ((TextViewHolder)holder).memoUpdateat.setText(TimeUtils.getChatTimeStr(memo.getUpdateat()));
+            if (holder instanceof TextViewHolder) {
+                Memo memo = list.get(position);
+                ((TextViewHolder) holder).memoTitle.setText(memo.getTitle());
+                ((TextViewHolder) holder).memoContent.setText(memo.getMemotxt());
+                ((TextViewHolder) holder).memoUpdateat.setText(TimeUtils.getChatTimeStr(memo.getUpdateat()));
+            } else if (holder instanceof PicViewHolder) {
+                Memo memo = list.get(position);
+                ((PicViewHolder) holder).memoTitle.setText(memo.getTitle());
+                ((PicViewHolder) holder).memoContent.setText(memo.getMemotxt());
+                ((PicViewHolder) holder).memoUpdateat.setText(TimeUtils.getChatTimeStr(memo.getUpdateat()));
+                String file = memo.getPic();
+                File file1 = new File(file);
+                if (file1.exists()) {
+                    Bitmap bm = BitmapFactory.decodeFile(file);
+                    ((PicViewHolder) holder).memoPic.setImageBitmap(bm);
+                } else
+                    ((PicViewHolder) holder).memoPic.setImageResource(R.drawable.vector_drawable_pic_error);
 
-        } else if (holder instanceof PicViewHolder) {
-            Memo memo = list.get(position);
-            ((PicViewHolder) holder).memoTitle.setText(memo.getTitle());
-            ((PicViewHolder) holder).memoContent.setText(memo.getMemotxt());
-            ((PicViewHolder) holder).memoUpdateat.setText(TimeUtils.getChatTimeStr(memo.getUpdateat()));
-            String file = memo.getPic();
-           File file1 = new File(file);
-            if (file1.exists()) {
-                Bitmap bm = BitmapFactory.decodeFile(file);
-                ((PicViewHolder)holder).memoPic.setImageBitmap(bm);
+            } else if (holder instanceof ReminderViewHolder) {
+                Memo memo = list.get(position);
+                ((ReminderViewHolder) holder).memoTitle.setText(memo.getTitle());
+                ((ReminderViewHolder) holder).memoContent.setText(memo.getMemotxt());
+                ((ReminderViewHolder) holder).memoreminderDate.setText(TimeUtils.getChatTimeStr(memo.getReminder_date()));
+            } else if (holder instanceof EmptyViewHolder) {
+                ((EmptyViewHolder) holder).emptyLayout.setVisibility(View.VISIBLE);
+            } else {
+                ((ErrorViewHolder) holder).emptyLayout.setVisibility(View.VISIBLE);
             }
-            else ((PicViewHolder)holder).memoPic.setImageResource(R.drawable.vector_drawable_pic_error);
 
-        } else if (holder instanceof ReminderViewHolder) {
-            Memo memo = list.get(position);
-            ((ReminderViewHolder) holder).memoTitle.setText(memo.getTitle());
-            ((ReminderViewHolder) holder).memoContent.setText(memo.getMemotxt());
-            ((ReminderViewHolder) holder).memoreminderDate.setText(TimeUtils.getChatTimeStr(memo.getReminder_date()));
-        }
-        else if (holder instanceof EmptyViewHolder){
-            ((EmptyViewHolder)holder).emptyLayout.setVisibility(View.VISIBLE);
-        }
-        else {
-            ((ErrorViewHolder)holder).emptyLayout.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -166,6 +163,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private TextView memoTitle;
         private TextView memoContent;
         private TextView memoUpdateat;
+        private TextView header_view;
         private OnItemClickListener onItemClickListener;
 
         private TextViewHolder(View view, OnItemClickListener onItemClickListener1) {
@@ -175,6 +173,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             memoTitle = (TextView) view.findViewById(R.id.memo_title);
             memoContent = (TextView) view.findViewById(R.id.memo_content);
             memoUpdateat = (TextView) view.findViewById(R.id.update_at);
+            header_view = (TextView) view.findViewById(R.id.header_view);
             aMemoItem.setOnClickListener(this);
             aMemoItem.setOnLongClickListener(this);
         }
@@ -200,6 +199,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             private TextView memoContent;
             private ImageView memoPic;
             private TextView memoUpdateat;
+            private TextView header_view;
             private OnItemClickListener onItemClickListener;
 
             private PicViewHolder(View view, OnItemClickListener onItemClickListener1) {
@@ -210,6 +210,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 memoContent = (TextView) view.findViewById(R.id.memo_content);
                 memoPic = (ImageView) view.findViewById(R.id.memo_pic);
                 memoUpdateat = (TextView) view.findViewById(R.id.update_at);
+                header_view = (TextView) view.findViewById(R.id.header_view);
                 aMemoItem.setOnClickListener(this);
                 aMemoItem.setOnLongClickListener(this);
             }
@@ -234,6 +235,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             private TextView memoTitle;
             private TextView memoContent;
             private TextView memoreminderDate;
+            private TextView header_view;
             private OnItemClickListener onItemClickListener;
 
             private ReminderViewHolder(View view, OnItemClickListener onItemClickListener1) {
@@ -243,6 +245,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 memoTitle = (TextView) view.findViewById(R.id.memo_title);
                 memoContent = (TextView) view.findViewById(R.id.memo_content);
                 memoreminderDate = (TextView) view.findViewById(R.id.memo_reminder_date);
+                header_view = (TextView) view.findViewById(R.id.header_view);
                 aMemoItem.setOnClickListener(this);
                 aMemoItem.setOnLongClickListener(this);
             }

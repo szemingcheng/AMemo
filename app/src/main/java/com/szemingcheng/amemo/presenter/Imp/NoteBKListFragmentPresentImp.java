@@ -43,8 +43,8 @@ public class NoteBKListFragmentPresentImp implements NoteBKListFragmentPresent {
     }
 
     @Override
-    public void update_NoteBK(NoteBK noteBK) {
-        noteBKListModel.notebk_save(noteBK,onRequestListener);
+    public void update_NoteBK(NoteBK noteBK1,NoteBK noteBK) {
+        noteBKListModel.notebk_save(noteBK1,noteBK,onRequestListener);
     }
 
     private NoteBKListModel.OnDataFinishedListener onDatafinishedlistener = new NoteBKListModel.OnDataFinishedListener() {
@@ -63,7 +63,12 @@ public class NoteBKListFragmentPresentImp implements NoteBKListFragmentPresent {
     private NoteBKListModel.OnRequestListener onRequestListener = new NoteBKListModel.OnRequestListener() {
         @Override
         public void onSuccess() {
-            noteBKListFragmentView.showSuccess();
+            noteBKListFragmentView.showDeleteSuccess();
+        }
+
+        @Override
+        public void onRenameSuccess() {
+            noteBKListFragmentView.showRenameSuccess();
         }
 
         @Override

@@ -28,81 +28,15 @@ public class TimeUtils {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        if (calendar.before(inputTime)){
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            return sdf.format(currenTimeZone);
-        }
         calendar.add(Calendar.DAY_OF_MONTH,-1);
-        if (calendar.before(inputTime)){
-            return "昨天";
-        }else{
-            calendar.add(Calendar.DAY_OF_MONTH, -5);
-            if (calendar.before(inputTime)){
-                return getWeekDayStr(inputTime.get(Calendar.DAY_OF_WEEK));
-            }
-            else
-            {
-                calendar.set(Calendar.DAY_OF_MONTH, 1);
-                calendar.set(Calendar.MONTH, Calendar.JANUARY);
-                int year = inputTime.get(Calendar.YEAR);
-                int month = inputTime.get(Calendar.MONTH);
-                int day = inputTime.get(Calendar.DAY_OF_MONTH);
-                return year+"/"+month+"/"+day;
-            }
-
-
-        }
-
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.MONTH, Calendar.JANUARY);
+        int year = inputTime.get(Calendar.YEAR);
+        int month = inputTime.get(Calendar.MONTH);
+        int day = inputTime.get(Calendar.DAY_OF_MONTH);
+        return year+"/"+month;
     }
-    /**
-     * 群发使用的时间转换
-     */
-    public static String multiSendTimeToStr(long timeStamp) {
-
-        if (timeStamp==0) return "";
-        Calendar inputTime = Calendar.getInstance();
-        String timeStr = timeStamp + "";
-        if(timeStr.length() == 10){
-            timeStamp = timeStamp*1000;
-        }
-        inputTime.setTimeInMillis(timeStamp);
-        Date currenTimeZone = inputTime.getTime();
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        if (calendar.before(inputTime)){
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            return sdf.format(currenTimeZone);
-        }
-        calendar.add(Calendar.DAY_OF_MONTH,-1);
-        if (calendar.before(inputTime)){
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            return "昨天";
-        }else {
-            calendar.add(Calendar.DAY_OF_MONTH, -5);
-            if (calendar.before(inputTime)){
-                return getWeekDayStr(inputTime.get(Calendar.DAY_OF_WEEK));
-            } else{
-                calendar.set(Calendar.DAY_OF_MONTH, 1);
-                calendar.set(Calendar.MONTH, Calendar.JANUARY);
-                if (calendar.before(inputTime)){
-                    SimpleDateFormat sdf = new SimpleDateFormat("M"+"/"+"d"+" ");
-                    String temp1 = sdf.format(currenTimeZone);
-                    SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm");
-                    String temp2 = sdf1.format(currenTimeZone);
-                    return temp1+temp2;
-                }else{
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy"+"/"+"M"+"/"+"d"+" ");
-                    String temp1 = sdf.format(currenTimeZone);
-                    SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm");
-                    String temp2 = sdf1.format(currenTimeZone);
-                    return temp1+temp2;
-                }
-            }
-        }
-    }/**
+/**
      * 时间转化为聊天界面显示字符串
      *
      * @param timeStamp 单位为秒
@@ -160,8 +94,7 @@ public class TimeUtils {
      *
      * @param strDay
      */
-    public static String timeFormatStr(Calendar calendar,String strDay)
-    {
+    public static String timeFormatStr(Calendar calendar,String strDay) {
         String tempStr = "";
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         if (hour > 11)

@@ -116,7 +116,7 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
             setTakePhoto();
         }else if(action_type==CHOOSE_PHOTO){
             mEditor.focusEditor();
-            setOpeanAlbum();
+            setOpenAlbum();
         }
     }
     private Toolbar.OnClickListener OnNavigationListener = new View.OnClickListener() {
@@ -351,11 +351,11 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
         findViewById(R.id.action_insert_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setOpeanAlbum();
+                setOpenAlbum();
             }
         });
     }
-    private void setOpeanAlbum(){
+    private void setOpenAlbum(){
         //检查权限
         if (ContextCompat.checkSelfPermission(MemoDetailActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             //申请sd卡运行权限
