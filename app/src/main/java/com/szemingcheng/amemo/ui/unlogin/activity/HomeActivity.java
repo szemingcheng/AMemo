@@ -29,7 +29,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.szemingcheng.amemo.App;
 import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.ui.unlogin.activity.setting.UserInfoActivity;
-import com.szemingcheng.amemo.ui.unlogin.fragment.MemoListFragment;
+import com.szemingcheng.amemo.ui.unlogin.fragment.memo.MemoListFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.SettingFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.notebk.NoteBKListFragment;
 import com.szemingcheng.amemo.ui.unlogin.fragment.trash.TrashListFragment;
@@ -197,8 +197,13 @@ public class HomeActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id){
+            case R.id.memo_search:
+                Intent intent = new Intent();
+                intent.setAction("com.activity.SearchLsitActivity");
+                startActivity(intent);
+                break;
             case R.id.memo_reminder:
-             return true;
+                return true;
             case R.id.nav_setting:
                 return true;
         }

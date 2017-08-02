@@ -68,8 +68,8 @@ public class LayoutMemoDetailNotebkItemAdapter extends RecyclerView.Adapter<Recy
         NoteBK noteBK = list.get(position);
         ((LayoutMemoDetailNotebkItemAdapter.NoteBKViewHolder) holder)
                 .noteBookTitle.setText(noteBK.getTitle());
-//        ((LayoutMemoDetailNotebkItemAdapter.NoteBKViewHolder) holder)
-//                .memoQuantity.setText(String.valueOf((noteBK.getMemos()).size())+"条笔记");
+        ((LayoutMemoDetailNotebkItemAdapter.NoteBKViewHolder) holder)
+                .memoQuantity.setText(String.valueOf((noteBK.getMemos()).size())+"条笔记");
 
     }
 

@@ -1,10 +1,9 @@
-package com.szemingcheng.amemo.ui.unlogin.fragment;
+package com.szemingcheng.amemo.ui.unlogin.fragment.memo;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,7 @@ import android.widget.TextView;
 
 import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.entity.Memo;
+import com.szemingcheng.amemo.ui.unlogin.fragment.OnItemClickListener;
 import com.szemingcheng.amemo.utils.TimeUtils;
 
 import java.io.File;
@@ -41,11 +41,9 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      public MemoListAdapter(Context context, OnItemClickListener onItemClickListener) {
         mcontext = context;
         this.onItemClickListener = onItemClickListener;
-        Log.i("adapter","adapter assigned");
     }
 
     public void setData(List<Memo> data) {
-         Log.i("adapter","set data:"+data.size());
         list = data;
         this.notifyDataSetChanged();
     }
@@ -76,7 +74,6 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else if (list.get(position).getType() == Memo.TYPE_REMINDER) {
             return REMINDER_VIEW;
         } else {
-            Log.i("adapter","default item view type:"+super.getItemViewType(position));
             return super.getItemViewType(position);
         }
     }
@@ -84,7 +81,6 @@ public class MemoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        Log.i("adapter","create view holder,view item:"+viewType);
         if (viewType == TXT_VIEW) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.layout_memo_item, parent, false);

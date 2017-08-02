@@ -21,7 +21,7 @@ import com.szemingcheng.amemo.view.NoteBKListFragmentView;
 import java.util.List;
 
 /**
- * Created by szemingcheng on 2017/5/23.
+ * Created by szemingcheng on 2017/5/23 14:03.
  */
 
 public class NoteBKSelectDialogActivity extends Activity implements NoteBKListFragmentView,View.OnClickListener {
@@ -67,9 +67,6 @@ public class NoteBKSelectDialogActivity extends Activity implements NoteBKListFr
         noteBKListFragmentPresent.getMemo(App.getAppcontext().getUser_ID());
     }
 
-    private EditText getEditNoteBK(){
-        return (EditText) findViewById(R.id.editNoteBK);
-    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

@@ -43,6 +43,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.unlogin.activity.SearchLsitActivity">
+            <intent-filter>
+                <action android:name="com.activity.SearchLsitActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.unlogin.activity.MemoListInNBActivity">
             <intent-filter>
                 <action android:name="com.activity.MemoListInNBActivity"/>

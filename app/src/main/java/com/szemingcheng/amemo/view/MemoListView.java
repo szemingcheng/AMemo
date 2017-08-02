@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface MemoListView {
    void updateListView(List<Memo> memos);
-     void showRecyclerView();
-     void hideRecyclerView();
-    void showSuccess();
-    void showError(String error);
+   void showRecyclerView();
+   void hideRecyclerView();
+   void showSuccess();
+   void showError(String error);
 
 }

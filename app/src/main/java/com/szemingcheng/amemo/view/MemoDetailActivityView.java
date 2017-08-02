@@ -3,7 +3,7 @@ package com.szemingcheng.amemo.view;
 import com.szemingcheng.amemo.entity.Memo;
 
 /**
- * Created by szemingcheng on 2017/5/23.
+ * Created by szemingcheng on 2017/5/23 14:03.
  */
 
 public interface MemoDetailActivityView {

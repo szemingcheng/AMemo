@@ -27,7 +27,7 @@ import com.szemingcheng.amemo.presenter.Imp.TrashListFragmentPresentImp;
 import com.szemingcheng.amemo.presenter.TrashListFragmentPresent;
 import com.szemingcheng.amemo.ui.unlogin.activity.HomeActivity;
 import com.szemingcheng.amemo.ui.unlogin.activity.MemoDetailActivity;
-import com.szemingcheng.amemo.ui.unlogin.fragment.MemoListAdapter;
+import com.szemingcheng.amemo.ui.unlogin.fragment.memo.MemoListAdapter;
 import com.szemingcheng.amemo.ui.unlogin.fragment.OnItemClickListener;
 import com.szemingcheng.amemo.view.HomeActivityView;
 import com.szemingcheng.amemo.view.TrashListFragmentView;

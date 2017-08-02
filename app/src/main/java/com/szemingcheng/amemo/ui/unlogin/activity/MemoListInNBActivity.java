@@ -20,7 +20,7 @@ import com.szemingcheng.amemo.R;
 import com.szemingcheng.amemo.entity.Memo;
 import com.szemingcheng.amemo.presenter.Imp.MemoListPresentImp;
 import com.szemingcheng.amemo.presenter.MemoListPresent;
-import com.szemingcheng.amemo.ui.unlogin.fragment.MemoListAdapter;
+import com.szemingcheng.amemo.ui.unlogin.fragment.memo.MemoListAdapter;
 import com.szemingcheng.amemo.ui.unlogin.fragment.OnItemClickListener;
 import com.szemingcheng.amemo.view.MemoListView;
 

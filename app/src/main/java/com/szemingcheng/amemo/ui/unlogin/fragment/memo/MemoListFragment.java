@@ -1,4 +1,4 @@
-package com.szemingcheng.amemo.ui.unlogin.fragment;
+package com.szemingcheng.amemo.ui.unlogin.fragment.memo;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +25,7 @@ import com.szemingcheng.amemo.presenter.Imp.MemoListPresentImp;
 import com.szemingcheng.amemo.presenter.MemoListPresent;
 import com.szemingcheng.amemo.ui.unlogin.activity.HomeActivity;
 import com.szemingcheng.amemo.ui.unlogin.activity.MemoDetailActivity;
+import com.szemingcheng.amemo.ui.unlogin.fragment.OnItemClickListener;
 import com.szemingcheng.amemo.view.HomeActivityView;
 import com.szemingcheng.amemo.view.MemoListView;
 

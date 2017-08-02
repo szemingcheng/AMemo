@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/layout_memo_detail_notebk_list"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_color"
+    xmlns:tool="http://schemas.android.com/tools">
+    <include layout="@layout/toolbar_in_memo_detail"/>
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="end">
+        <EditText
+            android:id="@+id/editNoteBK"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="搜索你的小本本"
+            android:inputType="text" />
+        <Button
+            android:id="@+id/buttonAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onButtonClick"
+            android:text="搜索"
+            />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/search_keyword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        tool:text="包含“”的结果有...."
+        android:visibility="gone"/>
+    <android.support.v7.widget.RecyclerView
+        android:layout_margin="10dp"
+        android:id="@+id/search_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    <include layout="@layout/layput_empty"/>
+    <include layout="@layout/layout_error"/>
+</LinearLayout>

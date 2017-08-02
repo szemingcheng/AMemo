@@ -407,6 +407,7 @@ public class MemoDetailActivity extends AppCompatActivity implements MemoDetailA
                     Long id = data.getExtras().getLong("id");
                     NoteBK noteBK = App.getAppcontext().getDaoSession().getNoteBKDao().load(id);
                     memo.setNoteBK(noteBK);
+                    noteBK.update();
                 }
             default:
                 break;
